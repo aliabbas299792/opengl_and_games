@@ -18,7 +18,7 @@ public:
 	}
 
 	//one below is constructor for intersection checker
-	bool checkIntersect(sf::Sprite &a, float b, float &c, float &d, float e, bool &f, bool &g, int &h, sf::Time &i, sf::Clock j);
+	bool checkIntersect(sf::Sprite &a, float b, float &c, float &d, float e, bool &f, bool &g, int &h, sf::Time &i, sf::Clock j, float &prevPosX, float &prevPosY);
 };
 
 class chunks { //chunks, which will hold 9 platforms and each will cover the screen

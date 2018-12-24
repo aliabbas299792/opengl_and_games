@@ -2,7 +2,7 @@
 #include <fstream>
 #include "../headerFiles/utilFunctions.h"
 
-void moveBall(sf::View &view, sf::RenderWindow &window, sf::Sprite &sprite, float &velocityX, float &velocityY, float accelerationX, float accelerationY, float &gravity, float originalGravity, bool collide, bool &hitFloor, float decelerationX, bool &removeGravity) {
+void moveBall(sf::View &view, sf::RenderWindow &window, sf::Sprite &sprite, float &velocityX, float &velocityY, float accelerationX, float accelerationY, float &gravity, float originalGravity, bool collide, bool &hitFloor, float decelerationX, bool &removeGravity, float &prevPosX, float &prevPosY) {
 	//if gravity remove flag has been raised in the intersection checks bit, disable gravity
 	if (removeGravity == true) {
 		gravity = 0;
@@ -57,6 +57,9 @@ void moveBall(sf::View &view, sf::RenderWindow &window, sf::Sprite &sprite, floa
 
 		velocityY *= -0.5; //otherwise reverse velocity in y axis, and half the magnitude to simulate bouncing
 	}
+
+	prevPosX = sprite.getPosition().x;
+	prevPosY = sprite.getPosition().y;
 
 	sprite.move(velocityX, velocityY); //move the sprite
 	view.setCenter(sprite.getPosition().x, sprite.getPosition().y); //set the center of the screen to the sprite's location

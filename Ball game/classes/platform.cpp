@@ -14,7 +14,7 @@ platform::platform(int a, int b, int c, int d) {
 	//platformStuff.push_back(this); //adds the collision object to a vector array
 }
 
-bool platform::checkIntersect(sf::Sprite &sprite1, float gravity, float &velocityX, float &velocityY, float gravityOriginal, bool &hitFloor, bool &removeGravity, int &score, sf::Time &timeAtJump, sf::Clock clock) {
+bool platform::checkIntersect(sf::Sprite &sprite1, float gravity, float &velocityX, float &velocityY, float gravityOriginal, bool &hitFloor, bool &removeGravity, int &score, sf::Time &timeAtJump, sf::Clock clock, float &prevPosX, float &prevPosY) {
 	//s_ is sprite, o_ is object, noGbox is rect above object, oLeft is rect to left of object, oRight is rect to right of object
 	if (jumpedOn == 3) {
 		return false;
@@ -53,26 +53,26 @@ bool platform::checkIntersect(sf::Sprite &sprite1, float gravity, float &velocit
 	if (s_max_x > noGbox_min_x && s_min_x < noGbox_max_x && s_max_y > noGbox_min_y && s_min_y < noGbox_max_y && velocityY > 0) {
 		//checks for intersection in an imaginary box 3 pixels higher than the surface of a collision object
 		removeGravity = true; //remove gravity if it intersects, to prevent infinite annoying bouncing
-		sprite1.setPosition(sprite1.getPosition().x, o_min_y - 16); //set the position to 1px above the surface of the object
+		sprite1.setPosition(prevPosX, prevPosY); //set it to previous position, which is probably outside the box
 		hitFloor = true; //signal that the floor has been hit, for the movement processor to act appropriately
 		truthCounter++; //increment the amount of times an intersection check turns out to be true
 	}
 
 	if (s_max_x > oLeft_min_x && s_min_x < oLeft_max_x && s_max_y > oLeft_min_y && s_min_y < oLeft_max_y) {
 		//check if ball intersects with imaginary box 5px to left of the box
-		velocityX = -0.3; //set velocity to go opposite it, thereby opposing motion into the box
+		velocityX *= -0.3; //set velocity to go opposite it, thereby opposing motion into the box
 		truthCounter++; //increment the amount of times an intersection check turns out to be true
 	}
 
 	if (s_max_x > oRight_min_x && s_min_x < oRight_max_x && s_max_y > oRight_min_y && s_min_y < oRight_max_y) {
 		//check if ball intersects with imaginary box 5px to right of the box
-		velocityX = 0.3; //set velocity to go opposite it, thereby opposing motion into the box
+		velocityX *= 0.3; //set velocity to go opposite it, thereby opposing motion into the box
 		truthCounter++; //increment the amount of times an intersection check turns out to be true
 	}
 
 	if (s_max_x > o_min_x && s_min_x < o_max_x && s_max_y > o_min_y && s_min_y < o_max_y && velocityY <= 0) {
 		//check if ball intersects the box, and the velocity is negative or 0, meaning it's coming from the bottom
-		sprite1.setPosition(sprite1.getPosition().x, o_max_y + 16); //set it to 1px below the bottom of the box to stop it from going into the box
+		sprite1.setPosition(prevPosX, prevPosY); //set it to previous position, which is probably outside the box
 		velocityY = 0.5; //set the velocity to be away from the bottom of the box
 		truthCounter++; //increment the amount of times an intersection check turns out to be true
 	}

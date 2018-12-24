@@ -3,8 +3,8 @@
 #include <fstream>
 #include <filesystem>
 
-#include "headerFiles/utilFunctions.h"
 #include "headerFiles/platformClasses.h"
+#include "headerFiles/utilFunctions.h"
 
 int main() {
 	//consts and vars
@@ -13,7 +13,10 @@ int main() {
 	const float accelerationY = 6;
 	const float gravityOriginal = 0.15;
 
-	int windowWidth = 900;
+	float prevPosX = 0;
+	float prevPosY = 0;
+
+	int windowWidth = 1200;
 	int windowHeight = 600;
 	bool removeGravity = false;
 	bool hitFloor = false;
@@ -157,7 +160,7 @@ int main() {
 
 				for (i = 0; i < liveChunk->chunksLoaded.size(); i++) { //iterates through chunk vector
 					for (j = 0; j < liveChunk->chunksLoaded[i].platformsInTheChunk.size(); j++) { //iterates through individual chunks
-						if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].checkIntersect(sprite1, gravity, velocityX, velocityY, gravityOriginal, hitFloor, removeGravity, score, timeSinceCollision, gameClock) && tempTorF == false) {
+						if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].checkIntersect(sprite1, gravity, velocityX, velocityY, gravityOriginal, hitFloor, removeGravity, score, timeSinceCollision, gameClock, prevPosX, prevPosY) && tempTorF == false) {
 							//if the above evaluates to true even once, the variable below is set to true for this entire iteration of the loop
 							//the if statement checks for collisions
 							tempTorF = true;
@@ -167,12 +170,12 @@ int main() {
 
 				if (tempTorF) //if it's true...
 				{
-					moveBall(windowView, window, sprite1, velocityX, velocityY, accelerationX, accelerationY, gravity, gravityOriginal, true, hitFloor, decelerationX, removeGravity);
+					moveBall(windowView, window, sprite1, velocityX, velocityY, accelerationX, accelerationY, gravity, gravityOriginal, true, hitFloor, decelerationX, removeGravity, prevPosX, prevPosY);
 					//then move the ball, while accounting for the collision has taken place
 				}
 				else {
 					//otherwise act as if there was no collision
-					moveBall(windowView, window, sprite1, velocityX, velocityY, accelerationX, accelerationY, gravity, gravityOriginal, false, hitFloor, decelerationX, removeGravity);
+					moveBall(windowView, window, sprite1, velocityX, velocityY, accelerationX, accelerationY, gravity, gravityOriginal, false, hitFloor, decelerationX, removeGravity, prevPosX, prevPosY);
 				}
 
 				window.setView(windowView); //sets the view to the moving view, and draws stuff relative to it

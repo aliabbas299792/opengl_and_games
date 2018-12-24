@@ -25,11 +25,11 @@ void moveBall(sf::View &view, sf::RenderWindow &window, sf::Sprite &sprite, floa
 		velocityY += gravity; //apply gravitational acceleration downwards
 
 		//make sure the magnitude of velocity is capped at 10
-		if (velocityY > 10) {
-			velocityY = 10;
+		if (velocityY > 1000) {
+			velocityY = 1000;
 		}
-		else if (velocityY < -10) {
-			velocityY = -10;
+		else if (velocityY < -1000) {
+			velocityY = -1000;
 		}
 
 		//accelerate in the requested direction by the user

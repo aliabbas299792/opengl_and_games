@@ -168,7 +168,7 @@ int main() {
 					justChanged = false;
 				}
 
-				if (currentTime.asMilliseconds() - timeSinceCollision.asMilliseconds() >= 20000) {
+				if (currentTime.asMilliseconds() - timeSinceCollision.asMilliseconds() >= 2000) {
 					liveChunk->~chunksHolder();
 					onDeath(gameState, "scoreboard.txt", score); //if it's been falling for at least 2 seconds then die
 				}

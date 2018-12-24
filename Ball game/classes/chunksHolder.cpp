@@ -126,7 +126,7 @@ chunksHolder::~chunksHolder() { //the destructor
 }
 
 chunksHolder::chunksHolder(int width, int height, int posX, int posY) { //the initial constructor
-	std::system("CLS"); //clears console
+	//std::system("CLS"); //clears console
 	//populates the vector with 3x3 chunks in a grid
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {

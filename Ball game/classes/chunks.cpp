@@ -1,4 +1,4 @@
-#include "platformClasses.h"
+#include "../headerFiles/platformClasses.h"
 #include <SFML/Graphics.hpp>
 
 chunks::~chunks() { //destructor definition, destructs the platforms, then empties the vector array, then destructs the chunk

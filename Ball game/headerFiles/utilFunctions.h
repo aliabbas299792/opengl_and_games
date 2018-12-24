@@ -5,7 +5,8 @@
 enum gameScreens { entrance, game, scoreboard, end }; //make enum for all the screens
 
 //below are all the function prototypes
-
+void entranceScreen(gameScreens &gameState, sf::RectangleShape buttonExit, sf::RectangleShape buttonStart, sf::RectangleShape buttonHighScore, sf::RectangleShape logo, sf::RenderWindow &window, bool &justChanged, int &score);
+bool timingFpsScore(sf::Time &currentTime, sf::Time &elapsedTimeFps, sf::Time &elapsedTime, sf::Clock gameClock, int &fps);
 void selectionProcessor(gameScreens &gameState, gameScreens nextScreen, sf::RectangleShape &button, sf::RenderWindow &window, bool &justChanged, std::string filePath, int &score);
 void loadTexture(sf::Texture &texture, sf::RectangleShape &rect, std::string filePath, float posX, float posY);
 void loadTextureSprite(sf::Texture &texture, sf::Sprite &sprite, std::string filePath, float posX, float posY);

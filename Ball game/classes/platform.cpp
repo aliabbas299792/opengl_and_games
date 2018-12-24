@@ -1,4 +1,4 @@
-#include "platformClasses.h"
+#include "../headerFiles/platformClasses.h"
 #include <SFML/Graphics.hpp>
 
 platform::platform(int a, int b, int c, int d) {

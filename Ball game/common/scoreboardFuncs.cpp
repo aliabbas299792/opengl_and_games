@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <fstream>
 #include <filesystem>
-#include "utilFunctions.h"
+#include "../headerFiles/utilFunctions.h"
 
 void sortScoreBoard(std::fstream &scoreboardFile, int *fileNums, int arrayLen, std::string filePath) {
 	int i = 0;

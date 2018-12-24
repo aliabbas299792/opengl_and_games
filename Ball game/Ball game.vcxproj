@@ -121,17 +121,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="chunks.cpp" />
-    <ClCompile Include="chunksHolder.cpp" />
-    <ClCompile Include="gameFuncs.cpp" />
+    <ClCompile Include="Classes\chunks.cpp" />
+    <ClCompile Include="Classes\chunksHolder.cpp" />
+    <ClCompile Include="Classes\platform.cpp" />
+    <ClCompile Include="Common\gameFuncs.cpp" />
+    <ClCompile Include="Common\mainInitFuncs.cpp" />
+    <ClCompile Include="Common\scoreboardFuncs.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mainInitFuncs.cpp" />
-    <ClCompile Include="platform.cpp" />
-    <ClCompile Include="scoreboardFuncs.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="platformClasses.h" />
-    <ClInclude Include="utilFunctions.h" />
+    <ClInclude Include="headerFiles\platformClasses.h" />
+    <ClInclude Include="headerFiles\utilFunctions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

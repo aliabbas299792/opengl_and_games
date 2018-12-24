@@ -1,54 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
+    <Filter Include="headerFiles">
+      <UniqueIdentifier>{f3da7f45-2062-4a83-aa07-69762c47d042}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sourceFiles">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="classes">
+      <UniqueIdentifier>{11cb2c26-2f04-421a-b430-84a02f7607c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Common">
-      <UniqueIdentifier>{984a0e49-4d1c-445f-82d9-9d680f3b1150}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes">
-      <UniqueIdentifier>{3886d6c1-524c-40bf-8621-fc82977b48df}</UniqueIdentifier>
+    <Filter Include="common">
+      <UniqueIdentifier>{a211dce9-9aae-4322-8425-f634388769c6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>sourceFiles</Filter>
     </ClCompile>
-    <ClCompile Include="scoreboardFuncs.cpp">
-      <Filter>Common</Filter>
+    <ClCompile Include="Classes\chunks.cpp">
+      <Filter>classes</Filter>
     </ClCompile>
-    <ClCompile Include="gameFuncs.cpp">
-      <Filter>Common</Filter>
+    <ClCompile Include="Classes\chunksHolder.cpp">
+      <Filter>classes</Filter>
     </ClCompile>
-    <ClCompile Include="mainInitFuncs.cpp">
-      <Filter>Common</Filter>
+    <ClCompile Include="Classes\platform.cpp">
+      <Filter>classes</Filter>
     </ClCompile>
-    <ClCompile Include="chunksHolder.cpp">
-      <Filter>Classes</Filter>
+    <ClCompile Include="Common\gameFuncs.cpp">
+      <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="chunks.cpp">
-      <Filter>Classes</Filter>
+    <ClCompile Include="Common\mainInitFuncs.cpp">
+      <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="platform.cpp">
-      <Filter>Classes</Filter>
+    <ClCompile Include="Common\scoreboardFuncs.cpp">
+      <Filter>common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="utilFunctions.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="headerFiles\utilFunctions.h">
+      <Filter>headerFiles</Filter>
     </ClInclude>
-    <ClInclude Include="platformClasses.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="headerFiles\platformClasses.h">
+      <Filter>headerFiles</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

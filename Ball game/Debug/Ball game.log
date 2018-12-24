@@ -1,40 +1,6 @@
-﻿  chunks.cpp
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunks.cpp(5): warning C4018: '<': signed/unsigned mismatch
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunks.cpp(14): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunks.cpp(15): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunks.cpp(18): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunks.cpp(19): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunks.cpp(20): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunks.cpp(21): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunks.cpp(24): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunks.cpp(33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunks.cpp(32): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunks.cpp(31): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunks.cpp(30): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  chunksHolder.cpp
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunksholder.cpp(17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunksholder.cpp(18): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunksholder.cpp(22): warning C4018: '<': signed/unsigned mismatch
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunksholder.cpp(37): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunksholder.cpp(40): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunksholder.cpp(105): warning C4018: '<': signed/unsigned mismatch
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\chunksholder.cpp(123): warning C4018: '<': signed/unsigned mismatch
+﻿  gameFuncs.cpp
+  mainInitFuncs.cpp
+  scoreboardFuncs.cpp
   main.cpp
 c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(11): warning C4305: 'initializing': truncation from 'double' to 'float'
 c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(12): warning C4305: 'initializing': truncation from 'double' to 'float'
@@ -55,38 +21,9 @@ c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.c
               T=float
           ]
 c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(173): warning C4018: '<': signed/unsigned mismatch
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(174): warning C4018: '<': signed/unsigned mismatch
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(195): warning C4018: '<': signed/unsigned mismatch
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(196): warning C4018: '<': signed/unsigned mismatch
-  platform.cpp
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(10): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(11): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(32): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(33): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(34): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(35): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(37): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(39): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(40): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(42): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(43): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(45): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(47): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(48): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(50): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(63): warning C4305: '=': truncation from 'double' to 'float'
-c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\platform.cpp(69): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(158): warning C4018: '<': signed/unsigned mismatch
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(159): warning C4018: '<': signed/unsigned mismatch
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(180): warning C4018: '<': signed/unsigned mismatch
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(181): warning C4018: '<': signed/unsigned mismatch
   Generating Code...
   Ball game.vcxproj -> C:\Users\Ali Abbas School\Desktop\c++\ball game retry\Ball game\Debug\Ball game.exe

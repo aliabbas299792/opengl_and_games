@@ -1,4 +1,4 @@
-#include "platformClasses.h"
+#include "../headerFiles/platformClasses.h"
 #include <SFML/Graphics.hpp>
 
 void chunksHolder::updateChunks(sf::Sprite sprite1, int winWidth, int winHeight) { //updateChunks(...) definition

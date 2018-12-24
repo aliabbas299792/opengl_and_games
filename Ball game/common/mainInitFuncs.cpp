@@ -1,7 +1,20 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <fstream>
-#include "utilFunctions.h"
+#include "../headerFiles/utilFunctions.h"
+
+bool timingFpsScore(sf::Time &currentTime, sf::Time &elapsedTimeFps, sf::Time &elapsedTime, sf::Clock gameClock, int &fps) {
+	currentTime = gameClock.getElapsedTime(); //gets elapsed time since the last time it was measured
+
+	if (currentTime.asMilliseconds() < elapsedTime.asMilliseconds() + 9) { //check if 9ms has passed
+		return true; //if it hasn't, skip processing for this loop, assuming true means continue
+	}
+	else {
+		fps++; //otherwise increment fps
+		elapsedTime = currentTime;
+		return false;
+	}
+}
 
 void selectionProcessor(gameScreens &gameState, gameScreens nextScreen, sf::RectangleShape &button, sf::RenderWindow &window, bool &justChanged, std::string filePath, int &score) {
 	//get the position of the mouse
@@ -60,4 +73,17 @@ void loadTextureSprite(sf::Texture &texture, sf::Sprite &sprite, std::string fil
 	}
 	sprite.setTexture(texture);
 	sprite.setPosition(posX, posY);
+}
+
+void entranceScreen(gameScreens &gameState, sf::RectangleShape buttonExit, sf::RectangleShape buttonStart, sf::RectangleShape buttonHighScore, sf::RectangleShape logo, sf::RenderWindow &window, bool &justChanged, int &score) {
+	//below are just the button stuff, so highlighting, and working, to change game state and move to another screen after clicking
+	selectionProcessor(gameState, end, buttonExit, window, justChanged, "scoreboard.txt", score);
+	selectionProcessor(gameState, game, buttonStart, window, justChanged, "scoreboard.txt", score);
+	selectionProcessor(gameState, scoreboard, buttonHighScore, window, justChanged, "scoreboard.txt", score);
+
+	//and draw the buttons and logo
+	window.draw(buttonStart);
+	window.draw(buttonExit);
+	window.draw(buttonHighScore);
+	window.draw(logo);
 }

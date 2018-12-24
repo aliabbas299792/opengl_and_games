@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <fstream>
-#include "utilFunctions.h"
+#include "../headerFiles/utilFunctions.h"
 
 void moveBall(sf::View &view, sf::RenderWindow &window, sf::Sprite &sprite, float &velocityX, float &velocityY, float accelerationX, float accelerationY, float &gravity, float originalGravity, bool collide, bool &hitFloor, float decelerationX, bool &removeGravity) {
 	//if gravity remove flag has been raised in the intersection checks bit, disable gravity

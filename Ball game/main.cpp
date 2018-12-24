@@ -3,8 +3,8 @@
 #include <fstream>
 #include <filesystem>
 
-#include "utilFunctions.h"
-#include "platformClasses.h"
+#include "headerFiles/utilFunctions.h"
+#include "headerFiles/platformClasses.h"
 
 int main() {
 	//consts and vars
@@ -113,7 +113,9 @@ int main() {
 
 		window.clear(sf::Color(10,10,15,255)); //set default background to black
 
-		currentTime = gameClock.getElapsedTime(); //gets elapsed time since the last time it was measured
+		if (timingFpsScore(currentTime, elapsedTimeFps, elapsedTime, gameClock, fps)) { //returns true to skip game loop
+			continue;
+		}
 
 		textScoreLive = sf::Text("Score: " + std::to_string(score), lato);
 		textScoreLive.setPosition(10, 30); //set the position on the screen
@@ -128,26 +130,9 @@ int main() {
 			elapsedTimeFps = currentTime; //sets the variable to current time, to measure for passing of 1 second in later loop
 		}
 
-		if (currentTime.asMilliseconds() < elapsedTime.asMilliseconds() + 9) { //check if 9ms has passed
-			continue; //if it hasn't, skip processing for this loop
-		}
-		else {
-			fps++; //otherwise increment fps
-			elapsedTime = currentTime;
-		}
-
 		switch (gameState) {
 			case entrance:
-				//below are just the button stuff, so highlighting, and working, to change game state and move to another screen after clicking
-				selectionProcessor(gameState, end, buttonExit, window, justChanged, "scoreboard.txt", score);
-				selectionProcessor(gameState, game, buttonStart, window, justChanged, "scoreboard.txt", score);
-				selectionProcessor(gameState, scoreboard, buttonHighScore, window, justChanged, "scoreboard.txt", score);
-
-				//and draw the buttons and logo
-				window.draw(buttonStart);
-				window.draw(buttonExit);
-				window.draw(buttonHighScore);
-				window.draw(logo);
+				entranceScreen(gameState, buttonExit, buttonStart, buttonHighScore, logo, window, justChanged, score);
 				break;
 			case game:
 				if (justChanged == true) { //esentially set it to initial positions and stuff

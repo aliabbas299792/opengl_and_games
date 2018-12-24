@@ -13,17 +13,41 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{984a0e49-4d1c-445f-82d9-9d680f3b1150}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes">
+      <UniqueIdentifier>{3886d6c1-524c-40bf-8621-fc82977b48df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scoreboardFuncs.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="gameFuncs.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="mainInitFuncs.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="chunksHolder.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="chunks.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="platform.cpp">
+      <Filter>Classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utilFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="platforms.h">
+    <ClInclude Include="platformClasses.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

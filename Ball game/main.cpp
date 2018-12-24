@@ -3,14 +3,8 @@
 #include <fstream>
 #include <filesystem>
 
-//enum definitions
-enum gameScreens { entrance, game, scoreboard, end }; //make enum for all the screens
-
 #include "utilFunctions.h"
-#include "platforms.h"
-
-//static var definitions
-//std::vector<platforms*> platforms::platformStuff;
+#include "platformClasses.h"
 
 int main() {
 	//consts and vars

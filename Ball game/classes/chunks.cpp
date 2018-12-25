@@ -25,14 +25,31 @@ chunks::chunks(int width, int height, int posX, int posY) { //the constructor de
 
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			platformsInTheChunk.push_back( //this will occur 9 times, a new platform will be made, and then added to the vector
-				platform(
-					sectorWidth / 2 + (rand() % 100 - 25),
-					sectorHeight / 2 + (rand() % 100 - 25),
-					posX + (sectorWidth * i) + (rand() % 50) + 50,
-					posY + (sectorHeight * j) + (rand() % 50) + 50
-				)
-			);
+			if ((rand() % 30) < 23) {
+				platformsInTheChunk.push_back( //this will occur 9 times, a new platform will be made, and then added to the vector
+					platformNormal::platform(
+						sectorWidth / 2 + (rand() % 100 - 25),
+						sectorHeight / 2 + (rand() % 100 - 25),
+						posX + (sectorWidth * i) + (rand() % 50) + 50,
+						posY + (sectorHeight * j) + (rand() % 50) + 50,
+						sf::Color::White,
+						"normal"
+					)
+				);
+			}
+			else {
+				platformsInTheChunk.push_back( //this will occur 9 times, a new platform will be made, and then added to the vector
+					platformInstantDeath::platform(
+						sectorWidth / 2 + (rand() % 100 - 25),
+						sectorHeight / 2 + (rand() % 100 - 25),
+						posX + (sectorWidth * i) + (rand() % 50) + 50,
+						posY + (sectorHeight * j) + (rand() % 50) + 50,
+						sf::Color::Red,
+						"instantDeath"
+
+					)
+				);
+			}
 		}
 	}
 }

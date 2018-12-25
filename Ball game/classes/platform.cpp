@@ -1,17 +1,19 @@
 #include "../headerFiles/platformClasses.h"
 #include <SFML/Graphics.hpp>
 
-platform::platform(int a, int b, int c, int d) {
+//enum definitions
+enum gameScreens { entrance, game, scoreboard, end }; //make enum for all the screens
+
+platform::platform(int a, int b, int c, int d, sf::Color e, sf::String f) {
 	//basically sets the values of the collision object
 	width = a;
 	height = b;
 	posx = c;
 	posy = d;
+	blockType = f;
 	rect.setSize(sf::Vector2f(width, height));
 	rect.setPosition(sf::Vector2f(posx, posy));
-	rect.setFillColor(sf::Color::White);
-
-	//platformStuff.push_back(this); //adds the collision object to a vector array
+	rect.setFillColor(e);
 }
 
 bool platform::checkIntersect(sf::Sprite &sprite1, float gravity, float &velocityX, float &velocityY, float gravityOriginal, bool &hitFloor, bool &removeGravity, int &score, sf::Time &timeAtJump, sf::Clock clock, float &prevPosX, float &prevPosY) {
@@ -85,10 +87,10 @@ bool platform::checkIntersect(sf::Sprite &sprite1, float gravity, float &velocit
 			int tempAlpha = rect.getFillColor().a / 2; //gets the alpha channel colour and divides by 2
 
 			if (jumpedOn == 3) { //if 3 jumps have occurred then basically make it disappear
-				rect.setFillColor(sf::Color(255, 255, 255, 0));
+				rect.setFillColor(sf::Color(rect.getFillColor().r, rect.getFillColor().g, rect.getFillColor().b, 0));
 			}
 			else {
-				rect.setFillColor(sf::Color(255, 255, 255, tempAlpha)); //otherwise just set the alpha channel to the decreased value of tempAlpha
+				rect.setFillColor(sf::Color(rect.getFillColor().r, rect.getFillColor().g, rect.getFillColor().b, tempAlpha)); //otherwise just set the alpha channel to the decreased value of tempAlpha
 			}
 		}
 
@@ -99,4 +101,8 @@ bool platform::checkIntersect(sf::Sprite &sprite1, float gravity, float &velocit
 	else {
 		return false; //return false, to continue as normal
 	}
+}
+
+void platform::setColour(sf::Color colour) {
+	rect.setFillColor(colour);
 }

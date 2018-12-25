@@ -84,6 +84,10 @@ void chunksHolder::updateChunks(sf::Sprite sprite1, int winWidth, int winHeight)
 					break;
 				}
 
+				if (tempCoordX == 0 && tempCoordY == 0) {
+					continue;
+				}
+
 				chunksLoaded.push_back( //adds the needed chunk to the chunksLoaded vector
 					chunks(
 						chunkCoordsWidthHeight[2],
@@ -130,6 +134,10 @@ chunksHolder::chunksHolder(int width, int height, int posX, int posY) { //the in
 	//populates the vector with 3x3 chunks in a grid
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
+			if (i == 1 && j == 1) {
+				continue;
+			}
+
 			chunksLoaded.push_back(
 				chunks(
 					width,

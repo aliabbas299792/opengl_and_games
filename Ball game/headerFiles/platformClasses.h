@@ -4,21 +4,37 @@
 #define PLATFORM_CLASSES
 
 class platform {
-private:
-	sf::RectangleShape rect; //the rectangle initial definition
-	int width, height, posx, posy; //the internal values it has
 public:
+	sf::RectangleShape rect; //the rectangle initial definition
+	int width, height, posx, posy; //the internal values it hasX
+	std::string blockType;
+
 	int jumpedOn = 0; //how many jumps on this platform itself
 
 	~platform() {}; //the destructor for the platform
-	platform(int, int, int, int); //the constructor
+
+	platform() {};
+	platform(int, int, int, int, sf::Color, sf::String); //the constructor
 
 	sf::RectangleShape* shape() { //to return the actual shape on request
 		return &rect;
 	}
 
+	void setColour(sf::Color);
+
 	//one below is constructor for intersection checker
 	bool checkIntersect(sf::Sprite &a, float b, float &c, float &d, float e, bool &f, bool &g, int &h, sf::Time &i, sf::Clock j, float &prevPosX, float &prevPosY);
+};
+
+class platformNormal : public platform {
+public:
+	bool instantDeath() { return false; };
+};
+
+class platformInstantDeath : public platform {
+public:
+	bool instantDeath() { return true; };
+
 };
 
 class chunks { //chunks, which will hold 9 platforms and each will cover the screen

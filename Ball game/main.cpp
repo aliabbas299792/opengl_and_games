@@ -3,12 +3,12 @@
 #include <fstream>
 #include <filesystem>
 
-#include "headerFiles/platformClasses.h"
 #include "headerFiles/utilFunctions.h"
+#include "headerFiles/platformClasses.h"
 
 int main() {
 	//consts and vars
-	const float accelerationX = 0.1;
+	const float accelerationX = 0.2;
 	const float decelerationX = 0.03;
 	const float accelerationY = 6;
 	const float gravityOriginal = 0.15;
@@ -99,6 +99,8 @@ int main() {
 	int j = 0; //to loop through chunk itself
 	bool tempTorF = false; //check if there is a collison variable
 
+	bool killFlag = false; //check if bounced on instant death block
+
 	//timing and fps
 	sf::Clock gameClock; //start the clock
 	sf::Time elapsedTime = gameClock.getElapsedTime(); //get elapsed time at this instant
@@ -140,7 +142,7 @@ int main() {
 			case game:
 				if (justChanged == true) { //esentially set it to initial positions and stuff
 					score = 0;
-					sprite1.setPosition(300.0f, 100.0f); //set sprite initial position
+					sprite1.setPosition(windowWidth/2, windowHeight/2); //set sprite initial position
 					velocityX = 0;
 					velocityY = 0;
 					timeSinceCollision = gameClock.getElapsedTime();
@@ -148,9 +150,11 @@ int main() {
 					liveChunk = new chunksHolder(windowWidth, windowHeight, (0 - windowWidth), (0 - windowHeight)); //reset chunks
 
 					justChanged = false;
+
+					killFlag = false;
 				}
 
-				if (currentTime.asMilliseconds() - timeSinceCollision.asMilliseconds() >= 2000) {
+				if (currentTime.asMilliseconds() - timeSinceCollision.asMilliseconds() >= 2000 || killFlag == true) {
 					liveChunk->~chunksHolder();
 					onDeath(gameState, "scoreboard.txt", score); //if it's been falling for at least 2 seconds then die
 				}
@@ -163,7 +167,12 @@ int main() {
 						if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].checkIntersect(sprite1, gravity, velocityX, velocityY, gravityOriginal, hitFloor, removeGravity, score, timeSinceCollision, gameClock, prevPosX, prevPosY) && tempTorF == false) {
 							//if the above evaluates to true even once, the variable below is set to true for this entire iteration of the loop
 							//the if statement checks for collisions
-							tempTorF = true;
+							if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].blockType == "instantDeath") { //if it's an instant death block
+								killFlag = true;
+							}
+							else {
+								tempTorF = true; //if it is not an instant death block, trigger the normal response to collisions
+							}
 						}
 					}
 				}

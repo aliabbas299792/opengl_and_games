@@ -11,7 +11,7 @@ void loadTexture(sf::Texture &texture, sf::RectangleShape &rect, std::string fil
 void loadTextureSprite(sf::Texture &texture, sf::Sprite &sprite, std::string filePath, float posX, float posY);
 
 void moveBall(sf::View &view, sf::RenderWindow &window, sf::Sprite &sprite, float &velocityX, float &velocityY, float accelerationX, float accelerationY, float &gravity, float originalGravity, bool collide, bool &hitFloor, float decelerationX, bool &removeGravity, float &prevPosX, float &prevPosY, float &bounceMultiplier);
-void onDeath(gameScreens &gameState, std::string filePath, int score, sf::Time &tempTime, sf::Time currentTime);
+void onDeath(gameScreens &gameState, std::string filePath, int score, sf::Time &tempTime, sf::Time currentTime, gameScreens nextScreen);
 
 void sortScoreBoard(std::fstream &scoreboardFile, int *fileNums, int arrayLen, std::string filePath);
 void scoreboard_init(std::string filePath, std::string &finalReturnString);

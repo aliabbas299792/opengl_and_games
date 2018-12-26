@@ -38,11 +38,6 @@ void scoreboard_init(std::string filePath, std::string &finalReturnString) {
 	int fileLoopTemp; //to retrieve number of lines in file for array, populate array and return string
 	std::string tempScore; //to first be used to find num of lines, then to retrieve lines and put in to array
 
-	if (!std::experimental::filesystem::exists(filePath)) { //creates the file if it doesnt exist
-		scores.open(filePath, std::fstream::in);
-		scores.close();
-	}
-
 	//initialising everything to empty or 0
 	fileLoopTemp = 0;
 	tempScore = "";

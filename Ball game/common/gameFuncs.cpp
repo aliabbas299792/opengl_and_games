@@ -43,7 +43,7 @@ void moveBall(sf::View &view, sf::RenderWindow &window, sf::Sprite &sprite, floa
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 			velocityX += accelerationX;
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 			if (hitFloor) { //if it just hit the floor allow for vertical acceleration, otherwise don't allow it
 				velocityY -= accelerationY;
 				hitFloor = false; //and set the variable to false once the acceleration is done
@@ -65,7 +65,7 @@ void moveBall(sf::View &view, sf::RenderWindow &window, sf::Sprite &sprite, floa
 	view.setCenter(sprite.getPosition().x, sprite.getPosition().y); //set the center of the screen to the sprite's location
 }
 
-void onDeath(gameScreens &gameState, std::string filePath, int score, sf::Time &tempTime, sf::Time currentTime) {
+void onDeath(gameScreens &gameState, std::string filePath, int score, sf::Time &tempTime, sf::Time currentTime, gameScreens nextScreen) {
 	std::fstream scores;
 	scores.open(filePath, std::ios::in);
 	std::string temp1 = "";
@@ -95,5 +95,5 @@ void onDeath(gameScreens &gameState, std::string filePath, int score, sf::Time &
 
 	tempTime = currentTime;
 
-	gameState = youDied;
+	gameState = nextScreen;
 }

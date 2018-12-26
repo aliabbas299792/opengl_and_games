@@ -27,6 +27,7 @@ int main() {
 	bool justChanged = false;
 	int score = 0;
 	std::string scoreboard_text;
+	std::string scoreboardFilePath = "scoreboard.txt";
 
 	gameScreens gameState = entrance; //set initial gamestate to entrance
 
@@ -54,7 +55,7 @@ int main() {
 	sf::RectangleShape timeLeftBox(sf::Vector2f(210, 40)); //box for the timer till death thing
 	sf::View windowView(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y)); //make the moving view that will be centered on the ball
 	sf::RectangleShape backgroundGround(sf::Vector2f(windowWidth, 100));
-	sf::RectangleShape buttonStart(sf::Vector2f(150, 56.25)); //start button
+	sf::RectangleShape buttonStart(sf::Vector2f(168.75, 56.25)); //start button
 	sf::Texture btnStartTex; //the respective texture
 	sf::RectangleShape buttonHighScore(sf::Vector2f(150, 56.25)); //high score button
 	sf::Texture btnHighScreTex; //the respective texture
@@ -99,8 +100,8 @@ int main() {
 	helpTitle.setCharacterSize(60);
 
 	actualHelp = sf::Text(
-		"-The aim of the game is to score as high as possible\n and not die.\n\n-Your score and fps appear in the top right once\n in-game.\n-You die after falling for 2 seconds, and the timer\n is on the right in-game.\n-Up, Left and Right to accelerate in those\n directions.\n\n-All blocks disappear after being bounced off of\n thrice. \n-White blocks add 1 to your score. \n-Green blocks add 4 to your score. \n-Blue blocks add 10 to your score. \n-Red blocks kill you.\n-Cyan blocks make you jump more.", lato, 20); //set the text font and size
-	actualHelp.setPosition(sf::Vector2f(windowWidth / 2 - scoreboard_board.getSize().x / 2 + 40, 130)); //set it to centre
+		"-The aim of the game is to score as high as possible\n and not die.\n\n-Your score and fps appear in the top right once\n in-game.\n-You die after falling for 2 seconds, and the timer\n is on the right in-game.\n-Start button or spacebar to start the game.\n-Up (or spacebar), Left and Right to accelerate in those\n directions.\n-Escape button to exit the game.\n\n-All blocks disappear after being bounced off of\n thrice. \n-White blocks add 1 to your score. \n-Green blocks add 4 to your score. \n-Blue blocks add 10 to your score. \n-Red blocks kill you.\n-Cyan blocks make you jump more.", lato, 18); //set the text font and size
+	actualHelp.setPosition(sf::Vector2f(windowWidth / 2 - scoreboard_board.getSize().x / 2 + 40, 124)); //set it to centre
 
 	timeLeftBox.setFillColor(sf::Color(30, 30, 30, 200));
 	timeLeftBox.setPosition(windowWidth - timeLeftBox.getSize().x, 90);
@@ -141,14 +142,22 @@ int main() {
 	sf::Time elapsedTimeFps = gameClock.getElapsedTime(); //elapsed time for FPS
 	sf::Time tempTime; //for whatever temporary purpose to measure time in the game
 
+	//make scoreboard file if it doesn't exist
+	std::fstream scores; //the actual filestream to get the scores
+	if (!std::experimental::filesystem::exists(scoreboardFilePath)) { //creates the file if it doesnt exist
+		scores.open(scoreboardFilePath, std::fstream::out);
+		scores << "0\n0\n0\n0\n0\n0\n0\n0\n0";
+		scores.close();
+	}
+
 	while (window.isOpen()) {
 		sf::Event events; 
 
 		window.clear(sf::Color(10,10,15,255)); //set default background to black
 
-		if (timingFpsScore(currentTime, elapsedTimeFps, elapsedTime, gameClock, fps)) { //returns true to skip game loop
-			continue;
-		}
+		currentTime = gameClock.getElapsedTime(); //gets elapsed time since the last time it was measured
+
+		fps++; //increment fps through ever loop, so shows it accurately
 
 		textScoreLive = sf::Text("Score: " + std::to_string(score), lato);
 		textScoreLive.setPosition(10, 30); //set the position on the screen
@@ -166,6 +175,11 @@ int main() {
 		switch (gameState) {
 			case entrance:
 				entranceScreen(gameState, buttonExit, buttonStart, buttonHighScore, buttonHelp, logo, window, justChanged, score);
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+					justChanged = true;
+					gameState = game;
+				}
 				break;
 			case game:
 				if (justChanged == true) { //esentially set it to initial positions and stuff
@@ -184,40 +198,44 @@ int main() {
 
 				if (currentTime.asMilliseconds() - timeSinceCollision.asMilliseconds() >= 2000 || killFlag == true) {
 					liveChunk->~chunksHolder();
-					onDeath(gameState, "scoreboard.txt", score, tempTime, currentTime); //if it's been falling for at least 2 seconds then die
+					onDeath(gameState, scoreboardFilePath, score, tempTime, currentTime, youDied); //if it's been falling for at least 2 seconds then die
 				}
 
-				removeGravity = false; //initialise bool to false
-				tempTorF = false; //initialise this bool to false as well
+				if (currentTime.asMilliseconds() >= elapsedTime.asMilliseconds() + 7) { //only process interactions and have movement ever 7ms
+					removeGravity = false; //initialise bool to false
+					tempTorF = false; //initialise this bool to false as well
 
-				for (i = 0; i < liveChunk->chunksLoaded.size(); i++) { //iterates through chunk vector
-					for (j = 0; j < liveChunk->chunksLoaded[i].platformsInTheChunk.size(); j++) { //iterates through individual chunks
-						if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].checkIntersect(sprite1, gravity, velocityX, velocityY, gravityOriginal, hitFloor, removeGravity, score, timeSinceCollision, gameClock, prevPosX, prevPosY) && tempTorF == false) {
-							//if the above evaluates to true even once, the variable below is set to true for this entire iteration of the loop
-							//the if statement checks for collisions
-							bounceMultiplier = 0.5; //default bounce multiplier
+					for (i = 0; i < liveChunk->chunksLoaded.size(); i++) { //iterates through chunk vector
+						for (j = 0; j < liveChunk->chunksLoaded[i].platformsInTheChunk.size(); j++) { //iterates through individual chunks
+							if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].checkIntersect(sprite1, gravity, velocityX, velocityY, gravityOriginal, hitFloor, removeGravity, score, timeSinceCollision, gameClock, prevPosX, prevPosY) && tempTorF == false) {
+								//if the above evaluates to true even once, the variable below is set to true for this entire iteration of the loop
+								//the if statement checks for collisions
+								bounceMultiplier = 0.5; //default bounce multiplier
 
-							if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].typeOfBlock == instantDeath) { //if it's an instant death block
-								killFlag = true; //set it to die on next loop
-								bounceMultiplier = 0.1;
+								if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].typeOfBlock == instantDeath) { //if it's an instant death block
+									killFlag = true; //set it to die on next loop
+									bounceMultiplier = 0.1;
+								}
+								else if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].typeOfBlock == bigBounce) {
+									bounceMultiplier = 1.5;
+								}
+
+								tempTorF = true; //basically collision flag
 							}
-							else if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].typeOfBlock == bigBounce) {
-								bounceMultiplier = 1.5;
-							}
-
-							tempTorF = true; //basically collision flag
 						}
 					}
-				}
 
-				if (tempTorF) //if it's true...
-				{
-					moveBall(windowView, window, sprite1, velocityX, velocityY, accelerationX, accelerationY, gravity, gravityOriginal, true, hitFloor, decelerationX, removeGravity, prevPosX, prevPosY, bounceMultiplier);
-					//then move the ball, while accounting for the collision has taken place
-				}
-				else {
-					//otherwise act as if there was no collision
-					moveBall(windowView, window, sprite1, velocityX, velocityY, accelerationX, accelerationY, gravity, gravityOriginal, false, hitFloor, decelerationX, removeGravity, prevPosX, prevPosY, bounceMultiplier);
+					if (tempTorF) //if it's true...
+					{
+						moveBall(windowView, window, sprite1, velocityX, velocityY, accelerationX, accelerationY, gravity, gravityOriginal, true, hitFloor, decelerationX, removeGravity, prevPosX, prevPosY, bounceMultiplier);
+						//then move the ball, while accounting for the collision has taken place
+					}
+					else {
+						//otherwise act as if there was no collision
+						moveBall(windowView, window, sprite1, velocityX, velocityY, accelerationX, accelerationY, gravity, gravityOriginal, false, hitFloor, decelerationX, removeGravity, prevPosX, prevPosY, bounceMultiplier);
+					}
+
+					elapsedTime = currentTime;
 				}
 
 				window.setView(windowView); //sets the view to the moving view, and draws stuff relative to it
@@ -226,6 +244,12 @@ int main() {
 					for (j = 0; j < liveChunk->chunksLoaded[i].platformsInTheChunk.size(); j++) { //iterates through individual chunks
 						window.draw(*liveChunk->chunksLoaded[i].platformsInTheChunk[j].shape()); //draws the platforms
 					}
+				}
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+					liveChunk->~chunksHolder();
+					onDeath(gameState, scoreboardFilePath, score, tempTime, currentTime, game); //if it's been falling for at least 2 seconds then die
+					window.close();
 				}
 
 				liveChunk->updateChunks(sprite1, windowWidth, windowHeight);
@@ -244,13 +268,13 @@ int main() {
 				window.draw(fpsText); //draws the fps text
 				window.draw(textScoreLive); //draw the score text
 				
-				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, "scoreboard.txt", score);
+				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, scoreboardFilePath, score);
 				//and adds the respective selection processor for the back button
 
 				break;
 			case scoreboard:
 				if (justChanged == true) { //on first iteration when the scoreboard has just been clicked on
-					scoreboard_init("scoreboard.txt", scoreboard_text); //sort all the scores, and limit the total amount to 9
+					scoreboard_init(scoreboardFilePath, scoreboard_text); //sort all the scores, and limit the total amount to 9
 
 					textScoreBoard = sf::Text(scoreboard_text, lato, 37); //set the text font and size
 					textScoreBoard.setPosition(sf::Vector2f(windowWidth / 2 - scoreboard_board.getSize().x / 2 + 40, 130)); //and centers it on x axis
@@ -263,14 +287,14 @@ int main() {
 				window.draw(textScoreBoard); //draw the scores
 				//
 				window.draw(buttonBack); //draw back button
-				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, "scoreboard.txt", score); //and the back buttons's selection processor thing here too
+				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, scoreboardFilePath, score); //and the back buttons's selection processor thing here too
 				break;
 			case help:
 				window.draw(helpBox);
 				window.draw(helpTitle);
 				window.draw(actualHelp);
 				window.draw(buttonBack); //draw back button
-				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, "scoreboard.txt", score); //and the back buttons's selection processor thing here too
+				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, scoreboardFilePath, score); //and the back buttons's selection processor thing here too
 				break;
 			case youDied:
 				window.draw(youAreDead);
@@ -286,6 +310,10 @@ int main() {
 				break;
 		}
 		
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+			window.close();
+		}
+
 		while (window.pollEvent(events))
 		{
 			//gotta poll events regardless of whether or not we use em, otherwise window will become unresponsive

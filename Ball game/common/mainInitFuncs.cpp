@@ -4,16 +4,7 @@
 #include "../headerFiles/utilFunctions.h"
 
 bool timingFpsScore(sf::Time &currentTime, sf::Time &elapsedTimeFps, sf::Time &elapsedTime, sf::Clock gameClock, int &fps) {
-	currentTime = gameClock.getElapsedTime(); //gets elapsed time since the last time it was measured
 
-	if (currentTime.asMilliseconds() < elapsedTime.asMilliseconds() + 9) { //check if 9ms has passed
-		return true; //if it hasn't, skip processing for this loop, assuming true means continue
-	}
-	else {
-		fps++; //otherwise increment fps
-		elapsedTime = currentTime;
-		return false;
-	}
 }
 
 void selectionProcessor(gameScreens &gameState, gameScreens nextScreen, sf::RectangleShape &button, sf::RenderWindow &window, bool &justChanged, std::string filePath, int &score) {

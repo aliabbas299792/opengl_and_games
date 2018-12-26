@@ -130,6 +130,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="headerFiles\enums.h" />
     <ClInclude Include="headerFiles\platformClasses.h" />
     <ClInclude Include="headerFiles\utilFunctions.h" />
   </ItemGroup>

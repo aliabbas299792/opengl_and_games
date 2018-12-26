@@ -25,7 +25,9 @@ chunks::chunks(int width, int height, int posX, int posY) { //the constructor de
 
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			if ((rand() % 30) < 23) {
+			//all of the if-statements below will result in blocks, in pretty random distributions, or none at all
+
+			if (rand() % 100 < 50) {
 				platformsInTheChunk.push_back( //this will occur 9 times, a new platform will be made, and then added to the vector
 					platformNormal::platform(
 						sectorWidth / 2 + (rand() % 100 - 25),
@@ -33,20 +35,60 @@ chunks::chunks(int width, int height, int posX, int posY) { //the constructor de
 						posX + (sectorWidth * i) + (rand() % 50) + 50,
 						posY + (sectorHeight * j) + (rand() % 50) + 50,
 						sf::Color::White,
-						"normal"
+						normal,
+						1
 					)
 				);
 			}
-			else {
+			else if(rand() % 100 >= 50 && rand() % 100 < 80){
 				platformsInTheChunk.push_back( //this will occur 9 times, a new platform will be made, and then added to the vector
 					platformInstantDeath::platform(
-						sectorWidth / 2 + (rand() % 100 - 25),
-						sectorHeight / 2 + (rand() % 100 - 25),
-						posX + (sectorWidth * i) + (rand() % 50) + 50,
-						posY + (sectorHeight * j) + (rand() % 50) + 50,
+						sectorWidth / 2 + (rand() % 150 - 25),
+						sectorHeight / 2 + (rand() % 50 - 25),
+						posX + (sectorWidth * i) + (rand() % 50) + 70,
+						posY + (sectorHeight * j) + (rand() % 50) + 70,
 						sf::Color::Red,
-						"instantDeath"
-
+						instantDeath,
+						1
+					)
+				);
+			}
+			else if (rand() % 100 >= 80 && rand() % 100 < 87) {
+				platformsInTheChunk.push_back( //this will occur 9 times, a new platform will be made, and then added to the vector
+					platformInstantDeath::platform(
+						sectorWidth / 2 + (rand() % 50 - 25),
+						sectorHeight / 2 + (rand() % 50 - 25),
+						posX + (sectorWidth * i) + (rand() % 50) + 70,
+						posY + (sectorHeight * j) + (rand() % 50) + 70,
+						sf::Color::Green,
+						quadrupleScore,
+						4
+					)
+				);
+			}
+			else if (rand() % 100 >= 87 && rand() % 100 < 95) {
+				platformsInTheChunk.push_back( //this will occur 9 times, a new platform will be made, and then added to the vector
+					platformInstantDeath::platform(
+						sectorWidth / 2 + (rand() % 150 - 25),
+						sectorHeight / 2 + (rand() % 150 - 25),
+						posX + (sectorWidth * i) + (rand() % 50) + 70,
+						posY + (sectorHeight * j) + (rand() % 50) + 70,
+						sf::Color::Cyan,
+						bigBounce,
+						1
+					)
+				);
+			}
+			else if (rand() % 100 >= 95 && rand() % 100 <= 99) {
+				platformsInTheChunk.push_back( //this will occur 9 times, a new platform will be made, and then added to the vector
+					platformInstantDeath::platform(
+						sectorWidth / 2 + (rand() % 50 - 25),
+						sectorHeight / 2 + (rand() % 50 - 25),
+						posX + (sectorWidth * i) + (rand() % 50) + 70,
+						posY + (sectorHeight * j) + (rand() % 50) + 70,
+						sf::Color::Blue,
+						tenTimeScore,
+						10
 					)
 				);
 			}

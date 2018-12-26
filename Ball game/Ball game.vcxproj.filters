@@ -45,5 +45,8 @@
     <ClInclude Include="headerFiles\platformClasses.h">
       <Filter>headerFiles</Filter>
     </ClInclude>
+    <ClInclude Include="headerFiles\enums.h">
+      <Filter>headerFiles</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

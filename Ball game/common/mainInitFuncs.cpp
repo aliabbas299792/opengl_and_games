@@ -75,14 +75,16 @@ void loadTextureSprite(sf::Texture &texture, sf::Sprite &sprite, std::string fil
 	sprite.setPosition(posX, posY);
 }
 
-void entranceScreen(gameScreens &gameState, sf::RectangleShape buttonExit, sf::RectangleShape buttonStart, sf::RectangleShape buttonHighScore, sf::RectangleShape logo, sf::RenderWindow &window, bool &justChanged, int &score) {
+void entranceScreen(gameScreens &gameState, sf::RectangleShape buttonExit, sf::RectangleShape buttonStart, sf::RectangleShape buttonHighScore, sf::RectangleShape buttonHelp, sf::RectangleShape logo, sf::RenderWindow &window, bool &justChanged, int &score) {
 	//below are just the button stuff, so highlighting, and working, to change game state and move to another screen after clicking
+	selectionProcessor(gameState, help, buttonHelp, window, justChanged, "scoreboard.txt", score);
 	selectionProcessor(gameState, end, buttonExit, window, justChanged, "scoreboard.txt", score);
 	selectionProcessor(gameState, game, buttonStart, window, justChanged, "scoreboard.txt", score);
 	selectionProcessor(gameState, scoreboard, buttonHighScore, window, justChanged, "scoreboard.txt", score);
 
 	//and draw the buttons and logo
 	window.draw(buttonStart);
+	window.draw(buttonHelp);
 	window.draw(buttonExit);
 	window.draw(buttonHighScore);
 	window.draw(logo);

@@ -3,6 +3,7 @@
 #include <fstream>
 #include <filesystem>
 
+#include "headerFiles/enums.h"
 #include "headerFiles/utilFunctions.h"
 #include "headerFiles/platformClasses.h"
 
@@ -50,30 +51,39 @@ int main() {
 	sf::Texture spriteTex;
 	sf::Sprite sprite1;
 	sf::RectangleShape scoreboardAndFps(sf::Vector2f(100, 60)); //make the fps box thing
+	sf::RectangleShape timeLeftBox(sf::Vector2f(210, 40)); //box for the timer till death thing
 	sf::View windowView(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y)); //make the moving view that will be centered on the ball
 	sf::RectangleShape backgroundGround(sf::Vector2f(windowWidth, 100));
-	sf::RectangleShape buttonStart(sf::Vector2f(200, 75)); //start button
+	sf::RectangleShape buttonStart(sf::Vector2f(150, 56.25)); //start button
 	sf::Texture btnStartTex; //the respective texture
 	sf::RectangleShape buttonHighScore(sf::Vector2f(150, 56.25)); //high score button
 	sf::Texture btnHighScreTex; //the respective texture
+	sf::RectangleShape buttonHelp(sf::Vector2f(61.875, 42.1875)); //high score button
+	sf::Texture btnHelpTex; //the respective texture
 	sf::RectangleShape buttonBack(sf::Vector2f(100, 37.5)); //back button
 	sf::Texture btnBackTex; //the respective texture
 	sf::RectangleShape buttonExit(sf::Vector2f(100, 37.5)); //back button
 	sf::Texture btnExitTex; //the respective texture
-	sf::RectangleShape logo(sf::Vector2f(300, 300)); //the logo in start screen
+	sf::RectangleShape logo(sf::Vector2f(250, 250)); //the logo in start screen
 	sf::Texture logoTex; //the respective texture
 	sf::RectangleShape scoreboard_board(sf::Vector2f(520, 540)); //scoreboard rect
+	sf::RectangleShape helpBox(sf::Vector2f(520, 540)); //scoreboard rect
 	sf::Font lato; //lato font
 	sf::Text textScoreBoardHead("Scoreboard:", lato); //the scoreboard title
-	sf::Text textScoreBoard("", lato); //the scores
-	sf::Text textScoreLive("", lato); //the scores
+	sf::Text textScoreBoard("", lato); //the scores for the highscore bit
+	sf::Text textScoreLive("", lato); //the scores for the actual in-game score
+	sf::Text remainingLife("", lato);
+	sf::Text youAreDead("You Died", lato);
+	sf::Text helpTitle("Help", lato);
+	sf::Text actualHelp("", lato);
 
 	//loading stuff, or making rectangles/sprites with colors and stuff, or setting position of stuff
 	loadTextureSprite(spriteTex, sprite1, "resources/char.png", windowWidth / 2 - 15, 100); //sprite
-	loadTexture(btnStartTex, buttonStart, "resources/btnStart.png", windowWidth/2-buttonStart.getSize().x/2, 360); //start button
+	loadTexture(btnStartTex, buttonStart, "resources/btnStart.png", windowWidth/2-buttonStart.getSize().x/2, 310); //start button
+	loadTexture(btnHelpTex, buttonHelp, "resources/btnHelp.png", windowWidth / 2 - buttonHelp.getSize().x/2, 471.25); //help button
 	loadTexture(btnBackTex, buttonBack, "resources/btnBack.png", windowWidth - buttonBack.getSize().x - 25, 25); //back button
-	loadTexture(btnHighScreTex, buttonHighScore, "resources/btnHighScre.png", windowWidth / 2 - buttonHighScore.getSize().x / 2, 460); //high score button
-	loadTexture(btnExitTex, buttonExit, "resources/btnExit.png", windowWidth / 2 - buttonExit.getSize().x / 2, 541.25); //high score button
+	loadTexture(btnHighScreTex, buttonHighScore, "resources/btnHighScre.png", windowWidth / 2 - buttonHighScore.getSize().x / 2, 390); //high score button
+	loadTexture(btnExitTex, buttonExit, "resources/btnExit.png", windowWidth / 2 - buttonExit.getSize().x / 2, 536.25); //exit button
 	loadTexture(logoTex, logo, "resources/logo.png", windowWidth / 2 - logo.getSize().x / 2, 30);
 	lato.loadFromFile("resources/Lato-Light.ttf"); //the actual font, lato
 
@@ -81,8 +91,25 @@ int main() {
 	sprite1.setTexture(spriteTex); //set the texture
 	sprite1.setOrigin(15, 15); //set origin for transformation to center
 
+	youAreDead.setPosition(windowWidth / 2 - 100, windowHeight / 2 - 20);
+	youAreDead.setCharacterSize(50);
+	youAreDead.setFillColor(sf::Color::Red);
+
+	helpTitle.setPosition(sf::Vector2f(windowWidth / 2 - scoreboard_board.getSize().x / 2 + 40, 40)); //sets help title to halfway across screen
+	helpTitle.setCharacterSize(60);
+
+	actualHelp = sf::Text(
+		"-The aim of the game is to score as high as possible\n and not die.\n\n-Your score and fps appear in the top right once\n in-game.\n-You die after falling for 2 seconds, and the timer\n is on the right in-game.\n-Up, Left and Right to accelerate in those\n directions.\n\n-All blocks disappear after being bounced off of\n thrice. \n-White blocks add 1 to your score. \n-Green blocks add 4 to your score. \n-Blue blocks add 10 to your score. \n-Red blocks kill you.\n-Cyan blocks make you jump more.", lato, 20); //set the text font and size
+	actualHelp.setPosition(sf::Vector2f(windowWidth / 2 - scoreboard_board.getSize().x / 2 + 40, 130)); //set it to centre
+
+	timeLeftBox.setFillColor(sf::Color(30, 30, 30, 200));
+	timeLeftBox.setPosition(windowWidth - timeLeftBox.getSize().x, 90);
+
+	helpBox.setFillColor(sf::Color(50, 50, 50, 255)); //set help box's color
+	helpBox.setPosition(windowWidth / 2 - scoreboard_board.getSize().x / 2, 30); //set the box to halfway across screen
+
 	scoreboardAndFps.setPosition(0, 0); //set the fps box holder thing to top left
-	scoreboardAndFps.setFillColor(sf::Color(30, 30, 30, 150)); //set it's color
+	scoreboardAndFps.setFillColor(sf::Color(30, 30, 30, 200)); //set it's color
 
 	//scoreboard stuff under the same subheading
 	scoreboard_board.setFillColor(sf::Color(50, 50, 50, 255)); //set scoreboard's color
@@ -98,7 +125,7 @@ int main() {
 	int i = 0; //for the iteration through the objects to check for collisions/draw them
 	int j = 0; //to loop through chunk itself
 	bool tempTorF = false; //check if there is a collison variable
-
+	float bounceMultiplier = 0.5;
 	bool killFlag = false; //check if bounced on instant death block
 
 	//timing and fps
@@ -111,7 +138,8 @@ int main() {
 	fpsText.setPosition(10, 10);
 	fpsText.setCharacterSize(15);
 	int fps = 0; //set initial value of fps to 0
-	sf::Time elapsedTimeFps = gameClock.getElapsedTime(); //
+	sf::Time elapsedTimeFps = gameClock.getElapsedTime(); //elapsed time for FPS
+	sf::Time tempTime; //for whatever temporary purpose to measure time in the game
 
 	while (window.isOpen()) {
 		sf::Event events; 
@@ -137,7 +165,7 @@ int main() {
 
 		switch (gameState) {
 			case entrance:
-				entranceScreen(gameState, buttonExit, buttonStart, buttonHighScore, logo, window, justChanged, score);
+				entranceScreen(gameState, buttonExit, buttonStart, buttonHighScore, buttonHelp, logo, window, justChanged, score);
 				break;
 			case game:
 				if (justChanged == true) { //esentially set it to initial positions and stuff
@@ -156,7 +184,7 @@ int main() {
 
 				if (currentTime.asMilliseconds() - timeSinceCollision.asMilliseconds() >= 2000 || killFlag == true) {
 					liveChunk->~chunksHolder();
-					onDeath(gameState, "scoreboard.txt", score); //if it's been falling for at least 2 seconds then die
+					onDeath(gameState, "scoreboard.txt", score, tempTime, currentTime); //if it's been falling for at least 2 seconds then die
 				}
 
 				removeGravity = false; //initialise bool to false
@@ -167,24 +195,29 @@ int main() {
 						if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].checkIntersect(sprite1, gravity, velocityX, velocityY, gravityOriginal, hitFloor, removeGravity, score, timeSinceCollision, gameClock, prevPosX, prevPosY) && tempTorF == false) {
 							//if the above evaluates to true even once, the variable below is set to true for this entire iteration of the loop
 							//the if statement checks for collisions
-							if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].blockType == "instantDeath") { //if it's an instant death block
-								killFlag = true;
+							bounceMultiplier = 0.5; //default bounce multiplier
+
+							if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].typeOfBlock == instantDeath) { //if it's an instant death block
+								killFlag = true; //set it to die on next loop
+								bounceMultiplier = 0.1;
 							}
-							else {
-								tempTorF = true; //if it is not an instant death block, trigger the normal response to collisions
+							else if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].typeOfBlock == bigBounce) {
+								bounceMultiplier = 1.5;
 							}
+
+							tempTorF = true; //basically collision flag
 						}
 					}
 				}
 
 				if (tempTorF) //if it's true...
 				{
-					moveBall(windowView, window, sprite1, velocityX, velocityY, accelerationX, accelerationY, gravity, gravityOriginal, true, hitFloor, decelerationX, removeGravity, prevPosX, prevPosY);
+					moveBall(windowView, window, sprite1, velocityX, velocityY, accelerationX, accelerationY, gravity, gravityOriginal, true, hitFloor, decelerationX, removeGravity, prevPosX, prevPosY, bounceMultiplier);
 					//then move the ball, while accounting for the collision has taken place
 				}
 				else {
 					//otherwise act as if there was no collision
-					moveBall(windowView, window, sprite1, velocityX, velocityY, accelerationX, accelerationY, gravity, gravityOriginal, false, hitFloor, decelerationX, removeGravity, prevPosX, prevPosY);
+					moveBall(windowView, window, sprite1, velocityX, velocityY, accelerationX, accelerationY, gravity, gravityOriginal, false, hitFloor, decelerationX, removeGravity, prevPosX, prevPosY, bounceMultiplier);
 				}
 
 				window.setView(windowView); //sets the view to the moving view, and draws stuff relative to it
@@ -197,9 +230,15 @@ int main() {
 
 				liveChunk->updateChunks(sprite1, windowWidth, windowHeight);
 
+				remainingLife = sf::Text("Time till death: " + std::to_string(2000 - (currentTime.asMilliseconds() - timeSinceCollision.asMilliseconds())) + "ms", lato);
+				remainingLife.setCharacterSize(15);
+				remainingLife.setPosition(windowWidth - 180, 100);
+
 				window.draw(sprite1); //and draws the sprite
 
 				window.setView(window.getDefaultView()); //sets back to the normal default view
+				window.draw(timeLeftBox); //holder for time left thing
+				window.draw(remainingLife); //time left thing
 				window.draw(buttonBack); //draws the back button
 				window.draw(scoreboardAndFps); //draws the fps text and (what will probably be score board) box
 				window.draw(fpsText); //draws the fps text
@@ -225,6 +264,21 @@ int main() {
 				//
 				window.draw(buttonBack); //draw back button
 				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, "scoreboard.txt", score); //and the back buttons's selection processor thing here too
+				break;
+			case help:
+				window.draw(helpBox);
+				window.draw(helpTitle);
+				window.draw(actualHelp);
+				window.draw(buttonBack); //draw back button
+				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, "scoreboard.txt", score); //and the back buttons's selection processor thing here too
+				break;
+			case youDied:
+				window.draw(youAreDead);
+
+				if (tempTime.asMilliseconds() < currentTime.asMilliseconds() - 1000) {
+					gameState = entrance;
+				}
+
 				break;
 			case end:
 				window.close();

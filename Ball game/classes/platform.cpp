@@ -1,16 +1,14 @@
 #include "../headerFiles/platformClasses.h"
 #include <SFML/Graphics.hpp>
 
-//enum definitions
-enum gameScreens { entrance, game, scoreboard, end }; //make enum for all the screens
-
-platform::platform(int a, int b, int c, int d, sf::Color e, sf::String f) {
+platform::platform(int a, int b, int c, int d, sf::Color e, blockTypes f, int g) {
 	//basically sets the values of the collision object
 	width = a;
 	height = b;
 	posx = c;
 	posy = d;
-	blockType = f;
+	typeOfBlock = f;
+	scoreIncrement = g;
 	rect.setSize(sf::Vector2f(width, height));
 	rect.setPosition(sf::Vector2f(posx, posy));
 	rect.setFillColor(e);
@@ -81,7 +79,7 @@ bool platform::checkIntersect(sf::Sprite &sprite1, float gravity, float &velocit
 
 	if (truthCounter > 0) { //if the intersection has occurred at least once
 		if (jumpedOn < 3) { //check if it has been jumped on before
-			score++; //otherwise award a point
+			score += scoreIncrement; //otherwise award a point
 			jumpedOn++;
 
 			int tempAlpha = rect.getFillColor().a / 2; //gets the alpha channel colour and divides by 2

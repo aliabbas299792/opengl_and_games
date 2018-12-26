@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include "enums.h"
 
 #ifndef PLATFORM_CLASSES
 #define PLATFORM_CLASSES
@@ -6,15 +7,15 @@
 class platform {
 public:
 	sf::RectangleShape rect; //the rectangle initial definition
-	int width, height, posx, posy; //the internal values it hasX
-	std::string blockType;
+	int width, height, posx, posy, scoreIncrement; //the internal values it hasX
+	blockTypes typeOfBlock;
 
 	int jumpedOn = 0; //how many jumps on this platform itself
 
 	~platform() {}; //the destructor for the platform
 
 	platform() {};
-	platform(int, int, int, int, sf::Color, sf::String); //the constructor
+	platform(int, int, int, int, sf::Color, blockTypes, int); //the constructor
 
 	sf::RectangleShape* shape() { //to return the actual shape on request
 		return &rect;
@@ -34,7 +35,6 @@ public:
 class platformInstantDeath : public platform {
 public:
 	bool instantDeath() { return true; };
-
 };
 
 class chunks { //chunks, which will hold 9 platforms and each will cover the screen

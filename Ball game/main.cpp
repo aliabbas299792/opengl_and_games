@@ -100,7 +100,7 @@ int main() {
 	helpTitle.setCharacterSize(60);
 
 	actualHelp = sf::Text(
-		"-The aim of the game is to score as high as possible\n and not die.\n\n-Your score and fps appear in the top right once\n in-game.\n-You die after falling for 2 seconds, and the timer\n is on the right in-game.\n-Start button or spacebar to start the game.\n-Up (or spacebar), Left and Right to accelerate in those\n directions.\n-Escape button to exit the game.\n\n-All blocks disappear after being bounced off of\n thrice. \n-White blocks add 1 to your score. \n-Green blocks add 4 to your score. \n-Blue blocks add 10 to your score. \n-Red blocks kill you.\n-Cyan blocks make you jump more.", lato, 18); //set the text font and size
+		"-The aim of the game is to score as high as possible\n and not die.\n\n-Your score and fps appear in the top left once in-game.\n-You die after falling for 2 seconds, and the timer\n is on the right in-game.\n-You also die if the window is out of focus.\n-Start button or spacebar to start the game.\n-Up (or spacebar), Left and Right to accelerate in those\n directions.\n-Escape button to exit the game.\n\n-All blocks disappear after being bounced off of\n thrice. \n-White blocks add 1 to your score. \n-Green blocks add 4 to your score. \n-Blue blocks add 10 to your score. \n-Red blocks kill you.\n-Cyan blocks make you jump more.", lato, 18); //set the text font and size
 	actualHelp.setPosition(sf::Vector2f(windowWidth / 2 - scoreboard_board.getSize().x / 2 + 40, 124)); //set it to centre
 
 	timeLeftBox.setFillColor(sf::Color(30, 30, 30, 200));
@@ -150,29 +150,32 @@ int main() {
 		scores.close();
 	}
 
+	bool clickedAwayFlag = false; //for seeing if a person has clicked away
+
 	while (window.isOpen()) {
-		sf::Event events; 
+		sf::Event events;
 
-		window.clear(sf::Color(10,10,15,255)); //set default background to black
+		if (window.hasFocus() == true) { //if the window is not in focus pause everything
+			window.clear(sf::Color(10, 10, 15, 255)); //set default background to black
 
-		currentTime = gameClock.getElapsedTime(); //gets elapsed time since the last time it was measured
+			currentTime = gameClock.getElapsedTime(); //gets elapsed time since the last time it was measured
 
-		fps++; //increment fps through ever loop, so shows it accurately
+			fps++; //increment fps through ever loop, so shows it accurately
 
-		textScoreLive = sf::Text("Score: " + std::to_string(score), lato);
-		textScoreLive.setPosition(10, 30); //set the position on the screen
-		textScoreLive.setCharacterSize(15); //font size of 15
+			textScoreLive = sf::Text("Score: " + std::to_string(score), lato);
+			textScoreLive.setPosition(10, 30); //set the position on the screen
+			textScoreLive.setCharacterSize(15); //font size of 15
 
-		if (currentTime.asMilliseconds() >= elapsedTimeFps.asMilliseconds() + 1000) { //if a second has passed...
-			fpsText = sf::Text(std::to_string(fps) + " FPS", lato); //update the fps text
-			fpsText.setPosition(10, 10); //set the position on the screen
-			fpsText.setCharacterSize(15); //font size of 15
+			if (currentTime.asMilliseconds() >= elapsedTimeFps.asMilliseconds() + 1000) { //if a second has passed...
+				fpsText = sf::Text(std::to_string(fps) + " FPS", lato); //update the fps text
+				fpsText.setPosition(10, 10); //set the position on the screen
+				fpsText.setCharacterSize(15); //font size of 15
 
-			fps = 0; //reset the fps counter (it's per second, so needs to be of course)
-			elapsedTimeFps = currentTime; //sets the variable to current time, to measure for passing of 1 second in later loop
-		}
+				fps = 0; //reset the fps counter (it's per second, so needs to be of course)
+				elapsedTimeFps = currentTime; //sets the variable to current time, to measure for passing of 1 second in later loop
+			}
 
-		switch (gameState) {
+			switch (gameState) {
 			case entrance:
 				entranceScreen(gameState, buttonExit, buttonStart, buttonHighScore, buttonHelp, logo, window, justChanged, score);
 
@@ -184,7 +187,7 @@ int main() {
 			case game:
 				if (justChanged == true) { //esentially set it to initial positions and stuff
 					score = 0;
-					sprite1.setPosition(windowWidth/2, windowHeight/2); //set sprite initial position
+					sprite1.setPosition(windowWidth / 2, windowHeight / 2); //set sprite initial position
 					velocityX = 0;
 					velocityY = 0;
 					timeSinceCollision = gameClock.getElapsedTime();
@@ -194,6 +197,11 @@ int main() {
 					justChanged = false;
 
 					killFlag = false;
+				}
+
+				if (clickedAwayFlag == true) {
+					onDeath(gameState, scoreboardFilePath, score, tempTime, currentTime, youDied); //if you click away, you die
+					clickedAwayFlag = false; //and reset the flag
 				}
 
 				if (currentTime.asMilliseconds() - timeSinceCollision.asMilliseconds() >= 2000 || killFlag == true) {
@@ -248,7 +256,7 @@ int main() {
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
 					liveChunk->~chunksHolder();
-					onDeath(gameState, scoreboardFilePath, score, tempTime, currentTime, game); //if it's been falling for at least 2 seconds then die
+					onDeath(gameState, scoreboardFilePath, score, tempTime, currentTime, game); //basically just save and exit
 					window.close();
 				}
 
@@ -267,7 +275,7 @@ int main() {
 				window.draw(scoreboardAndFps); //draws the fps text and (what will probably be score board) box
 				window.draw(fpsText); //draws the fps text
 				window.draw(textScoreLive); //draw the score text
-				
+
 				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, scoreboardFilePath, score);
 				//and adds the respective selection processor for the back button
 
@@ -308,10 +316,13 @@ int main() {
 				window.close();
 				return 0; //and end if exited
 				break;
-		}
-		
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-			window.close();
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+				window.close();
+			}
+		}else{
+			clickedAwayFlag = true;
 		}
 
 		while (window.pollEvent(events))

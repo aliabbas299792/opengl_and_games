@@ -8,7 +8,7 @@ chunks::~chunks() { //destructor definition, destructs the platforms, then empti
 	}
 }
 
-chunks::chunks(int width, int height, int posX, int posY) { //the constructor definition
+chunks::chunks(int width, int height, int posX, int posY, bool disableDeathBlock) { //the constructor definition
 	//the 2 variables below are a sector, which should be 1/9th of the screen
 	float sectorWidth, sectorHeight;
 	sectorWidth = width / 3;
@@ -40,7 +40,7 @@ chunks::chunks(int width, int height, int posX, int posY) { //the constructor de
 					)
 				);
 			}
-			else if(rand() % 100 >= 50 && rand() % 100 < 80){
+			else if(rand() % 100 >= 50 && rand() % 100 < 80 && disableDeathBlock == false){
 				platformsInTheChunk.push_back( //this will occur 9 times, a new platform will be made, and then added to the vector
 					platformInstantDeath::platform(
 						sectorWidth / 2 + (rand() % 150 - 25),

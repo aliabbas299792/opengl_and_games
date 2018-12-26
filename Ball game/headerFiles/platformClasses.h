@@ -44,7 +44,7 @@ public:
 
 	std::vector<platform> platformsInTheChunk; //a vector to hold the platforms
 
-	chunks(int, int, int, int); //the constructor
+	chunks(int, int, int, int, bool); //the constructor
 	~chunks(); //the destructor
 };
 

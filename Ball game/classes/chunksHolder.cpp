@@ -93,7 +93,8 @@ void chunksHolder::updateChunks(sf::Sprite sprite1, int winWidth, int winHeight)
 						chunkCoordsWidthHeight[2],
 						chunkCoordsWidthHeight[3],
 						tempCoordX,
-						tempCoordY
+						tempCoordY,
+						false
 					)
 				);
 
@@ -138,12 +139,26 @@ chunksHolder::chunksHolder(int width, int height, int posX, int posY) { //the in
 				continue;
 			}
 
+			if (posY + (height * j) == 600 && posX + (width * i) == 0) { //disable red blocks from forming in the chunk directly beneath it
+				chunksLoaded.push_back(
+					chunks(
+						width,
+						height,
+						posX + (width * i),
+						posY + (height * j),
+						true
+					)
+				);
+				continue;
+			}
+
 			chunksLoaded.push_back(
 				chunks(
 					width,
 					height,
 					posX + (width * i),
-					posY + (height * j)
+					posY + (height * j),
+					false
 				)
 			);
 		}

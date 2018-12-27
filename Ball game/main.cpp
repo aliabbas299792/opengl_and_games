@@ -150,6 +150,8 @@ int main() {
 		scores.close();
 	}
 
+	bool infinitePlayFlag = false; //special secret mode
+
 	bool clickedAwayFlag = false; //for seeing if a person has clicked away
 
 	while (window.isOpen()) {
@@ -177,7 +179,17 @@ int main() {
 
 			switch (gameState) {
 			case entrance:
-				entranceScreen(gameState, buttonExit, buttonStart, buttonHighScore, buttonHelp, logo, window, justChanged, score);
+				entranceScreen(gameState, buttonExit, buttonStart, buttonHighScore, buttonHelp, logo, window, justChanged, score, infinitePlayFlag);
+				
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) { //activate special mode
+					infinitePlayFlag = true;
+					//switch to game
+					justChanged = true;
+					gameState = game;
+				}
+				else {
+					infinitePlayFlag = false;
+				}
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 					justChanged = true;
@@ -197,19 +209,23 @@ int main() {
 					justChanged = false;
 
 					killFlag = false;
+
+					clickedAwayFlag = false;
 				}
 
-				if (clickedAwayFlag == true) {
-					onDeath(gameState, scoreboardFilePath, score, tempTime, currentTime, youDied); //if you click away, you die
+				if (clickedAwayFlag == true && infinitePlayFlag == false) {
+					onDeath(gameState, scoreboardFilePath, score, tempTime, currentTime, youDied, infinitePlayFlag); //if you click away, you die
 					clickedAwayFlag = false; //and reset the flag
 				}
 
 				if (currentTime.asMilliseconds() - timeSinceCollision.asMilliseconds() >= 2000 || killFlag == true) {
-					liveChunk->~chunksHolder();
-					onDeath(gameState, scoreboardFilePath, score, tempTime, currentTime, youDied); //if it's been falling for at least 2 seconds then die
+					if (infinitePlayFlag == false) {
+						liveChunk->~chunksHolder();
+						onDeath(gameState, scoreboardFilePath, score, tempTime, currentTime, youDied, infinitePlayFlag); //if it's been falling for at least 2 seconds then die
+					}
 				}
 
-				if (currentTime.asMilliseconds() >= elapsedTime.asMilliseconds() + 7) { //only process interactions and have movement ever 7ms
+				if (currentTime.asMilliseconds() >= elapsedTime.asMilliseconds() + 8) { //only process interactions and have movement ever 7ms
 					removeGravity = false; //initialise bool to false
 					tempTorF = false; //initialise this bool to false as well
 
@@ -220,7 +236,7 @@ int main() {
 								//the if statement checks for collisions
 								bounceMultiplier = 0.5; //default bounce multiplier
 
-								if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].typeOfBlock == instantDeath) { //if it's an instant death block
+								if (liveChunk->chunksLoaded[i].platformsInTheChunk[j].typeOfBlock == instantDeath && infinitePlayFlag == false) { //if it's an instant death block
 									killFlag = true; //set it to die on next loop
 									bounceMultiplier = 0.1;
 								}
@@ -256,13 +272,19 @@ int main() {
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
 					liveChunk->~chunksHolder();
-					onDeath(gameState, scoreboardFilePath, score, tempTime, currentTime, game); //basically just save and exit
+					onDeath(gameState, scoreboardFilePath, score, tempTime, currentTime, game, infinitePlayFlag); //basically just save and exit
 					window.close();
 				}
 
 				liveChunk->updateChunks(sprite1, windowWidth, windowHeight);
+				
+				if (infinitePlayFlag == false) {
+					remainingLife = sf::Text("Time till death: " + std::to_string(2000 - (currentTime.asMilliseconds() - timeSinceCollision.asMilliseconds())) + "ms", lato);
+				}
+				else {
+					remainingLife = sf::Text("You are immortal", lato);
+				}
 
-				remainingLife = sf::Text("Time till death: " + std::to_string(2000 - (currentTime.asMilliseconds() - timeSinceCollision.asMilliseconds())) + "ms", lato);
 				remainingLife.setCharacterSize(15);
 				remainingLife.setPosition(windowWidth - 180, 100);
 
@@ -276,7 +298,7 @@ int main() {
 				window.draw(fpsText); //draws the fps text
 				window.draw(textScoreLive); //draw the score text
 
-				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, scoreboardFilePath, score);
+				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, scoreboardFilePath, score, infinitePlayFlag);
 				//and adds the respective selection processor for the back button
 
 				break;
@@ -295,14 +317,14 @@ int main() {
 				window.draw(textScoreBoard); //draw the scores
 				//
 				window.draw(buttonBack); //draw back button
-				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, scoreboardFilePath, score); //and the back buttons's selection processor thing here too
+				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, scoreboardFilePath, score, infinitePlayFlag); //and the back buttons's selection processor thing here too
 				break;
 			case help:
 				window.draw(helpBox);
 				window.draw(helpTitle);
 				window.draw(actualHelp);
 				window.draw(buttonBack); //draw back button
-				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, scoreboardFilePath, score); //and the back buttons's selection processor thing here too
+				selectionProcessor(gameState, entrance, buttonBack, window, justChanged, scoreboardFilePath, score, infinitePlayFlag); //and the back buttons's selection processor thing here too
 				break;
 			case youDied:
 				window.draw(youAreDead);

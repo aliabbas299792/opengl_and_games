@@ -25,9 +25,6 @@
     <ClCompile Include="Classes\chunksHolder.cpp">
       <Filter>classes</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\platform.cpp">
-      <Filter>classes</Filter>
-    </ClCompile>
     <ClCompile Include="Common\gameFuncs.cpp">
       <Filter>common</Filter>
     </ClCompile>
@@ -36,6 +33,9 @@
     </ClCompile>
     <ClCompile Include="Common\scoreboardFuncs.cpp">
       <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\platforms.cpp">
+      <Filter>classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

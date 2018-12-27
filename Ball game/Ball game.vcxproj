@@ -127,7 +127,7 @@
   <ItemGroup>
     <ClCompile Include="Classes\chunks.cpp" />
     <ClCompile Include="Classes\chunksHolder.cpp" />
-    <ClCompile Include="Classes\platform.cpp" />
+    <ClCompile Include="Classes\platforms.cpp" />
     <ClCompile Include="Common\gameFuncs.cpp" />
     <ClCompile Include="Common\mainInitFuncs.cpp" />
     <ClCompile Include="Common\scoreboardFuncs.cpp" />

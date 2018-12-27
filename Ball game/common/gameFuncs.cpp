@@ -65,35 +65,43 @@ void moveBall(sf::View &view, sf::RenderWindow &window, sf::Sprite &sprite, floa
 	view.setCenter(sprite.getPosition().x, sprite.getPosition().y); //set the center of the screen to the sprite's location
 }
 
-void onDeath(gameScreens &gameState, std::string filePath, int score, sf::Time &tempTime, sf::Time currentTime, gameScreens nextScreen) {
-	std::fstream scores;
-	scores.open(filePath, std::ios::in);
-	std::string temp1 = "";
-	std::string temp = "";
-	int temp3 = 1;
+void onDeath(gameScreens &gameState, std::string filePath, int score, sf::Time &tempTime, sf::Time currentTime, gameScreens nextScreen, bool &infinitePlayFlag) {
+	if (infinitePlayFlag == true) { //scores aren't save for infinite play mode
+		tempTime = currentTime;
+		gameState = nextScreen;
 
-	while (std::getline(scores, temp1)) { //get all lines
-		if (temp3 == 1) {
-			temp += temp1;
-			temp3++;
-			continue;
+		infinitePlayFlag = false;
+	}
+	else {
+		std::fstream scores;
+		scores.open(filePath, std::ios::in);
+		std::string temp1 = "";
+		std::string temp = "";
+		int temp3 = 1;
+
+		while (std::getline(scores, temp1)) { //get all lines
+			if (temp3 == 1) {
+				temp += temp1;
+				temp3++;
+				continue;
+			}
+
+			temp += '\n' + temp1;
 		}
 
-		temp += '\n' + temp1;
+		scores.close();
+
+		scores.open(filePath, std::ios::in);
+		scores.close(); //wipes the file
+
+		//writes the score to the file
+		scores.open(filePath, std::ios::out);
+		temp += '\n' + std::to_string(score);
+		scores << temp;
+		scores.close();
+
+		tempTime = currentTime;
+
+		gameState = nextScreen;
 	}
-
-	scores.close();
-
-	scores.open(filePath, std::ios::in);
-	scores.close(); //wipes the file
-
-	//writes the score to the file
-	scores.open(filePath, std::ios::out);
-	temp += '\n' + std::to_string(score);
-	scores << temp;
-	scores.close();
-
-	tempTime = currentTime;
-
-	gameState = nextScreen;
 }

@@ -39,12 +39,25 @@ int main(){
 	//***********OPENGL STUFF**************//
 	//*************************************//
 
-	//3 vertices for a triangle
+	//4 vertices for a rectangle, i.e 2 triangles
 	float vertices[] = {
-		-0.5f, 0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f
+		-0.5f, 0.5f, 0.0f, //top left
+		-0.5f, -0.5f, 0.0f, //bottom left
+		0.5f, 0.5f, 0.0f, //top right
+		0.5f, -0.5f, 0.0f //bottom right
 	};
+
+	//element indices array
+	unsigned int indices[] = {
+		0, 1, 2, //first triangle
+		1, 2, 3, //second triangle
+	};
+
+	unsigned int EBO; //EBO id
+	glGenBuffers(1, &EBO); //generate EBO buffer
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //bind the buffer array data type to the EBO buffer
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); //load the indices into the EBO buffer object
 
 	//setup VAO, VBO and vertex atrrib stuff
 	unsigned int VBO, VAO;
@@ -91,9 +104,14 @@ int main(){
 		glClear(GL_COLOR_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed
 
 		glUseProgram(programID); //sets the program object as the current active shader object
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //bind the EBO object to use the indices
 		glBindVertexArray(VAO); //need this as it contains the VBO configuration
-		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(float)); //draws the vertices found in the currently bound VBO using the pattern in the first enum, 2nd param is starting pos
-			//->> 3rd param is the size of the VBO/number of vertices
+		glDrawElements(GL_TRIANGLES, sizeof(vertices)/sizeof(float), GL_UNSIGNED_INT, (void*)0); //used for indexed drawing, i.e using an EBO
+		//1st param draw mode, 2nd param number of vertices, 3rd param type of the indices, 4th param is basically the index at which to start from, but can only be 0
+		//however note that 2nd param is still number of vertices, because it is technically still drawing just vertices using indices as a 'guide' of sorts
+
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //this essentially allows viewing in wireframe mode
 
 		glfwSwapBuffers(window); //uses the double buffer thing, where the back buffer is drawn to and then swapped with the front one to prevent flickering
 		glfwPollEvents(); //checks for events and allows things such as the framebuffer_size_callback functions to be called once an event has been detected

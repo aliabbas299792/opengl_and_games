@@ -1,5 +1,11 @@
 #version 330 core
-out vec3 color;
+
+in vec3 fragColour;
+
+out vec4 color;
+
+//uniform vec4 fragColour; //literally a simple uniform, look in main.cpp
+
 void main(){
-  color = vec3(1,0.5,0.1); //the output colour of all fragments will be this
+  color.xyz = fragColour; //the output colour of all fragments will be this
 }

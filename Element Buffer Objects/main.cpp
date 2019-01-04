@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include <iostream>
+#include <math.h>
 
 #include "header/functionDefines.h"
 
@@ -10,9 +11,13 @@ int main(){
 
 	//glfw initialisation
 	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	//below 2 are saying requires OpenGL 3.0
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	//below says the core profile is needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	//below is a method to enable 8x MSAA in the application
+	glfwWindowHint(GLFW_SAMPLES, 8);
 
 	GLFWwindow* window = glfwCreateWindow(900, 700, "Window #1", NULL, NULL); //window creation
 
@@ -41,16 +46,15 @@ int main(){
 
 	//4 vertices for a rectangle, i.e 2 triangles
 	float vertices[] = {
-		-0.5f, 0.5f, 0.0f, //top left
-		-0.5f, -0.5f, 0.0f, //bottom left
-		0.5f, 0.5f, 0.0f, //top right
-		0.5f, -0.5f, 0.0f //bottom right
+		// positions         // colors
+		0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
+		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
+		0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
 	};
 
 	//element indices array
 	unsigned int indices[] = {
 		0, 1, 2, //first triangle
-		1, 2, 3, //second triangle
 	};
 
 	unsigned int EBO; //EBO id
@@ -80,15 +84,22 @@ int main(){
 	//4th param is how we want the graphics processing unit to process the data, GL_STATIC_DRAW is for data that will not change that much
 	      //->> GL_DYNAMIC_DRAW is for data that changes a lot, GL_STREAM_DRAW is for data that will change every time it is drawn
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	//position attributes
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	//1st param is the index of the attribute in the vertexShader GLSL, must match layout in shader
 	//2nd param is the number of components per vertex attribute
 	//3rd param is the data type of each component in the array
 	//4th param is whether or not the data should be normalised, i.e clamped to the -1 to +1 range, and 0 to 1 for unsigned values
-	//5th param is the 'stride', which is the byte offset between consecutive verticies in the array, assuming they are tightly packed (directly consecutive), so 0 normally
+	//5th param is the 'stride', which is the byte offset between consecutive verticies in the array, assuming they are tightly packed 
+		//->> (directly consecutive), so 0 normally, however if it is not using more than just vertex position, make it (index) * (sizeof(datatype))
+		//if say the indicies are [ x y z r g b ], so 6 elements, the r of element 1 and element 2 is 6 away, if it uses 9 indicies, r and 2nd r are 9 apart etc
 	//6th param is the 'pointer', which is the offset of the first component of the array
 	glEnableVertexAttribArray(0); //enables a generic vertex attribute, for index 0, as in the above function, can be disabled via glDisableVertexAttribArray(0)
-	
+
+	//colour attributes
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0); //calls the correct VBO using GL_ARRAY_BUFFER, and safely unbinds it
 	
 	glBindVertexArray(0); //unbind the VAO safely
@@ -96,11 +107,23 @@ int main(){
 	//shaders
 	unsigned int programID = loadShaders("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl");
 
+	/*
+	//OpenGL uniforms locations
+	int fragColourLocation = glGetUniformLocation(programID, "fragColour"); //returns the uniform location of a uniform name in the shader program
+	float loop = 0; //for inner colour loop thing
+	*/
+
 	//the main loop
 	while(!glfwWindowShouldClose(window)){
+		/*
+		if(loop >= 1000){loop = 0;} //to ensure it doesn't get too big
+		loop+=0.01;
+		glUniform4f(fragColourLocation, std::cos(loop), 0.5, sin(loop), 0.7f); //put a uniform in the specified location for a shader
+		*/
+
 		processInput(window); //check if the escape key has been pressed
 
-		glClearColor(0.2f,0.2f,0.2f,1.0f); //makes the entire screen this colour
+		glClearColor(0.2f,0.2f,0.25f,1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed
 
 		glUseProgram(programID); //sets the program object as the current active shader object

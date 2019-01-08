@@ -3,6 +3,7 @@
 #include <math.h>
 
 #include "header/functionDefines.h"
+#include "header/classDefines.h"
 
 int main(){
 	//*************************************//
@@ -62,7 +63,6 @@ int main(){
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //bind the buffer array data type to the EBO buffer
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); //load the indices into the EBO buffer object
-	//the final argument is saying that the data will be modified once and used mant times as the source for GL drawing commands
 
 	//setup VAO, VBO and vertex atrrib stuff
 	unsigned int VBO, VAO;
@@ -106,7 +106,10 @@ int main(){
 	glBindVertexArray(0); //unbind the VAO safely
 	
 	//shaders
-	unsigned int programID = loadShaders("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl");
+	Shader *progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl"); //constructing the shader object	
+	progShader->use(); //sets the program object as the current active shader object
+
+	progShader->setFloat("offsetX", 0.5f); //sets the uniform for the current active shader program object
 
 	/*
 	//OpenGL uniforms locations
@@ -126,8 +129,6 @@ int main(){
 
 		glClearColor(0.2f,0.2f,0.25f,1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed
-
-		glUseProgram(programID); //sets the program object as the current active shader object
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //bind the EBO object to use the indices
 		glBindVertexArray(VAO); //need this as it contains the VBO configuration

@@ -11,6 +11,8 @@ unsigned int loadTexture(const char* file){
     glGenTextures(1, &texture); //first param is how many to make, second param is a single int or array to store the generated texture IDs in
     glBindTexture(GL_TEXTURE_2D, texture); //sets as the currently active texture object, so subsequent texture operations are done on this
 
+    stbi_set_flip_vertically_on_load(true); //flips the image on load
+
     //for texture s,t,r is like x,y,z (you can have 3D textures)
     //so the below 2 texture wrap options are essentially in the x and y axis
     //as you may expect, GL_REPEAT just repeats it as expected, as normal
@@ -38,6 +40,8 @@ unsigned int loadTexture(const char* file){
     }else{
         std::cout << "Failed to load texture" << std::endl;
     }
+
+    glBindTexture(GL_TEXTURE_2D, 0); //safely unbinds texture
 
     stbi_image_free(data); //free the image memory once we're done with it
 

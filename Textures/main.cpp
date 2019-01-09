@@ -1,3 +1,4 @@
+#include <glad/glad.c>
 #include <glad/glad.h>
 #include <iostream>
 #include <math.h>
@@ -51,10 +52,10 @@ int main(){
 	//4 vertices for a rectangle, i.e 2 triangles
 	float vertices[] = {
 		// positions          // colors           // texture coords
-		0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-		0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+		1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+		1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+		-1.0f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+		-1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
 	};
 
 	//element indices array
@@ -116,35 +117,59 @@ int main(){
 	glBindVertexArray(0); //unbind the VAO safely
 
 	//textures
-	unsigned int textureID = loadTexture("sample.jpg"); //use the texture loading function to load a texture and return its id
+	//the below use the texture loading function to load a texture and return its id
+	unsigned int textureID_1 = loadTexture("images/1.png"); 
+	unsigned int textureID_2 = loadTexture("images/2.jpg"); 
+	unsigned int textureID_3 = loadTexture("images/3.jpg"); 
+	unsigned int textureID_4 = loadTexture("images/4.png"); 
+	unsigned int textureID_5 = loadTexture("images/5.png"); 
+	unsigned int textureID_6 = loadTexture("images/6.jpg"); 
+	unsigned int textureID_7 = loadTexture("images/7.jpg"); 
+	unsigned int textureID_8 = loadTexture("images/8.jpg"); 
 	
 	//shaders
 	Shader *progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl"); //constructing the shader object	
 	progShader->use(); //sets the program object as the current active shader object
 
+	//uniforms
 	progShader->setFloat("offsetX", 0.5f); //sets the uniform for the current active shader program object
-
-	/*
-	//OpenGL uniforms locations
-	int fragColourLocation = glGetUniformLocation(programID, "fragColour"); //returns the uniform location of a uniform name in the shader program
-	float loop = 0; //for inner colour loop thing
-	*/
+	progShader->setInt("rectTexture", 0); //sets the uniform of the specified name, for the sampler2D, which will have a texture bound using GL_TEXTURE1
+	progShader->setInt("rectTexture2", 1); //sets the uniform of the specified name, for the sampler2D, which will have a texture bound using GL_TEXTURE2
+	progShader->setInt("rectTexture3", 2); //sets the uniform of the specified name, for the sampler2D, which will have a texture bound using GL_TEXTURE3
+	progShader->setInt("rectTexture4", 3); //sets the uniform of the specified name, for the sampler2D, which will have a texture bound using GL_TEXTURE4
+	progShader->setInt("rectTexture5", 4); //sets the uniform of the specified name, for the sampler2D, which will have a texture bound using GL_TEXTURE5
+	progShader->setInt("rectTexture6", 5); //sets the uniform of the specified name, for the sampler2D, which will have a texture bound using GL_TEXTURE6
+	progShader->setInt("rectTexture7", 6); //sets the uniform of the specified name, for the sampler2D, which will have a texture bound using GL_TEXTURE7
+	progShader->setInt("rectTexture8", 7); //sets the uniform of the specified name, for the sampler2D, which will have a texture bound using GL_TEXTURE8
+	//basically a value of 0 up there corresponds to GL_TEXTURE1, a value of 1 corresponds to GL_TEXTURE2 etc
 
 	//the main loop
 	while(!glfwWindowShouldClose(window)){
-		/*
-		if(loop >= 1000){loop = 0;} //to ensure it doesn't get too big
-		loop+=0.01;
-		glUniform4f(fragColourLocation, std::cos(loop), 0.5, sin(loop), 0.7f); //put a uniform in the specified location for a shader
-		*/
-
 		processInput(window); //check if the escape key has been pressed
 
 		glClearColor(0.2f,0.2f,0.25f,1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //bind the EBO object to use the indices
-		glBindTexture(GL_TEXTURE_2D, textureID); //binds the texture there as a 2D texture, and it is used in the fragment shader
+
+		//by the way GL_TEXTURE1 is equal to GL_TEXTURE0 + 1, GL_TEXTURE2 is euqal to GL_TEXTURE0 + 2 etc
+		glBindTexture(GL_TEXTURE_2D, textureID_1); //binds the texture to the sampler2D with the name rextTexture (first one (0) as specified in uniforms section)
+		glActiveTexture(GL_TEXTURE1); //sets the 2nd texture location as this
+		glBindTexture(GL_TEXTURE_2D, textureID_2); //binds the texture to the sampler2D with the name rextTexture2 (second one (1) as specified in uniforms section)
+		glActiveTexture(GL_TEXTURE2); //this sets the location in the fragment shader for textures, so this is the first and is activated by default
+		glBindTexture(GL_TEXTURE_2D, textureID_3);
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, textureID_4);
+		glActiveTexture(GL_TEXTURE4);
+		glBindTexture(GL_TEXTURE_2D, textureID_5);
+		glActiveTexture(GL_TEXTURE5);
+		glBindTexture(GL_TEXTURE_2D, textureID_6);
+		glActiveTexture(GL_TEXTURE6);
+		glBindTexture(GL_TEXTURE_2D, textureID_7);
+		glActiveTexture(GL_TEXTURE7);
+		glBindTexture(GL_TEXTURE_2D, textureID_8);
+		glActiveTexture(GL_TEXTURE0 + 8); //equal to GL_TEXTURE0 + 8
+
 		glBindVertexArray(VAO); //need this as it contains the VBO configuration
 		glDrawElements(GL_TRIANGLES, sizeof(vertices)/sizeof(float), GL_UNSIGNED_INT, (void*)0); //used for indexed drawing, i.e using an EBO
 		//1st param draw mode, 2nd param number of vertices, 3rd param type of the indices, 4th param is basically the index at which to start from, but can only be 0

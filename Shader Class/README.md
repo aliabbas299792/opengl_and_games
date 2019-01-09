@@ -1,4 +1,4 @@
-# Element Buffer Objects
+# Shader Class
 This replaces the Shaders function with a class, and uses try-catch blocks for exception catching.<br>
 It also adds the feature of setting uniforms through a member function of the shader class.<br>
 The glsl files have been slightly modified to experiment with the added features.<br>

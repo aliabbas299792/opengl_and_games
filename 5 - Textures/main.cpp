@@ -143,14 +143,33 @@ int main(){
 	progShader->setInt("rectTexture8", 7); //sets the uniform of the specified name, for the sampler2D, which will have a texture bound using GL_TEXTURE8
 	//basically a value of 0 up there corresponds to GL_TEXTURE1, a value of 1 corresponds to GL_TEXTURE2 etc
 
+	float mixStrength = 0.5; //for the uniform mixStrength
+	progShader->setInt("mixStrength", mixStrength); //initially sets that uniform to 0.5
+
 	//the main loop
 	while(!glfwWindowShouldClose(window)){
 		processInput(window); //check if the escape key has been pressed
+		
+		//ensures the mixStrength uniform is within the boundaries of 0 and 1
+		if(mixStrength > 1){
+			mixStrength = 1;
+		}else if(mixStrength < 0){
+			mixStrength = 0;
+		}
 
 		glClearColor(0.2f,0.2f,0.25f,1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //bind the EBO object to use the indices
+
+		//sets the mixStrength to whatever (increments/decrements of 0.01), when pressing the up/down buttons, respectively
+		if(mixStrength >= 0 && mixStrength <= 1){
+			if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
+				progShader->setFloat("mixStrength", (mixStrength+=0.01));
+			}else if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
+				progShader->setFloat("mixStrength", (mixStrength-=0.01));
+			}
+		}
 
 		//by the way GL_TEXTURE1 is equal to GL_TEXTURE0 + 1, GL_TEXTURE2 is euqal to GL_TEXTURE0 + 2 etc
 		glBindTexture(GL_TEXTURE_2D, textureID_1); //binds the texture to the sampler2D with the name rextTexture (first one (0) as specified in uniforms section)

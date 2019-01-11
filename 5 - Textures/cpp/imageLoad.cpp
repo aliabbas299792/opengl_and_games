@@ -21,8 +21,8 @@ unsigned int loadTexture(const char* file){
     //GL_TEXTURE_MIN_FILTER is how to sample when minifying a texture, GL_TEXTURE_MAG_FILTER is how to sample when magnifying a texture
     //GL_LINEAR gets the average colour from a pixel and surrounding pixels so looks smoother, GL_NEAREST is precisely the colour of that pixel, so very sharp
     //and as such GL_NEAREST is possibly the effect you want in something like an 8-bit game
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     int width, height, nrChannels; //nrChannels 
     unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);

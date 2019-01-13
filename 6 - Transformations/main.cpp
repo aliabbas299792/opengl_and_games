@@ -50,19 +50,45 @@ int main(){
 	//*************************************//
 
 	//4 vertices for a rectangle, i.e 2 triangles
+
 	float vertices[] = {
 		// positions          // colors           // texture coords
-		1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-		1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-		-1.0f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-		-1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+		0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+		0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
 	};
-
+	
 	//element indices array
 	unsigned int indices[] = {
 		3, 2, 1, //first triangle
 		3, 0, 1 //second triangle
 	};
+
+	/* The commented out code below is for drawing a cubic graph, so long as the glDrawElements()'s first param is GL_POINTS
+	float xCoord = -100; //the starting x coord
+
+	float vertices[1700] = { 0 };
+	unsigned int indices[200] = { 0 };
+
+	for(int i = 0; i <= 1700; i++){
+		vertices[i] = 0;
+	}
+
+	for(int i = 0; i < 200; i++){
+		indices[i] = 0;
+	}
+
+	for(int i = 0;i <= 200;i++){
+		vertices[i*8] = xCoord/100;
+		vertices[(i*8)+1] = (pow(xCoord,3))/1000000;
+		xCoord++;
+		
+		indices[i] = i;
+	
+		//std::cout << vertices[i*8] << " - " << vertices[(i*8)+1] << " - " << vertices[(i*8)+2] << " - " << vertices[(i*8)+3] << " - " << vertices[(i*8)+4] << " - " << vertices[(i*8)+5] << " - " << vertices[(i*8)+6] << " - " << vertices[(i*8)+7] << std::endl;
+	}
+	*/
 
 	unsigned int EBO; //EBO id
 	glGenBuffers(1, &EBO); //generate EBO buffer

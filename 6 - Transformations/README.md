@@ -51,3 +51,5 @@ This is rotation:
 ![rotationEquations](https://res.cloudinary.com/deylrqt2d/image/upload/v1547336451/rotation_jbg2lj.png)
 
 That is the maths bit, I'll be applying it using GLM for this program.
+
+But before doing that I've got some commented out code for plotting a cubic graph in main.cpp.

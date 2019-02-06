@@ -3,6 +3,11 @@
 #include <iostream>
 #include <math.h>
 
+//the glm headers
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "header/functionDefines.h"
 #include "header/classDefines.h"
 
@@ -90,6 +95,16 @@ int main(){
 	}
 	*/
 
+	//
+	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+	glm::mat4 trans = glm::mat4(1.0f); //empty transformation matrix
+
+	//trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0,0,1.0)); //rotate is in 2 axis, so we populate the third using the 3rd component of vec3
+	//and supply the rotation before it so it is internally converted
+	//trans = glm::scale(trans, glm::vec3(0.5f,0.5f,0.5f)); //scales to half
+	//trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f)); //translates it
+	vec = trans * vec; //apply the transformation above to this vec
+
 	unsigned int EBO; //EBO id
 	glGenBuffers(1, &EBO); //generate EBO buffer
 
@@ -175,7 +190,7 @@ int main(){
 	//the main loop
 	while(!glfwWindowShouldClose(window)){
 		processInput(window); //check if the escape key has been pressed
-		
+
 		//ensures the mixStrength uniform is within the boundaries of 0 and 1
 		if(mixStrength > 1){
 			mixStrength = 1;
@@ -213,12 +228,35 @@ int main(){
 		glBindTexture(GL_TEXTURE_2D, textureID_7);
 		glActiveTexture(GL_TEXTURE7);
 		glBindTexture(GL_TEXTURE_2D, textureID_8);
-		glActiveTexture(GL_TEXTURE0 + 8); //equal to GL_TEXTURE0 + 8
+		glActiveTexture(GL_TEXTURE8); //equal to GL_TEXTURE0 + 8
 
 		glBindVertexArray(VAO); //need this as it contains the VBO configuration
+
+		trans = glm::mat4(1.0f);
+		trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.0f));
+		trans = glm::scale(trans, glm::vec3(0.7f, 0.7f, 0.7f));
+		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0,0,1.0)); //turns it 0.001 radians each frame
+		progShader->setMatrix4("transform", trans);
+		
+		//the current matrix transform would be applied here
 		glDrawElements(GL_TRIANGLES, sizeof(vertices)/sizeof(float), GL_UNSIGNED_INT, (void*)0); //used for indexed drawing, i.e using an EBO
 		//1st param draw mode, 2nd param number of vertices, 3rd param type of the indices, 4th param is basically the index at which to start from, but can only be 0
 		//however note that 2nd param is still number of vertices, because it is technically still drawing just vertices using indices as a 'guide' of sorts
+		
+		float scaleFactor = sin(glfwGetTime())*0.9; //repeatedly scales
+		//float scaleFactor = glfwGetTime(); //just gets bigger and bigger with time
+		
+		if(scaleFactor < 0){
+			scaleFactor *= -1; //scale is always positive
+		}
+
+		trans = glm::mat4(1.0f);
+		trans = glm::scale(trans, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
+		trans = glm::translate(trans, glm::vec3(-0.5f, -0.5f, 0.0f));
+		progShader->setMatrix4("transform", trans);
+
+		//the current matrix transform would be applied here
+		glDrawElements(GL_TRIANGLES, sizeof(vertices)/sizeof(float), GL_UNSIGNED_INT, (void*)0); //used for indexed drawing, i.e using an EBO
 
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //this essentially allows viewing in wireframe mode
 

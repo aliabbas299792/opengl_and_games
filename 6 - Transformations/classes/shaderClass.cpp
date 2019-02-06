@@ -3,6 +3,8 @@
 #include <sstream>
 #include <vector>
 #include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "../header/classDefines.h"
 
 Shader::Shader(const char* v_file_path, const char* f_file_path){
@@ -136,4 +138,13 @@ void Shader::setInt(const std::string &name, int value) const{
 
 void Shader::setFloat(const std::string &name, float value) const{
     glUniform1f(glGetUniformLocation(ID, name.c_str()), (float)value);
+}
+
+void Shader::setMatrix4(const std::string &name, glm::mat4 matrix) const{
+    unsigned int transformLocation = glGetUniformLocation(ID, name.c_str());
+    glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
+    //first param is the location
+    //2nd param is how many matrices we'd like to send, so 1
+    //3rd is if we want to swap the rows and columns, for a different matrix layout, no we don't so GL_FALSE
+    //4th is the actual matrix data, which is converted from the GLM code into the actual OpenGL compatible stuff using glm::value_ptr([a matrix])
 }

@@ -53,3 +53,5 @@ This is rotation:<br>
 That is the maths bit, I'll be applying it using GLM for this program.
 
 But before doing that I've got some commented out code for plotting a cubic graph in main.cpp.
+
+Also added the GLM library.

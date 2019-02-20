@@ -61,13 +61,28 @@ int main(){
 		0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
 		0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
 		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,    // top left 
+		0.5f,  0.5f, -1.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   //---------- top right
+		0.5f, -0.5f, -1.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+		-0.5f, -0.5f, -1.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+		-0.5f,  0.5f, -1.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
 	};
 	
 	//element indices array
 	unsigned int indices[] = {
 		3, 2, 1, //first triangle
-		3, 0, 1 //second triangle
+		3, 0, 1, //second triangle
+		0, 4, 5,
+		1, 0, 5,
+		7, 6, 5,
+		7, 4, 5,
+		0, 4, 7,
+		0, 3, 7,
+		1, 5, 6,
+		1, 2, 6,
+		3, 2, 6,
+		3, 7, 6
+
 	};
 
 	/* The commented out code below is for drawing a cubic graph, so long as the glDrawElements()'s first param is GL_POINTS
@@ -99,7 +114,7 @@ int main(){
 	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
 	glm::mat4 trans = glm::mat4(1.0f); //empty transformation matrix
 
-	//trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0,0,1.0)); //rotate is in 2 axis, so we populate the third using the 3rd component of vec3
+	//trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0,0,1.0));
 	//and supply the rotation before it so it is internally converted
 	//trans = glm::scale(trans, glm::vec3(0.5f,0.5f,0.5f)); //scales to half
 	//trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f)); //translates it
@@ -167,6 +182,19 @@ int main(){
 	unsigned int textureID_6 = loadTexture("images/6.jpg"); 
 	unsigned int textureID_7 = loadTexture("images/7.jpg"); 
 	unsigned int textureID_8 = loadTexture("images/8.jpg"); 
+
+	glm::vec3 cubePositions[] = { //positions for scattered cubes
+		glm::vec3( 0.0f,  0.0f,  0.0f), 
+		glm::vec3( 2.0f,  5.0f, -15.0f), 
+		glm::vec3(-1.5f, -2.2f, -2.5f),  
+		glm::vec3(-3.8f, -2.0f, -12.3f),  
+		glm::vec3( 2.4f, -0.4f, -3.5f),  
+		glm::vec3(-1.7f,  3.0f, -7.5f),  
+		glm::vec3( 1.3f, -2.0f, -2.5f),  
+		glm::vec3( 1.5f,  2.0f, -2.5f), 
+		glm::vec3( 1.5f,  0.2f, -1.5f), 
+		glm::vec3(-1.3f,  1.0f, -1.5f)  
+	};
 	
 	//shaders
 	Shader *progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl"); //constructing the shader object	
@@ -187,6 +215,21 @@ int main(){
 	float mixStrength = 0.5; //for the uniform mixStrength
 	progShader->setInt("mixStrength", mixStrength); //initially sets that uniform to 0.5
 
+	glm::mat4 view = glm::mat4(1.0f);
+	//the view matrix, i.e the camera view matrix
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+	
+	glm::mat4 projection;
+	projection = glm::perspective(glm::radians(45.0f), (float)width/height, 0.1f, 100.0f);
+	//projection matrix, i.e transforms all of the coords to clip space and applies the perspective division
+	//the first param: the FoV, 2nd: aspect ratio, 3rd: distance of near plane, anything closer than this is not drawn, 4th: far plane, anything past it is not drawn
+
+	progShader->setMatrix4("view", view);
+	progShader->setMatrix4("projection", projection);
+
+	glEnable(GL_DEPTH_TEST);
+
+
 	//the main loop
 	while(!glfwWindowShouldClose(window)){
 		processInput(window); //check if the escape key has been pressed
@@ -199,7 +242,7 @@ int main(){
 		}
 
 		glClearColor(0.2f,0.2f,0.25f,1.0f); //makes the entire screen this colour
-		glClear(GL_COLOR_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //bind the EBO object to use the indices
 
@@ -232,31 +275,37 @@ int main(){
 
 		glBindVertexArray(VAO); //need this as it contains the VBO configuration
 
+		/*
 		trans = glm::mat4(1.0f);
 		trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.0f));
+		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(1.0,0.0,1.0)); //turns it 0.001 radians each frame
 		trans = glm::scale(trans, glm::vec3(0.7f, 0.7f, 0.7f));
-		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0,0,1.0)); //turns it 0.001 radians each frame
-		progShader->setMatrix4("transform", trans);
-		
+		//glm::rotate, 1st param is the matrix to transform, 2nd param is by how much you want it to be rotated, 3rd param specifies the axis around which to rotate
+		//order is normal xyz, and imagine the axis as bars, and that you are rotating about those bars
+		//so the one above rotates a in a circular motion
+		progShader->setMatrix4("model", trans);
+	
 		//the current matrix transform would be applied here
 		glDrawElements(GL_TRIANGLES, sizeof(vertices)/sizeof(float), GL_UNSIGNED_INT, (void*)0); //used for indexed drawing, i.e using an EBO
 		//1st param draw mode, 2nd param number of vertices, 3rd param type of the indices, 4th param is basically the index at which to start from, but can only be 0
 		//however note that 2nd param is still number of vertices, because it is technically still drawing just vertices using indices as a 'guide' of sorts
-		
-		float scaleFactor = sin(glfwGetTime())*0.9; //repeatedly scales
+		*/
+
+		float scaleFactor = (sin(glfwGetTime())*0.3) + 0.5; //repeatedly scales
 		//float scaleFactor = glfwGetTime(); //just gets bigger and bigger with time
-		
-		if(scaleFactor < 0){
-			scaleFactor *= -1; //scale is always positive
+
+		for(int i = 0;i < 10; i++){ //draws 10 cubes, all with slightly different positions, and the same transformations applied to them
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			model = glm::scale(model, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
+			model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0,1.0,1.0)); //turns it by (current_time) radians each frame
+			float angle = 20.0f * i; 
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			progShader->setMatrix4("model", model);
+
+			//the current matrix transform would be applied here
+			glDrawElements(GL_TRIANGLES, sizeof(vertices)/sizeof(float), GL_UNSIGNED_INT, (void*)0); //used for indexed drawing, i.e using an EBO
 		}
-
-		trans = glm::mat4(1.0f);
-		trans = glm::scale(trans, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
-		trans = glm::translate(trans, glm::vec3(-0.5f, -0.5f, 0.0f));
-		progShader->setMatrix4("transform", trans);
-
-		//the current matrix transform would be applied here
-		glDrawElements(GL_TRIANGLES, sizeof(vertices)/sizeof(float), GL_UNSIGNED_INT, (void*)0); //used for indexed drawing, i.e using an EBO
 
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //this essentially allows viewing in wireframe mode
 

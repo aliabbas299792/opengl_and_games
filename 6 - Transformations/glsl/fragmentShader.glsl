@@ -24,7 +24,7 @@ void main(){
 
   //color = vec4(1,1,1,1);
 
-  color = mix(texture(rectTexture1, texCoordinates), texture(rectTexture2, texCoordinates), mixStrength); //mixes with mixStrength opacity upper layer
+  color = mix(texture(rectTexture7, texCoordinates), texture(rectTexture8, texCoordinates), mixStrength); //mixes with mixStrength opacity upper layer
 
   //color = texture(rectTexture7, texCoordinates) * texture(rectTexture8, vec2(texCoordinates.x, texCoordinates.y)); //basically overlay kinda effect
 }

@@ -71,49 +71,50 @@ int main(){
 
 	//4 vertices for a rectangle, i.e 2 triangles
 	//not using an EBO for now, as I need to use the normals provided in this model
-	float vertices[] = {
-			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-			0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-			0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-			0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-			-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+  float vertices[] = {
+      // positions          // normals           // texture coords
+      -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+       0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+       0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+       0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+      -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+      -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 
-			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-			0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-			0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-			0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-			-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+      -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+       0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+       0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+       0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+      -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+      -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
 
-			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-			-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-			-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+      -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+      -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+      -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+      -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+      -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+      -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-			0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-			0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-			0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-			0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-			0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-			0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+       0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+       0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+       0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+       0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+       0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+       0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-			0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-			0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-			0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+      -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+       0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+       0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+       0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+      -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+      -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
 
-			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-			0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-			0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-			0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
-	};
+      -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+       0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+       0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+       0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+      -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+      -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
+  };
 
 	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
 	glm::mat4 trans = glm::mat4(1.0f); //empty transformation matrix
@@ -132,12 +133,16 @@ int main(){
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	//position attributes
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0); //enables a generic vertex attribute, for index 0, as in the above function, can be disabled via glDisableVertexAttribArray(0)
 
 	//normal vector attributes
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+
+	//texture coords and stuff
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0); //calls the correct VBO using GL_ARRAY_BUFFER, and safely unbinds it
 	
@@ -148,7 +153,7 @@ int main(){
 
 	//textures
 	//the below use the texture loading function to load a texture and return its id
-	unsigned int textureID_1 = loadTexture("images/1.png"); 
+	unsigned int textureID_1 = loadTexture("images/container2.png"); //used in the diffuse colour sampling in the fragment shader
 	//shaders
 	Shader *progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl"); //constructing the shader object	
 
@@ -158,7 +163,7 @@ int main(){
 	
 	//uniforms
 	progShader->setFloat("offsetX", 0.5f); //sets the uniform for the current active shader program object
-	progShader->setInt("rectTexture", 0); //sets the uniform of the specified name, for the sampler2D, which will have a texture bound using GL_TEXTURE1
+	progShader->setInt("material.diffuse", 0); //sets the uniform of the specified name, for the sampler2D in the material struct in the fragment shader, which will have a texture bound using GL_TEXTURE1
 	//basically a value of 0 up there corresponds to GL_TEXTURE1, a value of 1 corresponds to GL_TEXTURE2 etc
 
 	progShader->set3Float("objectColour", 1.0f, 0.5f, 0.31f);
@@ -184,16 +189,21 @@ int main(){
 		glm::vec3 temp = lightPos + glm::vec3(camX, 0.0f, camZ); //the transformation for the light itself (round in a circle)
 		progShader->setVec3("light.position", temp); //sending the transformation as a vector
 		
+		//basically makes the colours change based the time
+		/* 
 		glm::vec3 colourTemp = glm::vec3( (sin(glfwGetTime())+1)/2, (cos(glfwGetTime())+1)/2,  (sin(glfwGetTime()/4)+1)/2);
 		progShader->set3Float("light.ambient",  colourTemp.r * 0.2f, colourTemp.g * 0.2f, colourTemp.b * 0.2f);
 		progShader->set3Float("light.diffuse",  colourTemp.r * 0.5f, colourTemp.g * 0.5f, colourTemp.b * 0.5f);
-		progShader->set3Float("light.specular", colourTemp.r * 1.0f, colourTemp.g * 1.0f, colourTemp.b * 1.0f); 
+		progShader->set3Float("light.specular", colourTemp.r * 1.0f, colourTemp.g * 1.0f, colourTemp.b * 1.0f);
+		*/
+
+		progShader->set3Float("light.ambient",  0.2f, 0.2f, 0.2f);
+		progShader->set3Float("light.diffuse",  0.5f, 0.5f, 0.5f);
+		progShader->set3Float("light.specular", 1.0f, 1.0f, 1.0f);
 
 		//sending all the material colour stuff
-		progShader->set3Float("material.ambient", 1.0f, 0.5f, 0.31f);
-		progShader->set3Float("material.diffuse", 1.0f, 0.5f, 0.31f);
-		progShader->set3Float("material.specular", 0.5f, 0.5f, 0.5f);
-		progShader->setFloat("material.shininess", 128.0f);
+		progShader->set3Float("material.specular", 0.2f, 0.2f, 0.2f);
+		progShader->setFloat("material.shininess", 32.0f);
 
 		progShader->setVec3("cameraPos", camera->cameraPos); //need to pass it to the shader constantly
 

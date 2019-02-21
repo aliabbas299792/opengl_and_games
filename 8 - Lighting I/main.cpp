@@ -17,8 +17,8 @@
 
 //camera setup - needed outside of the int main() function because I need to pass the data from the callback functions to my camera object
 //need to set the window width/height first
-const int width = 900; 
-const int height = 900;
+const int width = 1000; 
+const int height = 1000;
 //then create my camera object
 Camera *camera = new Camera(width, height, 45.0f); //the first 2 params are obviously window width and height, the third is the initial fov
 
@@ -69,73 +69,56 @@ int main(){
 	//***********OPENGL STUFF**************//
 	//*************************************//
 
-	//camera stuff
-	/*	This is the manual way of doing the stuff, use glm::lookAt() instead  */
-	/*
-	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f); //camera position
-	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f); //the camera target
-	glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget); //this makes the vector of cameraPos to cameraTarget into a direction vector (normalises it)
-	//we are giving the direction of the target to the camera, so pointing towards the camera
-	//as we are going to move everything in the scene relative to the camera
-	//the vector will actually point towards the positive z axis, in other words, towards the viewer - out of the screen
-	
-	//to get the positive x axis of the camera, you need use cross product (as there are 2 possible positive x axis, left and right)
-	//so make a vector for up, and do cross product with the one pointing towards positive z axis
-	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f); //the up vector for world space
-	glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-
-	glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight); //crosses the two direction vectors to get the positive y direction vector for the camera
-
-	/////////////////////////////////////////////
-
-	//using these variables, and a piece of code towards the beginning of the while loop (I'll label it #333), I will make the camera rotate around a point (x and z axis)
-	float radius = 10.0f; //the circle path it will take will be of radius 10
-	float camX = 0;
-	float camZ = 0;
-
-	glm::mat4 view; //the actual view matrix that will be changed during the while loop
-	*/
-
 	//4 vertices for a rectangle, i.e 2 triangles
+	//not using an EBO for now, as I need to use the normals provided in this model
 	float vertices[] = {
-		// positions          // colors           // texture coords
-		0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-		0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,    // top left 
-		0.5f,  0.5f, -1.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   //---------- top right
-		0.5f, -0.5f, -1.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-		-0.5f, -0.5f, -1.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-		-0.5f,  0.5f, -1.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
-	};
-	
-	//element indices array
-	unsigned int indices[] = {
-		3, 2, 1, //first triangle
-		3, 0, 1, //second triangle
-		0, 4, 5,
-		1, 0, 5,
-		7, 6, 5,
-		7, 4, 5,
-		0, 4, 7,
-		0, 3, 7,
-		1, 5, 6,
-		1, 2, 6,
-		3, 2, 6,
-		3, 7, 6
+			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+			0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+			0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+			-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
 
+			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+
+			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+
+			0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+			0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+			0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+			0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+			0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+			0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+			0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+			0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+			0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+
+			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+			0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+			0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+			0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 	};
 
 	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
 	glm::mat4 trans = glm::mat4(1.0f); //empty transformation matrix
 	
 	vec = trans * vec; //apply the transformation above to this vec
-
-	unsigned int EBO; //EBO id
-	glGenBuffers(1, &EBO); //generate EBO buffer
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //bind the buffer array data type to the EBO buffer
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); //load the indices into the EBO buffer object
 
 	//setup VAO, VBO and vertex atrrib stuff
 	unsigned int VBO, VAO;
@@ -149,73 +132,61 @@ int main(){
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	//position attributes
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0); //enables a generic vertex attribute, for index 0, as in the above function, can be disabled via glDisableVertexAttribArray(0)
 
-	//colour attributes
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	//normal vector attributes
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
-
-	//texture attributes
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(6 * sizeof(float))); //there are now 6 floats before it, so specify and all that
-	glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0); //calls the correct VBO using GL_ARRAY_BUFFER, and safely unbinds it
 	
 	glBindVertexArray(0); //unbind the VAO safely
 
+	//light VAO - the cube shaped lamp
+	glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.0f); //the position of the light, we will transform one of the cubes and draw them separately using this
+
 	//textures
 	//the below use the texture loading function to load a texture and return its id
 	unsigned int textureID_1 = loadTexture("images/1.png"); 
-
-	glm::vec3 cubePositions[] = { //positions for scattered cubes
-		glm::vec3( 0.0f,  0.0f,  0.0f), 
-		glm::vec3( 2.0f,  5.0f, -15.0f), 
-		glm::vec3(-1.5f, -2.2f, -2.5f),  
-		glm::vec3(-3.8f, -2.0f, -12.3f),  
-		glm::vec3( 2.4f, -0.4f, -3.5f),  
-		glm::vec3(-1.7f,  3.0f, -7.5f),  
-		glm::vec3( 1.3f, -2.0f, -2.5f),  
-		glm::vec3( 1.5f,  2.0f, -2.5f), 
-		glm::vec3( 1.5f,  0.2f, -1.5f), 
-		glm::vec3(-1.3f,  1.0f, -1.5f)  
-	};
-	
 	//shaders
 	Shader *progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl"); //constructing the shader object	
+
+	Shader *lightShader = new Shader("glsl/vertexShader.glsl", "glsl/lightFragShader.glsl"); //the shader object specifically for the lamp
+
 	progShader->use(); //sets the program object as the current active shader object
-
-	camera->shader = progShader; //gives the camera a pointer to the shader
-
+	
 	//uniforms
 	progShader->setFloat("offsetX", 0.5f); //sets the uniform for the current active shader program object
 	progShader->setInt("rectTexture", 0); //sets the uniform of the specified name, for the sampler2D, which will have a texture bound using GL_TEXTURE1
 	//basically a value of 0 up there corresponds to GL_TEXTURE1, a value of 1 corresponds to GL_TEXTURE2 etc
 
-	glEnable(GL_DEPTH_TEST);
+	progShader->set3Float("objectColour", 1.0f, 0.5f, 0.31f);
+	progShader->set3Float("lightColour", 1.0f, 1.0f, 1.0f);
 
+	glEnable(GL_DEPTH_TEST); //basically makes sure that you can't see through objects, by rendering them in the correct order
 
 	//the main loop
 	while(!glfwWindowShouldClose(window)){
 		processInput(window); //check if the escape key has been pressed
-		camera->liveUpdate("view", "projection"); //does all the stuff that needs to be done regularly in the main loop, in this function
-		//the piece of code labelled #333
-		/*
-		//sin and cos are 90 deg, or 1/2 pi radians apart, so the peak of the cos occurs when sin is at 0, so as they oscillate on x and z in sync, they make a circle path
-		camX = sin(glfwGetTime()) * radius;
-		camZ = cos(glfwGetTime()) * radius;
 
-		//give the view matrix the camZ and camX
-		view = glm::lookAt(glm::vec3(camX, 0.0, camZ), 
-						glm::vec3(0.0, 0.0, 0.0), 
-						glm::vec3(0.0, 1.0, 0.0f)
-		);
-		*/
+		//for making the light loop around the object
+		float camX = sin(glfwGetTime()) * 10;
+		float camZ = cos(glfwGetTime()) * 10;
+
+		progShader->use(); //sets the program object as the current active shader object
+		camera->liveUpdate(); //does all the stuff that needs to be done regularly in the main loop, in this function
+
+		progShader->setMatrix4("view", camera->view); //gives the vertex shader the view matrix to transform the points appropriately
+		progShader->setMatrix4("projection", camera->projection); //obviously the projection matrix is also used, along with the model matrix, all in one
+
+		glm::vec3 temp = lightPos + glm::vec3(camX, 0.0f, camZ); //the transformation for the light itself (round in a circle)
+		progShader->setVec3("lightPos", temp); //sending the transformation as a vector
+
+		progShader->setVec3("cameraPos", camera->cameraPos); //need to pass it to the shader constantly
 
 		glClearColor(0.2f,0.2f,0.25f,1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //bind the EBO object to use the indices
 
 		//by the way GL_TEXTURE1 is equal to GL_TEXTURE0 + 1, GL_TEXTURE2 is euqal to GL_TEXTURE0 + 2 etc
 		glBindTexture(GL_TEXTURE_2D, textureID_1); //binds the texture to the sampler2D with the name rextTexture (first one (0) as specified in uniforms section)
@@ -223,19 +194,25 @@ int main(){
 
 		glBindVertexArray(VAO); //need this as it contains the VBO configuration
 
-		float scaleFactor = (sin(glfwGetTime())*0.3) + 0.5; //repeatedly scales
-		//float scaleFactor = glfwGetTime(); //just gets bigger and bigger with time
+		glm::mat4 model = glm::mat4(1.0f);
+		progShader->setMatrix4("model", model);
 
-		for(int i = 0;i < 10; i++){ //draws 10 cubes, all with slightly different positions, and the same transformations applied to them
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, cubePositions[i]);
-			progShader->setMatrix4("model", model);
+		//the current matrix transform would be applied here
+		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(float)); //draws the vertices found in the currently bound VBO
 
-			//the current matrix transform would be applied here
-			glDrawElements(GL_TRIANGLES, sizeof(vertices)/sizeof(float), GL_UNSIGNED_INT, (void*)0); //used for indexed drawing, i.e using an EBO
-		}
+		lightShader->use();
 
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //this essentially allows viewing in wireframe mode
+		lightShader->setMatrix4("view", camera->view); //gives the vertex shader the view matrix to transform the points appropriately
+		lightShader->setMatrix4("projection", camera->projection); //obviously the projection matrix is also used, along with the model matrix, all in one
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.2f));
+
+		model = glm::translate(model, lightPos + glm::vec3(camX, 0.0f, camZ));
+
+		lightShader->setMatrix4("model", model);
+
+		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(float)); //draws the vertices found in the currently bound VBO
 
 		glfwSwapBuffers(window); //uses the double buffer thing, where the back buffer is drawn to and then swapped with the front one to prevent flickering
 		glfwPollEvents(); //checks for events and allows things such as the framebuffer_size_callback functions to be called once an event has been detected

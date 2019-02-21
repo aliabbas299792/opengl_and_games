@@ -140,11 +140,20 @@ void Shader::setFloat(const std::string &name, float value) const{
     glUniform1f(glGetUniformLocation(ID, name.c_str()), (float)value);
 }
 
-void Shader::setMatrix4(const std::string &name, glm::mat4 matrix) const{
+void Shader::setMatrix4(const std::string &name, glm::mat4 &matrix) const{
     unsigned int transformLocation = glGetUniformLocation(ID, name.c_str());
     glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
     //first param is the location
     //2nd param is how many matrices we'd like to send, so 1
     //3rd is if we want to swap the rows and columns, for a different matrix layout, no we don't so GL_FALSE
     //4th is the actual matrix data, which is converted from the GLM code into the actual OpenGL compatible stuff using glm::value_ptr([a matrix])
+}
+
+void Shader::set3Float(const std::string &name, float r, float g, float b) const{
+    glUniform3f(glGetUniformLocation(ID, name.c_str()), r, g, b);
+}
+
+void Shader::setVec3(const std::string &name, glm::vec3 &vector) const{
+    glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &vector[0]);
+    //the second parameter is how many elements (vectors in this case), will be passed, with the final being a reference to the first value of the vector array thing
 }

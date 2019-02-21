@@ -86,14 +86,11 @@ void Camera::scroll_callback_zoom(double xOffset, double yOffset){ //the respons
         fov = 45.0f;
 }
 
-void Camera::liveUpdate(std::string viewMatName, std::string projectMatName){
+void Camera::liveUpdate(){
     this->keyboard_movement(); //references the keyboard_movement() function for this instance of the object
     
     view = glm::lookAt(cameraPos, cameraFront + cameraPos, cameraUp);
     projection = glm::perspective(glm::radians(fov), (float)windowWidth/windowWidth, 0.1f, 100.0f);
 	//the first param is the position of the camera, and the second is the target, the third is just the up vector
 	//the 2nd param has the cameraPos vector added to it, as we want the target to be constantly in front of the camera, so cameraPos + cameraFront
-
-    shader->setMatrix4("view", view); //gives the vertex shader the view matrix to transform the points appropriately
-	shader->setMatrix4("projection", projection); //obviously the projection matrix is also used, along with the model matrix, all in one
 }

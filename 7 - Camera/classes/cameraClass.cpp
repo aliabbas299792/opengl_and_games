@@ -63,7 +63,7 @@ void Camera::mouse_callback(double xpos, double ypos){ //the function we pass on
     yaw += xoffset; //increasing the yaw (x axis rotation), but can be negative so can also decrease it obviously
     pitch += yoffset; //increasing the yaw (x axis rotation), but can be negative so can also decrease it obviously
 
-    //the below just limits the pitch to 180 degress, and as the pitch is used in all the calculations, it consequently constrains the yaw as well
+    //the below just limits the pitch to 180 degress, so you can't go round in a full 360 degree pitch circle
     if(pitch > 89.0f)
         pitch = 89.0f;
     if(pitch < -89.0f)

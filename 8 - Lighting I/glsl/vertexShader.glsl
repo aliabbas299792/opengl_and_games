@@ -1,22 +1,36 @@
 #version 330 core
 layout(location = 0) in vec3 pos;
-layout(location = 1) in vec3 inputColour;
-layout(location = 2) in vec2 texCoords;
+layout(location = 1) in vec3 normalVector;
 
-uniform float offsetX;
+uniform vec3 lightPos;
+uniform vec3 objectColour;
+uniform vec3 lightColour;
+uniform vec3 cameraPos;
+
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-out vec3 fragColour;
-out vec2 texCoordinates;
+out vec3 objectColourFrag;
+out vec3 normalVec;
+out vec3 fragPosVec;
+out vec3 cameraPosVec;
+out vec3 lightPosVec;
+out vec3 lightColourVec;
 
 void main(){
-    //gl_Position.xyz = vec3(pos.x /*+ offsetX*/, pos.y, pos.z); //small will be applied to all input vertices, just passed on to next stage
-    //gl_Position.w = 1.0;
-
     gl_Position = projection * view * model * vec4(pos, 1.0f);
+    
+    //whenever we apply a non-uniform scale the normal vectors are not perpendicular to the corresponding surface anymore which distorts the lighting
+    //to fix this you take the transpose of the inverse of the model matrix, which applies a similar transform to the normal, but without making it become not perpendicular
+    vec3 normal = mat3(transpose(inverse(model))) * normalVector;
+    //though you shouldn't do this normally, as this is an expensive operation, instead do it on the CPU and then send it through a uniform to the shader
 
-    fragColour = gl_Position.xyz; //visualise the NDC coordinates as colours of the triangle
-    texCoordinates = texCoords; //this will pass on the texture coordinates
+    lightColourVec = lightColour;
+    normalVec = normal;
+    fragPosVec = vec3(model * vec4(pos, 1.0f)); //this gives the position in world space, which we will use to calculate lighting and such;
+    cameraPosVec = cameraPos;
+    lightPosVec = lightPos;
+
+    objectColourFrag = objectColour;
 }

@@ -35,7 +35,7 @@ As you can see, `sin(theta)` gives the y displacement from origin, `cos(theta) *
 
 So now you need to obtain the `theta` and `phi` previously mentioned.
 
-And that's easy, literally just set it to be the pixel displacement, and then constrain one of them to 180 degrees, like pitch for example.
+And that's easy, literally just set it to be the pixel displacement, and then constrain the pitch to 180 degrees (so it can only look up and down), and leave the yaw free to go round and round, and you're done.
 
 Then apply the transformations to the `cameraFront` variable, and normalise it, then you're done.
 

@@ -16,7 +16,9 @@ class Shader{
         void setBool(const std::string &name, bool value) const;
         void setInt(const std::string &name, int value) const;
         void setFloat(const std::string &name, float value) const;
-        void setMatrix4(const std::string &name, glm::mat4 matrix) const;
+        void setMatrix4(const std::string &name, glm::mat4 &matrix) const;
+        void set3Float(const std::string &name, float r, float g, float b) const;
+        void setVec3(const std::string &name, glm::vec3 &vector) const;
 
         /*
         When an object is defined as const in the main program, they can only call const member functions like those above.
@@ -35,7 +37,6 @@ class Camera{
         float pitch = 0;
     public:
         GLFWwindow* window = NULL;
-        Shader* shader = NULL;
 
         float fov = 45.0f;
 
@@ -50,7 +51,7 @@ class Camera{
         void keyboard_movement();
         void scroll_callback_zoom(double xOffset, double yOffset);
         void mouse_callback(double xPos, double yPos);
-        void liveUpdate(std::string viewMatName, std::string projectMatName);
+        void liveUpdate();
 };
 
 #endif

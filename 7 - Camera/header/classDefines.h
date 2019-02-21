@@ -2,6 +2,8 @@
 #define CLASS_DEFINES
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <GLFW/glfw3.h>
 
 class Shader{
     public:
@@ -20,6 +22,35 @@ class Shader{
         When an object is defined as const in the main program, they can only call const member functions like those above.
         It is also considered good practice to make as many member functions const as possible to prevent accidental changes to objects.
         */
+};
+
+class Camera{
+    private:
+        int windowWidth = 0;
+        int windowHeight = 0;
+
+        float lastX = windowWidth/2;
+        float lastY = windowHeight/2;
+        float yaw = 0;
+        float pitch = 0;
+    public:
+        GLFWwindow* window = NULL;
+        Shader* shader = NULL;
+
+        float fov = 45.0f;
+
+        glm::mat4 projection = glm::mat4(1.0f);
+
+        glm::mat4 view = glm::mat4(1.0f);
+        glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f,  3.0f);
+        glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+        glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f,  0.0f);
+
+        Camera(int width, int height, float fov);
+        void keyboard_movement();
+        void scroll_callback_zoom(double xOffset, double yOffset);
+        void mouse_callback(double xPos, double yPos);
+        void liveUpdate(std::string viewMatName, std::string projectMatName);
 };
 
 #endif

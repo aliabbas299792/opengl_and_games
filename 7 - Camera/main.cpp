@@ -15,13 +15,17 @@
 #include "header/functionDefines.h"
 #include "header/classDefines.h"
 
+//camera setup - needed outside of the int main() function because I need to pass the data from the callback functions to my camera object
+//need to set the window width/height first
+const int width = 900; 
+const int height = 900;
+//then create my camera object
+Camera *camera = new Camera(width, height, 45.0f); //the first 2 params are obviously window width and height, the third is the initial fov
+
 int main(){
 	//*************************************//
 	//***********GLFW STUFF****************//
 	//*************************************//
-
-	const int width = 900;
-	const int height = 900;
 
 	//glfw initialisation
 	glfwInit();
@@ -34,6 +38,8 @@ int main(){
 	glfwWindowHint(GLFW_SAMPLES, 8);
 
 	GLFWwindow* window = glfwCreateWindow(width, height, "Window #1", NULL, NULL); //window creation
+
+	camera->window = window; //here we give the camera object a pointer to the window object, for it to use internally later
 
 	if(window == NULL){ //if creation failed
 		std::cout << "Window creation failed." << std::endl;
@@ -53,6 +59,11 @@ int main(){
 	glViewport(0, 0, width, height); //this is where everything is rendered inside of, params are: top x, top y, width, height respectively
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); //call the function specified, when the specified window is resized
+
+	glfwSetCursorPosCallback(window, mouse_callback); //sets this function whenever a mouse movement even occurs
+	glfwSetScrollCallback(window, scroll_callback_zoom);
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); //ensures the cursor doesn't leave the window, when the window is in focus, and that it is hidden
 
 	//*************************************//
 	//***********OPENGL STUFF**************//
@@ -75,6 +86,8 @@ int main(){
 
 	glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight); //crosses the two direction vectors to get the positive y direction vector for the camera
 
+	/////////////////////////////////////////////
+
 	//using these variables, and a piece of code towards the beginning of the while loop (I'll label it #333), I will make the camera rotate around a point (x and z axis)
 	float radius = 10.0f; //the circle path it will take will be of radius 10
 	float camX = 0;
@@ -82,12 +95,6 @@ int main(){
 
 	glm::mat4 view; //the actual view matrix that will be changed during the while loop
 	*/
-
-	glm::mat4 view = glm::mat4(1.0f);
-
-	glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f, 3.0f);
-	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	//4 vertices for a rectangle, i.e 2 triangles
 	float vertices[] = {
@@ -178,25 +185,20 @@ int main(){
 	Shader *progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl"); //constructing the shader object	
 	progShader->use(); //sets the program object as the current active shader object
 
+	camera->shader = progShader; //gives the camera a pointer to the shader
+
 	//uniforms
 	progShader->setFloat("offsetX", 0.5f); //sets the uniform for the current active shader program object
 	progShader->setInt("rectTexture", 0); //sets the uniform of the specified name, for the sampler2D, which will have a texture bound using GL_TEXTURE1
 	//basically a value of 0 up there corresponds to GL_TEXTURE1, a value of 1 corresponds to GL_TEXTURE2 etc
-	
-	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.0f), (float)width/height, 0.1f, 100.0f);
-	//projection matrix, i.e transforms all of the coords to clip space and applies the perspective division
-	//the first param: the FoV, 2nd: aspect ratio, 3rd: distance of near plane, anything closer than this is not drawn, 4th: far plane, anything past it is not drawn
-
-	progShader->setMatrix4("projection", projection);
 
 	glEnable(GL_DEPTH_TEST);
 
 
 	//the main loop
 	while(!glfwWindowShouldClose(window)){
-		processInput(window, cameraPos, cameraFront, cameraUp); //check if the escape key has been pressed
-
+		processInput(window); //check if the escape key has been pressed
+		camera->liveUpdate("view", "projection"); //does all the stuff that needs to be done regularly in the main loop, in this function
 		//the piece of code labelled #333
 		/*
 		//sin and cos are 90 deg, or 1/2 pi radians apart, so the peak of the cos occurs when sin is at 0, so as they oscillate on x and z in sync, they make a circle path
@@ -209,13 +211,6 @@ int main(){
 						glm::vec3(0.0, 1.0, 0.0f)
 		);
 		*/
-		view = glm::lookAt(cameraPos, cameraFront + cameraPos, cameraUp);
-		//the first param is the position of the camera, and the second is the target, the third is just the up vector
-		//the 2nd param has the cameraPos vector added to it, as we want the target to be constantly in front of the camera, so cameraPos + cameraFront
-
-		progShader->setMatrix4("view", view); //gives the vertex shader the view matrix to transform the points appropriately
-		progShader->setMatrix4("projection", projection);
-		//obviously the projection matrix is also used, along with the model matrix, all in one
 
 		glClearColor(0.2f,0.2f,0.25f,1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer
@@ -249,4 +244,12 @@ int main(){
 	//exit properly, first destroys all remaining windows, frees any allocated resources, and sets library to uninitialised state, before actually returning 0
 	glfwTerminate();
 	return 0;
+}
+
+void mouse_callback(GLFWwindow* window, double xPos, double yPos){ //the callback function for the mouse events, only needed to pass on variables to my object
+    camera->mouse_callback(xPos, yPos);
+}  
+
+void scroll_callback_zoom(GLFWwindow* window, double xOffset, double yOffset){ //the callback function for the mouse scroll events, only needed to pass on variables to my object
+  camera->scroll_callback_zoom(xOffset, yOffset);
 }

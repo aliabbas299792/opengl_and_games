@@ -10,12 +10,12 @@ So normally, you will make a 'view' vector, which employs glm::lookAt(), and tak
 ![matrix](https://res.cloudinary.com/deylrqt2d/image/upload/v1550683537/lookAt_k68exa.png)
 
 ### Movement and the lookAt() function
-The lookAt function is like this: `view = glm::lookAt(cameraPos, cameraFront + cameraPos, cameraUp)`
-The first argument is the camera positon, the second is the 'target' vector, the one the camera points at, and the third is the up vector, which is literally just like `vec3(0.0f, 1.0f, 0.0f)`, and is used for the cross product internally, as described above.
+The lookAt function is like this: `view = glm::lookAt(cameraPos, cameraFront + cameraPos, cameraUp)`.
+The first argument is the camera positon, the second is the 'target' vector, the one the camera points at, and the third is the up vector, which is literally just like `vec3(0.0f, 1.0f, 0.0f)`, and is used for the cross product internally, as described above.<br>
 The second argument has `cameraFront + cameraPos`, as we specify that the target is translated the same amount as the camera itself, so it is always looking into the negative Z in front of the camera, by adding those vectors up.
-They are all `vec3`.
+They are all `vec3`.<br>
 
-Then movement is simple, you change the position based on WASD input or something, and also change the target for the lookAt() function as well, so that the target is always the same distance in front of the camera (negative Z though, as positive Z is towards the viewer).
+Then movement is simple, you change the position based on WASD input or something, and also change the target for the lookAt() function as well, so that the target is always the same distance in front of the camera (negative Z though, as positive Z is towards the viewer).<br>
 
 #### Delta Time
 Delta time is used, which is just the time since the last frame, so `currentFrame - lastFrame`, (assuming those variables hold times), and then multiplying this variable by the speed to obtain the new speed, which will mean that the speed of the camera will be the same across systems regardless of the fps.

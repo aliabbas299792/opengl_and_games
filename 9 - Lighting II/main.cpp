@@ -115,6 +115,19 @@ int main(){
       -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
       -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
   };
+	
+	glm::vec3 cubePositions[] = { //positions for scattered cubes
+		glm::vec3( 0.0f,  0.0f,  0.0f), 
+		glm::vec3( 2.0f,  5.0f, -15.0f), 
+		glm::vec3(-1.5f, -2.2f, -2.5f),  
+		glm::vec3(-3.8f, -2.0f, -12.3f),  
+		glm::vec3( 2.4f, -0.4f, -3.5f),  
+		glm::vec3(-1.7f,  3.0f, -7.5f),  
+		glm::vec3( 1.3f, -2.0f, -2.5f),  
+		glm::vec3( 1.5f,  2.0f, -2.5f), 
+		glm::vec3( 1.5f,  0.2f, -1.5f), 
+		glm::vec3(-1.3f,  1.0f, -1.5f)  
+	};
 
 	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
 	glm::mat4 trans = glm::mat4(1.0f); //empty transformation matrix
@@ -149,11 +162,13 @@ int main(){
 	glBindVertexArray(0); //unbind the VAO safely
 
 	//light VAO - the cube shaped lamp
-	glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.0f); //the position of the light, we will transform one of the cubes and draw them separately using this
+	glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 10.0f); //the position of the light, we will transform one of the cubes and draw them separately using this
 
 	//textures
 	//the below use the texture loading function to load a texture and return its id
 	unsigned int textureID_1 = loadTexture("images/container2.png"); //used in the diffuse colour sampling in the fragment shader
+	unsigned int textureID_2 = loadTexture("images/container2_specular.png"); //used in the specular map sampling in the fragment shader
+	unsigned int textureID_3 = loadTexture("images/matrix.jpg"); //used in the emission map sampling in the fragment shader
 	//shaders
 	Shader *progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl"); //constructing the shader object	
 
@@ -164,9 +179,11 @@ int main(){
 	//uniforms
 	progShader->setFloat("offsetX", 0.5f); //sets the uniform for the current active shader program object
 	progShader->setInt("material.diffuse", 0); //sets the uniform of the specified name, for the sampler2D in the material struct in the fragment shader, which will have a texture bound using GL_TEXTURE1
+	progShader->setInt("material.specular", 1); //sets the specular map uniform
+	progShader->setInt("material.emission", 2); //sets the emission map uniform
 	//basically a value of 0 up there corresponds to GL_TEXTURE1, a value of 1 corresponds to GL_TEXTURE2 etc
 
-	progShader->set3Float("objectColour", 1.0f, 0.5f, 0.31f);
+	progShader->set3Float("objectColour", 1.0f, 1.0f, 1.0f); //can give the object(s) a certain tint
 	progShader->set3Float("lightColour", 1.0f, 1.0f, 1.0f);
 
 	glEnable(GL_DEPTH_TEST); //basically makes sure that you can't see through objects, by rendering them in the correct order
@@ -176,18 +193,22 @@ int main(){
 		processInput(window); //check if the escape key has been pressed
 
 		//for making the light loop around the object
-		float camX = sin(glfwGetTime()) * 10;
-		float camZ = cos(glfwGetTime()) * 10;
+		float camX = sin(glfwGetTime()) * 50;
+		float camZ = cos(glfwGetTime()) * 50;
 
 		progShader->use(); //sets the program object as the current active shader object
 		camera->liveUpdate(); //does all the stuff that needs to be done regularly in the main loop, in this function
+
+		progShader->setFloat("time", glfwGetTime()); //sends the time to the fragment shader, so I can cause the emission map to move
 
 		progShader->setMatrix4("view", camera->view); //gives the vertex shader the view matrix to transform the points appropriately
 		progShader->setMatrix4("projection", camera->projection); //obviously the projection matrix is also used, along with the model matrix, all in one
 
 		//sending the light properties
-		glm::vec3 temp = lightPos + glm::vec3(camX, 0.0f, camZ); //the transformation for the light itself (round in a circle)
-		progShader->setVec3("light.position", temp); //sending the transformation as a vector
+		//glm::vec3 temp = lightPos + glm::vec3(camX, 0.0f, camZ); //the transformation for the light itself (round in a circle)
+		progShader->setVec3("light.position", lightPos); //sending the transformation as a vector, unneccessary for directional light
+		//glm::vec3 temp = glm::vec3(0.0f, 1.0f, 0.0f);
+		//progShader->setVec3("light.direction", temp);
 		
 		//basically makes the colours change based the time
 		/* 
@@ -200,39 +221,59 @@ int main(){
 		progShader->set3Float("light.ambient",  0.2f, 0.2f, 0.2f);
 		progShader->set3Float("light.diffuse",  0.5f, 0.5f, 0.5f);
 		progShader->set3Float("light.specular", 1.0f, 1.0f, 1.0f);
+		progShader->setFloat("light.constant", 1.0f);
+		progShader->setFloat("light.linear", 0.07f);
+		progShader->setFloat("light.quadratic", 0.017f);
 
 		//sending all the material colour stuff
-		progShader->set3Float("material.specular", 0.2f, 0.2f, 0.2f);
 		progShader->setFloat("material.shininess", 32.0f);
 
 		progShader->setVec3("cameraPos", camera->cameraPos); //need to pass it to the shader constantly
 
-		glClearColor(0.2f,0.2f,0.25f,1.0f); //makes the entire screen this colour
+		glClearColor(0.0f,0.0f,0.0f,1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer
 
 		//by the way GL_TEXTURE1 is equal to GL_TEXTURE0 + 1, GL_TEXTURE2 is euqal to GL_TEXTURE0 + 2 etc
 		glBindTexture(GL_TEXTURE_2D, textureID_1); //binds the texture to the sampler2D with the name rextTexture (first one (0) as specified in uniforms section)
 		glActiveTexture(GL_TEXTURE1); //sets the 2nd texture location as this
+		glBindTexture(GL_TEXTURE_2D, textureID_2); //sends the specular map
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, textureID_3); //sends the emission map
+		glActiveTexture(GL_TEXTURE3);
 
 		glBindVertexArray(VAO); //need this as it contains the VBO configuration
 
-		glm::mat4 model = glm::mat4(1.0f);
-		progShader->setMatrix4("model", model);
+		float scaleFactor = (sin(glfwGetTime()) + 5)/5; //repeatedly scales, it is also essentially y=(sin(x)+5)/5
+		//float scaleFactor = glfwGetTime(); //just gets bigger and bigger with time
 
-		//the current matrix transform would be applied here
-		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(float)); //draws the vertices found in the currently bound VBO
+		for(int i = 0;i < 10; i++){ //draws 10 cubes, all with slightly different positions, and the same transformations applied to them
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			model = glm::scale(model, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
+			model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0,1.0,1.0)); //turns it by (current_time) radians each frame
+			float angle = 20.0f * i; 
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			progShader->setMatrix4("model", model);
 
+			//the current matrix transform would be applied here
+			glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(float)); //draws the vertices found in the currently bound VBO
+		}
+
+		//this entire bit isn't used for directional lights, as we don't want a visible source, as it's modelled to be infinitely far away
+		///*
 		lightShader->use();
 
 		lightShader->setMatrix4("view", camera->view); //gives the vertex shader the view matrix to transform the points appropriately
 		lightShader->setMatrix4("projection", camera->projection); //obviously the projection matrix is also used, along with the model matrix, all in one
 
-		model = glm::mat4(1.0f);
+		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.2f));
 
-		model = glm::translate(model, lightPos + glm::vec3(camX, 0.0f, camZ));
+		//model = glm::translate(model, lightPos + glm::vec3(camX, 0.0f, camZ)); //used for the camera rotating around the scene
+		model = glm::translate(model, lightPos);
 
 		lightShader->setMatrix4("model", model);
+		//*/
 
 		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(float)); //draws the vertices found in the currently bound VBO
 

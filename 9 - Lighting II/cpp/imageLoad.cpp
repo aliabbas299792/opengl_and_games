@@ -25,6 +25,8 @@ unsigned int loadTexture(const char* file){
         GLenum format;
         if (nrChannels == 1)
             format = GL_RED;
+        else if (nrChannels == 2)
+            format = GL_RG;
         else if (nrChannels == 3)
             format = GL_RGB;
         else if (nrChannels == 4)

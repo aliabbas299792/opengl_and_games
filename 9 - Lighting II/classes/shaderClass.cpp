@@ -157,3 +157,13 @@ void Shader::setVec3(const std::string &name, glm::vec3 &vector) const{
     glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &vector[0]);
     //the second parameter is how many elements (vectors in this case), will be passed, with the final being a reference to the first value of the vector array thing
 }
+
+void Shader::setVec3_v2(const std::string &name, glm::vec3 vector) const{ //this one is so you can define a vec3 in there
+    glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &vector[0]);
+    //the second parameter is how many elements (vectors in this case), will be passed, with the final being a reference to the first value of the vector array thing
+}
+
+void Shader::setVec4(const std::string &name, glm::vec4 &vector) const{
+    glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &vector[0]);
+    //the second parameter is how many elements (vectors in this case), will be passed, with the final being a reference to the first value of the vector array thing
+}

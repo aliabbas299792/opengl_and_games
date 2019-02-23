@@ -19,6 +19,8 @@ class Shader{
         void setMatrix4(const std::string &name, glm::mat4 &matrix) const;
         void set3Float(const std::string &name, float r, float g, float b) const;
         void setVec3(const std::string &name, glm::vec3 &vector) const;
+        void setVec3_v2(const std::string &name, glm::vec3 vector) const;
+        void setVec4(const std::string &name, glm::vec4 &vector) const;
 
         /*
         When an object is defined as const in the main program, they can only call const member functions like those above.

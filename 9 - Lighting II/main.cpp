@@ -167,7 +167,7 @@ int main(){
 	//textures
 	//the below use the texture loading function to load a texture and return its id
 	unsigned int textureID_1 = loadTexture("images/container2.png"); //used in the diffuse colour sampling in the fragment shader
-	unsigned int textureID_2 = loadTexture("images/container2_specular.png"); //used in the specular map sampling in the fragment shader
+	unsigned int textureID_2 = loadTexture("images/container2_specular_alternate.png"); //used in the specular map sampling in the fragment shader
 	unsigned int textureID_3 = loadTexture("images/matrix.jpg"); //used in the emission map sampling in the fragment shader
 	//shaders
 	Shader *progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl"); //constructing the shader object	
@@ -206,9 +206,16 @@ int main(){
 
 		//sending the light properties
 		//glm::vec3 temp = lightPos + glm::vec3(camX, 0.0f, camZ); //the transformation for the light itself (round in a circle)
-		progShader->setVec3("light.position", lightPos); //sending the transformation as a vector, unneccessary for directional light
+		//progShader->setVec3("light.position", lightPos); //sending the transformation as a vector, unneccessary for directional light
 		//glm::vec3 temp = glm::vec3(0.0f, 1.0f, 0.0f);
 		//progShader->setVec3("light.direction", temp);
+
+		//for spotlights, it is different, in this case I will demonstrate with a flashlight
+		progShader->setVec3_v2("light.position", camera->cameraPos);
+		progShader->setVec3_v2("light.direction", camera->cameraFront);
+		progShader->setFloat("light.cutOff", cos(glm::radians(15.0f))); //will pas the cos value of 15 degrees to the shader, rather than passing
+		//the actual value of 15 degrees, as, the dot product of the light-direction vector, and the incident light ray vector would return the cos of some value,
+		//and to get the angle you need to do inverse cos of that, which is an expensive operation, so we instead pas the cos of the angle we're comparing
 		
 		//basically makes the colours change based the time
 		/* 
@@ -220,7 +227,7 @@ int main(){
 
 		progShader->set3Float("light.ambient",  0.2f, 0.2f, 0.2f);
 		progShader->set3Float("light.diffuse",  0.5f, 0.5f, 0.5f);
-		progShader->set3Float("light.specular", 1.0f, 1.0f, 1.0f);
+		progShader->set3Float("light.specular", 2.0f, 2.0f, 2.0f);
 		progShader->setFloat("light.constant", 1.0f);
 		progShader->setFloat("light.linear", 0.07f);
 		progShader->setFloat("light.quadratic", 0.017f);
@@ -260,7 +267,8 @@ int main(){
 		}
 
 		//this entire bit isn't used for directional lights, as we don't want a visible source, as it's modelled to be infinitely far away
-		///*
+		//also not needed for torch style spotlights
+		/*
 		lightShader->use();
 
 		lightShader->setMatrix4("view", camera->view); //gives the vertex shader the view matrix to transform the points appropriately
@@ -273,7 +281,7 @@ int main(){
 		model = glm::translate(model, lightPos);
 
 		lightShader->setMatrix4("model", model);
-		//*/
+		*/
 
 		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(float)); //draws the vertices found in the currently bound VBO
 

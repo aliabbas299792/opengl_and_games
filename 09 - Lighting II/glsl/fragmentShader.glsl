@@ -35,10 +35,9 @@ struct Light{
 
 //by accepting these as uniforms, it helps keep things a lot more organised, and allow us a lot more control over the look of our object
 uniform Material material;
-uniform Light light;
+uniform Light torch;
 
 uniform vec3 objectColour;
-uniform vec3 lightColour;
 uniform vec3 cameraPos;
 uniform float time;
 
@@ -49,21 +48,21 @@ in vec2 TexCoords;
 out vec4 color;
 
 void main(){
-  vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords)) * 0.1; //replaces the ambient colour with the colour sampled from the texture
+  vec3 ambient = torch.ambient * vec3(texture(material.diffuse, TexCoords)) * 0.1; //replaces the ambient colour with the colour sampled from the texture
 
-  float distance = length(light.position - fragPosVec);
-  float attenuation = 1.0 / (light.constant + (light.linear * distance) + light.quadratic * (distance * distance));    
+  float distance = length(torch.position - fragPosVec);
+  float attenuation = 1.0 / (torch.constant + (torch.linear * distance) + torch.quadratic * (distance * distance));    
 
   vec3 normal = normalize(normalVec); //normalises the normal, to be safe
   //the below is not used in directional lights
-  vec3 lightDirToSourceFromFragment = normalize(light.position - fragPosVec); //the normalised vector is the direction of the light, from the fragment to the source, using the coordinates from there as well
+  vec3 lightDirToSourceFromFragment = normalize(torch.position - fragPosVec); //the normalised vector is the direction of the light, from the fragment to the source, using the coordinates from there as well
   //vec3 lightDir = normalize(-light.direction); //the direction, provided by the directional light
   
   //spotlight code below
   //to soften the border of the cutoff, because it looks very unnatural, you can add an outer cutoff, which would ease out and blur the border
-  float outerCutOff = light.cutOff - 0.05; //remember that a lower value is a higher angle in cos graphs, so slightly lower value is slightly higher angle, allowing for the blur to occur
-  float cosThetaBetweenFragmentAndLight = dot(lightDirToSourceFromFragment, normalize(-light.direction)); //get the cos angle value to model the spotlight
-  float epsilon = light.cutOff - outerCutOff; //this is the difference between the inner and outer cutoffs
+  float outerCutOff = torch.cutOff - 0.05; //remember that a lower value is a higher angle in cos graphs, so slightly lower value is slightly higher angle, allowing for the blur to occur
+  float cosThetaBetweenFragmentAndLight = dot(lightDirToSourceFromFragment, normalize(-torch.direction)); //get the cos angle value to model the spotlight
+  float epsilon = torch.cutOff - outerCutOff; //this is the difference between the inner and outer cutoffs
   float intensity = (cosThetaBetweenFragmentAndLight - outerCutOff) / epsilon; //this is the intensity equation
   //but basically the center has a value much higher than 1, and anything past the outer cutoff has a value less than 0, so clamping it means that the blur
   //which is observed between the cutoffs is the only range of light visible
@@ -79,22 +78,23 @@ void main(){
 
   float diff = max(dot(normal, lightDirToSourceFromFragment), 0.0f); //recall that the dot product outputs 0 when vectors are perpendicular, and gets closer to 1 as the angle between them is smaller
   //however when the angle between them is more than 90 degrees, the dot product becomes negative, and so we use the max(vector, 0.0f), to clamp it to a minimum of 0.0f
-  vec3 diffuse = diff * light.diffuse * vec3(texture(material.diffuse, TexCoords)); //replaces the diffuse colour with the colour sampled from the texture, using the coordinates from there as well
+  vec3 diffuse = diff * torch.diffuse * vec3(texture(material.diffuse, TexCoords)); //replaces the diffuse colour with the colour sampled from the texture, using the coordinates from there as well
 
   vec3 viewDir = normalize(cameraPos - fragPosVec); //gets the direction towards the light
   vec3 reflectDir = reflect(-lightDirToSourceFromFragment, normal); //inputs the vector towards the point, so from the light source, and returns the reflected ray vector, with the normal being the specified normal (2nd parameter)
   float spec = pow(max(dot(viewDir, reflectDir), 0.0f), material.shininess); //the closer the viewer is to the angle of reflection, the brighter the highlight, more so as it's raised to a high power
   //raising it to a higher power results in a more focused highlight
-  vec3 specular = spec * light.specular * vec3(texture(material.specular, TexCoords)); //tones down the highlight and makes it the colour of the light
+  vec3 specular = spec * torch.specular * vec3(texture(material.specular, TexCoords)); //tones down the highlight and makes it the colour of the light
 
   vec3 emission = vec3(0.0f); //initialise the emission vector to 0
   if(texture(material.specular, TexCoords).r < 0.07f){ //checks if the specular map's red component is less than 0.07f, which indicates it's probably the black bit
     emission = texture(material.emission, TexCoords + vec2(0.0f, time)).xyz; //if it is, add the emission map to the resultant colour, and shift it according to the time
   }
 
-  vec3 result = ( (ambient + (diffuse + specular) * intensity ) * attenuation /*+ emission it's too bright, doesn't help with testing*/ ) * objectColour; //the phong reflection model is applied
+  vec3 result = ( (ambient + (diffuse + specular) * intensity ) * attenuation); /*+ emission it's too bright, doesn't help with testing ) * objectColour; //the phong reflection model is applied
   //if the phong calculations are done in the vertex shader (where it is more efficient), it is of a lower quality, as there are many more fragments than there are verticies, so more calculations are carried out
   //as you can see, I have multiplied by attenuation, which will result in things further from a point light source being dimmer
+  */
 
   color.xyz = result;
 }

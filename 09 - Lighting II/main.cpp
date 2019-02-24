@@ -129,6 +129,14 @@ int main(){
 		glm::vec3(-1.3f,  1.0f, -1.5f)  
 	};
 
+  // positions of the point lights
+  glm::vec3 pointLightPositions[] = {
+      glm::vec3( 0.7f,  0.2f,  2.0f),
+      glm::vec3( 2.3f, -3.3f, -4.0f),
+      glm::vec3(-4.0f,  2.0f, -12.0f),
+      glm::vec3( 0.0f,  0.0f, -3.0f)
+  };
+
 	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
 	glm::mat4 trans = glm::mat4(1.0f); //empty transformation matrix
 	
@@ -170,6 +178,7 @@ int main(){
 	unsigned int textureID_2 = loadTexture("images/container2_specular_alternate.png"); //used in the specular map sampling in the fragment shader
 	unsigned int textureID_3 = loadTexture("images/matrix.jpg"); //used in the emission map sampling in the fragment shader
 	//shaders
+	//Shader *progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShaderMultiLight.glsl"); //constructing the shader object	
 	Shader *progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl"); //constructing the shader object	
 
 	Shader *lightShader = new Shader("glsl/vertexShader.glsl", "glsl/lightFragShader.glsl"); //the shader object specifically for the lamp
@@ -183,7 +192,7 @@ int main(){
 	progShader->setInt("material.emission", 2); //sets the emission map uniform
 	//basically a value of 0 up there corresponds to GL_TEXTURE1, a value of 1 corresponds to GL_TEXTURE2 etc
 
-	progShader->set3Float("objectColour", 1.0f, 1.0f, 1.0f); //can give the object(s) a certain tint
+	//progShader->set3Float("objectColour", 1.0f, 1.0f, 1.0f); //can give the object(s) a certain tint, when it's used anyway
 	progShader->set3Float("lightColour", 1.0f, 1.0f, 1.0f);
 
 	glEnable(GL_DEPTH_TEST); //basically makes sure that you can't see through objects, by rendering them in the correct order
@@ -193,8 +202,8 @@ int main(){
 		processInput(window); //check if the escape key has been pressed
 
 		//for making the light loop around the object
-		float camX = sin(glfwGetTime()) * 50;
-		float camZ = cos(glfwGetTime()) * 50;
+		//float camX = sin(glfwGetTime()) * 50;
+		//float camZ = cos(glfwGetTime()) * 50;
 
 		progShader->use(); //sets the program object as the current active shader object
 		camera->liveUpdate(); //does all the stuff that needs to be done regularly in the main loop, in this function
@@ -211,9 +220,9 @@ int main(){
 		//progShader->setVec3("light.direction", temp);
 
 		//for spotlights, it is different, in this case I will demonstrate with a flashlight
-		progShader->setVec3_v2("light.position", camera->cameraPos);
-		progShader->setVec3_v2("light.direction", camera->cameraFront);
-		progShader->setFloat("light.cutOff", cos(glm::radians(15.0f))); //will pas the cos value of 15 degrees to the shader, rather than passing
+		progShader->setVec3_v2("torch.position", camera->cameraPos);
+		progShader->setVec3_v2("torch.direction", camera->cameraFront);
+		progShader->setFloat("torch.cutOff", cos(glm::radians(10.0f))); //will pas the cos value of 15 degrees to the shader, rather than passing
 		//the actual value of 15 degrees, as, the dot product of the light-direction vector, and the incident light ray vector would return the cos of some value,
 		//and to get the angle you need to do inverse cos of that, which is an expensive operation, so we instead pas the cos of the angle we're comparing
 		
@@ -225,13 +234,52 @@ int main(){
 		progShader->set3Float("light.specular", colourTemp.r * 1.0f, colourTemp.g * 1.0f, colourTemp.b * 1.0f);
 		*/
 
-		progShader->set3Float("light.ambient",  0.2f, 0.2f, 0.2f);
-		progShader->set3Float("light.diffuse",  0.5f, 0.5f, 0.5f);
-		progShader->set3Float("light.specular", 2.0f, 2.0f, 2.0f);
-		progShader->setFloat("light.constant", 1.0f);
-		progShader->setFloat("light.linear", 0.07f);
-		progShader->setFloat("light.quadratic", 0.017f);
+		progShader->set3Float("torch.ambient",  0.2f, 0.2f, 0.2f);
+		progShader->set3Float("torch.diffuse",  0.5f, 0.5f, 0.5f);
+		progShader->set3Float("torch.specular", 2.0f, 2.0f, 2.0f);
+		progShader->setFloat("torch.constant", 1.0f);
+		progShader->setFloat("torch.linear", 0.07f);
+		progShader->setFloat("torch.quadratic", 0.017f);
 
+		/*
+    progShader->set3Float("dirLight.direction", -0.2f, -1.0f, -0.3f);
+    progShader->set3Float("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+    progShader->set3Float("dirLight.diffuse", 0.8f, 0.56f, 0.65f);
+    progShader->set3Float("dirLight.specular", 0.5f, 0.5f, 0.5f);
+
+		// point light 1
+		progShader->setVec3("pointLights[0].position", pointLightPositions[0]);
+		progShader->set3Float("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+    progShader->set3Float("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+    progShader->set3Float("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+    progShader->setFloat("pointLights[0].constant", 1.0f);
+    progShader->setFloat("pointLights[0].linear", 0.09);
+    progShader->setFloat("pointLights[0].quadratic", 0.032);
+    // point light 2
+    progShader->setVec3("pointLights[1].position", pointLightPositions[1]);
+    progShader->set3Float("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+    progShader->set3Float("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+    progShader->set3Float("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+    progShader->setFloat("pointLights[1].constant", 1.0f);
+    progShader->setFloat("pointLights[1].linear", 0.09);
+    progShader->setFloat("pointLights[1].quadratic", 0.032);
+    // point light 3
+    progShader->setVec3("pointLights[2].position", pointLightPositions[2]);
+    progShader->set3Float("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+    progShader->set3Float("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+    progShader->set3Float("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+    progShader->setFloat("pointLights[2].constant", 1.0f);
+    progShader->setFloat("pointLights[2].linear", 0.09);
+    progShader->setFloat("pointLights[2].quadratic", 0.032);
+    // point light 4
+    progShader->setVec3("pointLights[3].position", pointLightPositions[3]);
+    progShader->set3Float("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+    progShader->set3Float("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+    progShader->set3Float("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+    progShader->setFloat("pointLights[3].constant", 1.0f);
+    progShader->setFloat("pointLights[3].linear", 0.09);
+    progShader->setFloat("pointLights[3].quadratic", 0.032);
+		*/
 		//sending all the material colour stuff
 		progShader->setFloat("material.shininess", 32.0f);
 
@@ -275,15 +323,15 @@ int main(){
 		lightShader->setMatrix4("projection", camera->projection); //obviously the projection matrix is also used, along with the model matrix, all in one
 
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.2f));
 
-		//model = glm::translate(model, lightPos + glm::vec3(camX, 0.0f, camZ)); //used for the camera rotating around the scene
-		model = glm::translate(model, lightPos);
-
-		lightShader->setMatrix4("model", model);
+    for (unsigned int i = 0; i < 4; i++){
+      model = glm::mat4(1.0f);
+      model = glm::translate(model, pointLightPositions[i]);
+      model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+      lightShader->setMatrix4("model", model);
+			glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(float)); //draws the vertices found in the currently bound VBO
+    }
 		*/
-
-		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(float)); //draws the vertices found in the currently bound VBO
 
 		glfwSwapBuffers(window); //uses the double buffer thing, where the back buffer is drawn to and then swapped with the front one to prevent flickering
 		glfwPollEvents(); //checks for events and allows things such as the framebuffer_size_callback functions to be called once an event has been detected

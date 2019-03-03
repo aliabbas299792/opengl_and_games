@@ -14,6 +14,7 @@
 
 #include "header/functionDefines.h"
 #include "header/classDefines.h"
+#include "header/modelStuff.h"
 
 //camera setup - needed outside of the int main() function because I need to pass the data from the callback functions to my camera object
 //need to set the window width/height first
@@ -63,125 +64,23 @@ int main(){
 	glfwSetCursorPosCallback(window, mouse_callback); //sets this function whenever a mouse movement even occurs
 	glfwSetScrollCallback(window, scroll_callback_zoom);
 
+	Model test("models/nanosuit/nanosuit.obj");
+
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); //ensures the cursor doesn't leave the window, when the window is in focus, and that it is hidden
 
 	//*************************************//
 	//***********OPENGL STUFF**************//
 	//*************************************//
 
-	//4 vertices for a rectangle, i.e 2 triangles
-	//not using an EBO for now, as I need to use the normals provided in this model
-  float vertices[] = {
-      // positions          // normals           // texture coords
-      -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
-       0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
-       0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
-       0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
-      -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
-      -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
-
-      -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-       0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
-       0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-       0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-      -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
-      -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-
-      -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-      -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
-      -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-      -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-      -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-      -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-
-       0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-       0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
-       0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-       0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-       0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-       0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-
-      -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
-       0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
-       0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-       0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-      -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
-      -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
-
-      -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
-       0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
-       0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-       0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-      -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
-      -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
-  };
-	
-	glm::vec3 cubePositions[] = { //positions for scattered cubes
-		glm::vec3( 0.0f,  0.0f,  0.0f), 
-		glm::vec3( 2.0f,  5.0f, -15.0f), 
-		glm::vec3(-1.5f, -2.2f, -2.5f),  
-		glm::vec3(-3.8f, -2.0f, -12.3f),  
-		glm::vec3( 2.4f, -0.4f, -3.5f),  
-		glm::vec3(-1.7f,  3.0f, -7.5f),  
-		glm::vec3( 1.3f, -2.0f, -2.5f),  
-		glm::vec3( 1.5f,  2.0f, -2.5f), 
-		glm::vec3( 1.5f,  0.2f, -1.5f), 
-		glm::vec3(-1.3f,  1.0f, -1.5f)  
-	};
-
-  // positions of the point lights
-  glm::vec3 pointLightPositions[] = {
-      glm::vec3( 0.7f,  0.2f,  2.0f),
-      glm::vec3( 2.3f, -3.3f, -4.0f),
-      glm::vec3(-4.0f,  2.0f, -12.0f),
-      glm::vec3( 0.0f,  0.0f, -3.0f)
-  };
-
 	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
 	glm::mat4 trans = glm::mat4(1.0f); //empty transformation matrix
 	
 	vec = trans * vec; //apply the transformation above to this vec
 
-	//setup VAO, VBO and vertex atrrib stuff
-	unsigned int VBO, VAO;
-	glGenVertexArrays(1, &VAO); //generate 1 vertex array object
-	glGenBuffers(1, &VBO); //generate 1 buffer object
-
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	//position attributes
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0); //enables a generic vertex attribute, for index 0, as in the above function, can be disabled via glDisableVertexAttribArray(0)
-
-	//normal vector attributes
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	//texture coords and stuff
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0); //calls the correct VBO using GL_ARRAY_BUFFER, and safely unbinds it
-	
-	glBindVertexArray(0); //unbind the VAO safely
-
 	//light VAO - the cube shaped lamp
 	glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 10.0f); //the position of the light, we will transform one of the cubes and draw them separately using this
 
-	//textures
-	//the below use the texture loading function to load a texture and return its id
-	unsigned int textureID_1 = loadTexture("images/container2.png"); //used in the diffuse colour sampling in the fragment shader
-	unsigned int textureID_2 = loadTexture("images/container2_specular_alternate.png"); //used in the specular map sampling in the fragment shader
-	unsigned int textureID_3 = loadTexture("images/matrix.jpg"); //used in the emission map sampling in the fragment shader
-	//shaders
-	//Shader *progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShaderMultiLight.glsl"); //constructing the shader object	
 	Shader *progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl"); //constructing the shader object	
-
-	Shader *lightShader = new Shader("glsl/vertexShader.glsl", "glsl/lightFragShader.glsl"); //the shader object specifically for the lamp
 
 	progShader->use(); //sets the program object as the current active shader object
 	
@@ -201,10 +100,6 @@ int main(){
 	while(!glfwWindowShouldClose(window)){
 		processInput(window); //check if the escape key has been pressed
 
-		//for making the light loop around the object
-		//float camX = sin(glfwGetTime()) * 50;
-		//float camZ = cos(glfwGetTime()) * 50;
-
 		progShader->use(); //sets the program object as the current active shader object
 		camera->liveUpdate(); //does all the stuff that needs to be done regularly in the main loop, in this function
 
@@ -213,26 +108,12 @@ int main(){
 		progShader->setMatrix4("view", camera->view); //gives the vertex shader the view matrix to transform the points appropriately
 		progShader->setMatrix4("projection", camera->projection); //obviously the projection matrix is also used, along with the model matrix, all in one
 
-		//sending the light properties
-		//glm::vec3 temp = lightPos + glm::vec3(camX, 0.0f, camZ); //the transformation for the light itself (round in a circle)
-		//progShader->setVec3("light.position", lightPos); //sending the transformation as a vector, unneccessary for directional light
-		//glm::vec3 temp = glm::vec3(0.0f, 1.0f, 0.0f);
-		//progShader->setVec3("light.direction", temp);
-
 		//for spotlights, it is different, in this case I will demonstrate with a flashlight
 		progShader->setVec3_v2("torch.position", camera->cameraPos);
 		progShader->setVec3_v2("torch.direction", camera->cameraFront);
 		progShader->setFloat("torch.cutOff", cos(glm::radians(10.0f))); //will pas the cos value of 15 degrees to the shader, rather than passing
 		//the actual value of 15 degrees, as, the dot product of the light-direction vector, and the incident light ray vector would return the cos of some value,
 		//and to get the angle you need to do inverse cos of that, which is an expensive operation, so we instead pas the cos of the angle we're comparing
-		
-		//basically makes the colours change based the time
-		/* 
-		glm::vec3 colourTemp = glm::vec3( (sin(glfwGetTime())+1)/2, (cos(glfwGetTime())+1)/2,  (sin(glfwGetTime()/4)+1)/2);
-		progShader->set3Float("light.ambient",  colourTemp.r * 0.2f, colourTemp.g * 0.2f, colourTemp.b * 0.2f);
-		progShader->set3Float("light.diffuse",  colourTemp.r * 0.5f, colourTemp.g * 0.5f, colourTemp.b * 0.5f);
-		progShader->set3Float("light.specular", colourTemp.r * 1.0f, colourTemp.g * 1.0f, colourTemp.b * 1.0f);
-		*/
 
 		progShader->set3Float("torch.ambient",  0.2f, 0.2f, 0.2f);
 		progShader->set3Float("torch.diffuse",  0.5f, 0.5f, 0.5f);
@@ -241,97 +122,17 @@ int main(){
 		progShader->setFloat("torch.linear", 0.07f);
 		progShader->setFloat("torch.quadratic", 0.017f);
 
-		/*
-    progShader->set3Float("dirLight.direction", -0.2f, -1.0f, -0.3f);
-    progShader->set3Float("dirLight.ambient", 0.05f, 0.05f, 0.05f);
-    progShader->set3Float("dirLight.diffuse", 0.8f, 0.56f, 0.65f);
-    progShader->set3Float("dirLight.specular", 0.5f, 0.5f, 0.5f);
-
-		// point light 1
-		progShader->setVec3("pointLights[0].position", pointLightPositions[0]);
-		progShader->set3Float("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
-    progShader->set3Float("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
-    progShader->set3Float("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-    progShader->setFloat("pointLights[0].constant", 1.0f);
-    progShader->setFloat("pointLights[0].linear", 0.09);
-    progShader->setFloat("pointLights[0].quadratic", 0.032);
-    // point light 2
-    progShader->setVec3("pointLights[1].position", pointLightPositions[1]);
-    progShader->set3Float("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
-    progShader->set3Float("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
-    progShader->set3Float("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
-    progShader->setFloat("pointLights[1].constant", 1.0f);
-    progShader->setFloat("pointLights[1].linear", 0.09);
-    progShader->setFloat("pointLights[1].quadratic", 0.032);
-    // point light 3
-    progShader->setVec3("pointLights[2].position", pointLightPositions[2]);
-    progShader->set3Float("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
-    progShader->set3Float("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
-    progShader->set3Float("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
-    progShader->setFloat("pointLights[2].constant", 1.0f);
-    progShader->setFloat("pointLights[2].linear", 0.09);
-    progShader->setFloat("pointLights[2].quadratic", 0.032);
-    // point light 4
-    progShader->setVec3("pointLights[3].position", pointLightPositions[3]);
-    progShader->set3Float("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-    progShader->set3Float("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-    progShader->set3Float("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
-    progShader->setFloat("pointLights[3].constant", 1.0f);
-    progShader->setFloat("pointLights[3].linear", 0.09);
-    progShader->setFloat("pointLights[3].quadratic", 0.032);
-		*/
-		//sending all the material colour stuff
-		progShader->setFloat("material.shininess", 32.0f);
-
 		progShader->setVec3("cameraPos", camera->cameraPos); //need to pass it to the shader constantly
 
 		glClearColor(0.0f,0.0f,0.0f,1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer
 
-		//by the way GL_TEXTURE1 is equal to GL_TEXTURE0 + 1, GL_TEXTURE2 is euqal to GL_TEXTURE0 + 2 etc
-		glBindTexture(GL_TEXTURE_2D, textureID_1); //binds the texture to the sampler2D with the name rextTexture (first one (0) as specified in uniforms section)
-		glActiveTexture(GL_TEXTURE1); //sets the 2nd texture location as this
-		glBindTexture(GL_TEXTURE_2D, textureID_2); //sends the specular map
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, textureID_3); //sends the emission map
-		glActiveTexture(GL_TEXTURE3);
-
-		glBindVertexArray(VAO); //need this as it contains the VBO configuration
-
-		float scaleFactor = (sin(glfwGetTime()) + 5)/5; //repeatedly scales, it is also essentially y=(sin(x)+5)/5
-		//float scaleFactor = glfwGetTime(); //just gets bigger and bigger with time
-
-		for(int i = 0;i < 10; i++){ //draws 10 cubes, all with slightly different positions, and the same transformations applied to them
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, cubePositions[i]);
-			model = glm::scale(model, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
-			model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0,1.0,1.0)); //turns it by (current_time) radians each frame
-			float angle = 20.0f * i; 
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			progShader->setMatrix4("model", model);
-
-			//the current matrix transform would be applied here
-			glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(float)); //draws the vertices found in the currently bound VBO
-		}
-
-		//this entire bit isn't used for directional lights, as we don't want a visible source, as it's modelled to be infinitely far away
-		//also not needed for torch style spotlights
-		/*
-		lightShader->use();
-
-		lightShader->setMatrix4("view", camera->view); //gives the vertex shader the view matrix to transform the points appropriately
-		lightShader->setMatrix4("projection", camera->projection); //obviously the projection matrix is also used, along with the model matrix, all in one
-
+		// render the loaded model
 		glm::mat4 model = glm::mat4(1.0f);
-
-    for (unsigned int i = 0; i < 4; i++){
-      model = glm::mat4(1.0f);
-      model = glm::translate(model, pointLightPositions[i]);
-      model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
-      lightShader->setMatrix4("model", model);
-			glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(float)); //draws the vertices found in the currently bound VBO
-    }
-		*/
+		model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		progShader->setMatrix4("model", model);
+		test.Draw(progShader);
 
 		glfwSwapBuffers(window); //uses the double buffer thing, where the back buffer is drawn to and then swapped with the front one to prevent flickering
 		glfwPollEvents(); //checks for events and allows things such as the framebuffer_size_callback functions to be called once an event has been detected

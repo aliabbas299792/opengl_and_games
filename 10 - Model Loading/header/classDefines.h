@@ -4,6 +4,12 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
+#include <vector>
+
+//assimp headers
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 class Shader{
     public:
@@ -55,5 +61,49 @@ class Camera{
         void mouse_callback(double xPos, double yPos);
         void liveUpdate();
 };
+
+/*
+
+struct Vertex {
+	glm::vec3 position;
+	glm::vec3 normal;
+	glm::vec2 texCoords;
+};
+
+struct Texture {
+	unsigned int id;
+	std::string type;
+	std::string path;
+};
+
+class Mesh {
+public:
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indices;
+	std::vector<Texture> textures;
+
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+	void Draw(Shader* shader);
+	void setupMesh();
+private:
+	unsigned int VAO, VBO, EBO;
+};
+
+class Model {
+public:
+	Model(std::string path);
+	void Draw(Shader* shader);
+
+	void loadModel(std::string path);
+	void processNode(aiNode *node, const aiScene *scene);
+	Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+	std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
+private:
+	std::vector<Mesh> meshes;
+	std::string directory;
+
+	std::vector<Texture> textures_loaded;
+};
+*/
 
 #endif

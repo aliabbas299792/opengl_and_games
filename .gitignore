@@ -4,5 +4,5 @@
 */*.vcxproj
 */*.vcxproj.filters
 */*.vcxproj.user
-*/include/*
-*/lib/*
+**/include
+**/lib

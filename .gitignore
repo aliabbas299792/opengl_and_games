@@ -7,3 +7,14 @@
 */include
 */lib
 */Debug
+*/debug
+*/*/Debug
+*/*/debug
+*/*/include
+*/*/lib
+*/*/x64
+*/*/.vs
+*/*/*.sln
+*/*/*.vcxproj
+*/*/*.vcxproj.filters
+*/*/*.vcxproj.user

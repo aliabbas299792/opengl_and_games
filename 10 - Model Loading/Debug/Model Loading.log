@@ -1,0 +1,10 @@
+﻿  modelClasses.cpp
+E:\Programming Projects\School\OpenGL\10 - Model Loading\header\classDefines.h(42): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGL\10 - Model Loading\header\classDefines.h(43): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGL\10 - Model Loading\classes\modelClasses.cpp(65): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  main.cpp
+E:\Programming Projects\School\OpenGL\10 - Model Loading\header\classDefines.h(42): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGL\10 - Model Loading\header\classDefines.h(43): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGL\10 - Model Loading\main.cpp(106): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+  Model Loading.vcxproj -> E:\Programming Projects\School\OpenGL\10 - Model Loading\Debug\Model Loading.exe

@@ -14,7 +14,7 @@
 
 #include "header/functionDefines.h"
 #include "header/classDefines.h"
-#include "header/modelStuff.h"
+#include "header/modelHeader.h"
 
 //camera setup - needed outside of the int main() function because I need to pass the data from the callback functions to my camera object
 //need to set the window width/height first

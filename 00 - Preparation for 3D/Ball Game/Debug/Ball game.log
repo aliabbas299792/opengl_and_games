@@ -1,0 +1,31 @@
+﻿  mainInitFuncs.cpp
+  main.cpp
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(12): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(13): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(15): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(24): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(56): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(57): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(82): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(95): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(202): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(232): warning C4018: '<': signed/unsigned mismatch
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(233): warning C4018: '<': signed/unsigned mismatch
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(241): warning C4305: '=': truncation from 'double' to 'float'
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(267): warning C4018: '<': signed/unsigned mismatch
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(268): warning C4018: '<': signed/unsigned mismatch
+E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Ball game\main.cpp(289): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Generating Code...
+  Ball game.vcxproj -> E:\Programming Projects\School\OpenGL\00 - Preparation for 3D\Debug\Ball game.exe

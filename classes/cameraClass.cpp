@@ -49,31 +49,37 @@ void Camera::keyboard_movement(){
     }
 }
 
-void Camera::mouse_callback(double xpos, double ypos){ //the function we pass on the processing for the callback to
-    float xoffset = xpos - lastX; //the offset in x since the last frame
-    float yoffset = lastY - ypos; //the offset in y since the last frame
-    lastX = xpos; //updates the x variable in preparation for the next function call
-    lastY = ypos; //updates the x variable in preparation for the next function call
+void Camera::mouse_callback(double xpos, double ypos, bool &firstMouse){ //the function we pass on the processing for the callback to
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
 
-    float sensitivity = 0.05; //scales the offset reaction, so this sets it to roughly normal
-    //and below is just scaling the offset reaction
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+	lastX = xpos;
+	lastY = ypos;
 
-    yaw += xoffset; //increasing the yaw (x axis rotation), but can be negative so can also decrease it obviously
-    pitch += yoffset; //increasing the yaw (x axis rotation), but can be negative so can also decrease it obviously
+	float sensitivity = 0.05f; // change this value to your liking
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
 
-    //the below just limits the pitch to 180 degress, and as the pitch is used in all the calculations, it consequently constrains the yaw as well
-    if(pitch > 89.0f)
-        pitch = 89.0f;
-    if(pitch < -89.0f)
-        pitch = -89.0f;
+	yaw += xoffset;
+	pitch += yoffset;
 
-    glm::vec3 front; //a temporary front vector to operate on
-    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)); //the x rotation (explained in the README.md file)
-    front.y = sin(glm::radians(pitch)); //the y rotation (explained in the README.md file)
-    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch)); //the z rotation (explained in the README.md file)
-    cameraFront = glm::normalize(front); //sets that temporary vector as the new one
+	// make sure that when pitch is out of bounds, screen doesn't get flipped
+	if (pitch > 89.0f)
+		pitch = 89.0f;
+	if (pitch < -89.0f)
+		pitch = -89.0f;
+
+	glm::vec3 front;
+	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	front.y = sin(glm::radians(pitch));
+	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	this->cameraFront = glm::normalize(front);
 }  
 
 void Camera::scroll_callback_zoom(double xOffset, double yOffset){ //the response to the callback is processed here

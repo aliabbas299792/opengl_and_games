@@ -10,7 +10,7 @@ unsigned int loadTexture(const char* file){
     unsigned int texture; //the actual texture id
     glGenTextures(1, &texture); //first param is how many to make, second param is a single int or array to store the generated texture IDs in
 
-    stbi_set_flip_vertically_on_load(true); //flips the image on load
+    //stbi_set_flip_vertically_on_load(true); //flips the image on load
 
     int width, height, nrChannels; //nrChannels 
     unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
@@ -19,10 +19,9 @@ unsigned int loadTexture(const char* file){
     //for final parameter, you can replace '0' with '1' or more to force that many bits per pixel
 
     if(data){ //data will be more than 0 if it loaded anything, and more than 0 is not false, so the next piece of code happens
-        glBindTexture(GL_TEXTURE_2D, texture); //sets as the currently active texture object, so subsequent texture operations are done on this
 
         //basically checks the channels and sets the respective format, using an enum
-        GLenum format;
+        GLenum format = GL_RGBA;
         if (nrChannels == 1)
             format = GL_RED;
         else if (nrChannels == 2)
@@ -32,6 +31,7 @@ unsigned int loadTexture(const char* file){
         else if (nrChannels == 4)
             format = GL_RGBA;
 
+		glBindTexture(GL_TEXTURE_2D, texture); //sets as the currently active texture object, so subsequent texture operations are done on this
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         //1st param is the type, 2nd is the mipmap level if you want to do it manually, but we don't so set it to 0, 3rd param is what kind of format to store 
         //the image as, we'll store as RGB so GL_RGB, 4th and 5th are the width and height, 6th is the border, which is a legacy parameter, so set it to 0,

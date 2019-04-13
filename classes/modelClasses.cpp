@@ -63,6 +63,7 @@ void Mesh::Draw(Shader* shader) {
 			number = std::to_string(specularNr++); //store the number as a string  for use in sending the name
 
 		shader->setFloat(("material." + name + number).c_str(), i);
+
 		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}
 	glActiveTexture(GL_TEXTURE0);
@@ -133,10 +134,12 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		vertex.Pos = vector;
 
 		//normals
-		vector.x = mesh->mNormals[i].x;
-		vector.y = mesh->mNormals[i].y;
-		vector.z = mesh->mNormals[i].z;
-		vertex.Normal = vector;
+		if (mesh->mNormals->Length() > 0) {
+			vector.x = mesh->mNormals[i].x;
+			vector.y = mesh->mNormals[i].y;
+			vector.z = mesh->mNormals[i].z;
+			vertex.Normal = vector;
+		}
 
 		//textures
 		if (mesh->mTextureCoords[0]) { //check if it contains texture coordinates

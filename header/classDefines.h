@@ -41,9 +41,10 @@ class Camera{
 
         float lastX = windowWidth/2;
         float lastY = windowHeight/2;
-        float yaw = 0;
+		float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
         float pitch = 0;
-    public:
+
+	public:
         GLFWwindow* window = NULL;
 
         float fov = 45.0f;
@@ -51,59 +52,15 @@ class Camera{
         glm::mat4 projection = glm::mat4(1.0f);
 
         glm::mat4 view = glm::mat4(1.0f);
-        glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f,  3.0f);
+        glm::vec3 cameraPos = glm::vec3(0.0f, -1.5f, 3.0f);
         glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-        glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f,  0.0f);
+        glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
         Camera(int width, int height, float fov);
         void keyboard_movement();
         void scroll_callback_zoom(double xOffset, double yOffset);
-        void mouse_callback(double xPos, double yPos);
+        void mouse_callback(double xPos, double yPos, bool &firstMouse);
         void liveUpdate();
 };
-
-/*
-
-struct Vertex {
-	glm::vec3 position;
-	glm::vec3 normal;
-	glm::vec2 texCoords;
-};
-
-struct Texture {
-	unsigned int id;
-	std::string type;
-	std::string path;
-};
-
-class Mesh {
-public:
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
-	std::vector<Texture> textures;
-
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
-	void Draw(Shader* shader);
-	void setupMesh();
-private:
-	unsigned int VAO, VBO, EBO;
-};
-
-class Model {
-public:
-	Model(std::string path);
-	void Draw(Shader* shader);
-
-	void loadModel(std::string path);
-	void processNode(aiNode *node, const aiScene *scene);
-	Mesh processMesh(aiMesh *mesh, const aiScene *scene);
-	std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
-private:
-	std::vector<Mesh> meshes;
-	std::string directory;
-
-	std::vector<Texture> textures_loaded;
-};
-*/
 
 #endif

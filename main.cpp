@@ -14,16 +14,17 @@
 
 #include "header/functionDefines.h"
 #include "header/classDefines.h"
-#include "header/modelHeader.h"
 
 //camera setup - needed outside of the int main() function because I need to pass the data from the callback functions to my camera object
 //need to set the window width/height first
 const int width = 1000; 
 const int height = 1000;
 
-bool firstMouse = true;
+bool firstMouse = true; //basically needed so that the view doesn't randomly jump
 //then create my camera object
 Camera *camera = new Camera(width, height, 45.0f); //the first 2 params are obviously window width and height, the third is the initial fov
+
+Player* player = new Player(camera); //the player is initialised
 
 int main(){
 	//*************************************//
@@ -64,10 +65,8 @@ int main(){
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); //call the function specified, when the specified window is resized
 
 	glfwSetCursorPosCallback(window, mouse_callback); //sets this function whenever a mouse movement even occurs
-	glfwSetScrollCallback(window, scroll_callback_zoom);
-
-	Model ball("models/sphere/sphere.obj");
-	Model platform("models/platform/platform.obj");
+	glfwSetScrollCallback(window, scroll_callback_zoom); //scroll callback
+	glfwSetKeyCallback(window, key_callback); //key callback
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); //ensures the cursor doesn't leave the window, when the window is in focus, and that it is hidden
 
@@ -84,10 +83,26 @@ int main(){
 
 	progShader->use(); //sets the program object as the current active shader object
 
+	Model* platform = new Model("models/platform/platform.obj");
+
+	player->shader = progShader;
+	player->window = window;
+
+	player->player = new Model("models/sphere/sphere.obj");
+
 	glEnable(GL_DEPTH_TEST); //basically makes sure that you can't see through objects, by rendering them in the correct order
+
+	float timePrev = glfwGetTime();
 
 	//the main loop
 	while(!glfwWindowShouldClose(window)){
+		//manually capping the framerate to 400fps because otherwise my computer makes weird noises from processing too hard
+		if (glfwGetTime() >= timePrev + 0.0025) {
+			timePrev = glfwGetTime();
+		} else {
+			continue;
+		}
+
 		processInput(window); //check if the escape key has been pressed
 
 		progShader->use(); //sets the program object as the current active shader object
@@ -103,24 +118,18 @@ int main(){
 		progShader->set3Float("light.diffuse",  0.7f, 0.7f, 0.7f);
 		progShader->set3Float("light.specular", 2.0f, 2.0f, 2.0f);
 
-		progShader->setVec3("cameraPos", camera->cameraPos); //need to pass it to the shader constantly
-
 		glClearColor(0.0f,0.0f,0.0f,1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer
 
-		// render the loaded model
+		// render the loaded models
+		player->liveUpdate(progShader);
+
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
-		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		model = glm::translate(model, glm::vec3(0.0f, -0.25f, 0.0f)); // translate it down so it's at the center of the scene
+		model = glm::scale(model, glm::vec3(1.0f, 0.2f, 1.0f));	// it's a bit too big for our scene, so scale it down
 		progShader->setMatrix4("model", model);
 
-		ball.Draw(progShader);
-
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f)); // translate it down so it's at the center of the scene
-		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
-		progShader->setMatrix4("model", model);
-		platform.Draw(progShader);
+		platform->Draw(progShader);
 
 		glfwSwapBuffers(window); //uses the double buffer thing, where the back buffer is drawn to and then swapped with the front one to prevent flickering
 		glfwPollEvents(); //checks for events and allows things such as the framebuffer_size_callback functions to be called once an event has been detected
@@ -132,9 +141,20 @@ int main(){
 }
 
 void mouse_callback(GLFWwindow* window, double xPos, double yPos){ //the callback function for the mouse events, only needed to pass on variables to my object
-    camera->mouse_callback(xPos, yPos, firstMouse);
+	camera->mouse_callback(xPos, yPos, firstMouse);
 }  
 
 void scroll_callback_zoom(GLFWwindow* window, double xOffset, double yOffset){ //the callback function for the mouse scroll events, only needed to pass on variables to my object
-  camera->scroll_callback_zoom(xOffset, yOffset);
+	camera->scroll_callback_zoom(xOffset, yOffset);
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) //callback needed to send the states of keys to the player class more accurately
+{
+	glm::vec4 keyStates(0);
+	keyStates.x = glfwGetKey(window, GLFW_KEY_W);
+	keyStates.y = glfwGetKey(window, GLFW_KEY_A);
+	keyStates.z = glfwGetKey(window, GLFW_KEY_S);
+	keyStates.w = glfwGetKey(window, GLFW_KEY_D);
+
+	player->playerMovement(keyStates);
 }

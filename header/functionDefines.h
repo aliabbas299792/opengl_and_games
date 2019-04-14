@@ -11,5 +11,6 @@ unsigned int loadTexture(const char* file); //for loading textures
 //the callback functions, which are defined in main.cpp
 void mouse_callback(GLFWwindow* window, double xPos, double yPos);
 void scroll_callback_zoom(GLFWwindow* window, double xOffset, double yOffset);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 #endif

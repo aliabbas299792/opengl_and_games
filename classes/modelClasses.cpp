@@ -1,9 +1,7 @@
 #include <glad/glad.h>
 #include <vector>
-#include <string>
 #include <iostream>
 
-#include "../header/modelHeader.h"
 #include "../header/classDefines.h"
 #include "../header/functionDefines.h"
 

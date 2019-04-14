@@ -16,6 +16,7 @@ Camera::Camera(int x, int y, float z){
 
 }
 
+/*
 void Camera::keyboard_movement(){
     static float deltaTime = 0;
     static float lastFrame = 0;
@@ -48,6 +49,7 @@ void Camera::keyboard_movement(){
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed; //does the cross product of front and up to get right
     }
 }
+*/
 
 void Camera::mouse_callback(double xpos, double ypos, bool &firstMouse){ //the function we pass on the processing for the callback to
 	if (firstMouse)
@@ -84,16 +86,16 @@ void Camera::mouse_callback(double xpos, double ypos, bool &firstMouse){ //the f
 
 void Camera::scroll_callback_zoom(double xOffset, double yOffset){ //the response to the callback is processed here
     //the yOffset increases/decreases based on the mouse wheel, and that is used to increase/decrease fov, which essentially acts as zooming in/out
-    if(fov >= 1.0f && fov <= 45.0f)
+    if(fov >= 1.0f && fov <= 90.0f)
         fov -= yOffset;
     if(fov <= 1.0f)
         fov = 1.0f;
-    if(fov >= 45.0f)
-        fov = 45.0f;
+    if(fov >= 90.0f)
+        fov = 90.0f;
 }
 
 void Camera::liveUpdate(){
-    this->keyboard_movement(); //references the keyboard_movement() function for this instance of the object
+    //this->keyboard_movement(); //references the keyboard_movement() function for this instance of the object
     
     view = glm::lookAt(cameraPos, cameraFront + cameraPos, cameraUp);
     projection = glm::perspective(glm::radians(fov), (float)windowWidth/windowWidth, 0.1f, 100.0f);

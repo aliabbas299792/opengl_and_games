@@ -63,16 +63,16 @@ void Player::playerMovement(glm::vec4 keyStates) {
 
 		//much slower acceleration provided while jumping
 		if (keyStates.x) {
-			velocity.r -= acceleration.x/ 15;
+			velocity.r -= acceleration.x/ 5;
 		}
 		if (keyStates.y) {
-			velocity.g -= acceleration.x / 15;
+			velocity.g -= acceleration.x / 5;
 		}
 		if (keyStates.z) {
-			velocity.r += acceleration.x / 15;
+			velocity.r += acceleration.x / 5;
 		}
 		if (keyStates.w) {
-			velocity.g += acceleration.x / 15;
+			velocity.g += acceleration.x / 5;
 		}
 
 	} else { //x and z plane deceleration

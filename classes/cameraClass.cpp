@@ -13,6 +13,8 @@ Camera::Camera(int x, int y, float z){
     projection = glm::perspective(glm::radians(z), (float)windowWidth/windowHeight, 0.1f, 100.0f);
     //projection matrix, i.e transforms all of the coords to clip space and applies the perspective division
 	//the first param: the FoV, 2nd: aspect ratio, 3rd: distance of near plane, anything closer than this is not drawn, 4th: far plane, anything past it is not drawn
+	bool temp = 0;
+	this->mouse_callback(0, 0, temp);
 
 }
 
@@ -52,8 +54,9 @@ void Camera::keyboard_movement(){
 */
 
 void Camera::mouse_callback(double xpos, double ypos, bool &firstMouse){ //the function we pass on the processing for the callback to
-	if (firstMouse)
-	{
+	ypos += 450; //ensure that the ypos is centered on the player at the beginning
+
+	if (firstMouse) { //if this is the first mouse movement, do those things (as it prevents a sudden jump in the view)
 		lastX = xpos;
 		lastY = ypos;
 		firstMouse = false;
@@ -71,11 +74,15 @@ void Camera::mouse_callback(double xpos, double ypos, bool &firstMouse){ //the f
 	yaw += xoffset;
 	pitch += yoffset;
 
-	// make sure that when pitch is out of bounds, screen doesn't get flipped
-	if (pitch > 89.0f)
-		pitch = 89.0f;
-	if (pitch < -89.0f)
-		pitch = -89.0f;
+	// limit mouse movement
+	if (pitch > 10.0f)
+		pitch = 10.0f;
+	if (pitch < -30.0f)
+		pitch = -30.0f;
+	if (yaw > -70.0f)
+		yaw = -70.0f;
+	if (yaw < -110.0f)
+		yaw = -110.0f;
 
 	glm::vec3 front;
 	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));

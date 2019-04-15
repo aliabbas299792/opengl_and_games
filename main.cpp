@@ -83,12 +83,14 @@ int main(){
 
 	progShader->use(); //sets the program object as the current active shader object
 
-	Model* platform = new Model("models/platform/platform.obj");
+	Model* platform1 = new Model("models/platform2/platform2.obj");
 
 	player->shader = progShader;
 	player->window = window;
 
 	player->player = new Model("models/sphere/sphere.obj");
+
+	Platforms* platform2 = new Platforms(progShader);
 
 	glEnable(GL_DEPTH_TEST); //basically makes sure that you can't see through objects, by rendering them in the correct order
 
@@ -96,8 +98,8 @@ int main(){
 
 	//the main loop
 	while(!glfwWindowShouldClose(window)){
-		//manually capping the framerate to 400fps because otherwise my computer makes weird noises from processing too hard
-		if (glfwGetTime() >= timePrev + 0.0025) {
+		//manually capping the framerate to 100fps, but it's irrespective of time as delta time is implemented
+		if (glfwGetTime() >= timePrev + 0.01) {
 			timePrev = glfwGetTime();
 		} else {
 			continue;
@@ -125,17 +127,23 @@ int main(){
 		player->liveUpdate(progShader);
 
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, -0.25f, 0.0f)); // translate it down so it's at the center of the scene
+		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f)); // translate it down so it's at the center of the scene
 		model = glm::scale(model, glm::vec3(1.0f, 0.2f, 1.0f));	// it's a bit too big for our scene, so scale it down
 		progShader->setMatrix4("model", model);
 
-		platform->Draw(progShader);
+		platform2->Draw();
+		platform2->liveUpdate();
 
 		glfwSwapBuffers(window); //uses the double buffer thing, where the back buffer is drawn to and then swapped with the front one to prevent flickering
 		glfwPollEvents(); //checks for events and allows things such as the framebuffer_size_callback functions to be called once an event has been detected
 	}
 
 	//exit properly, first destroys all remaining windows, frees any allocated resources, and sets library to uninitialised state, before actually returning 0
+	//and call destructors for objects
+	player->~Player();
+	progShader->~Shader();
+	camera->~Camera();
+
 	glfwTerminate();
 	return 0;
 }

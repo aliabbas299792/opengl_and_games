@@ -18,6 +18,7 @@ class Shader{
         unsigned int ID;
 
         Shader(const char* v_file_path, const char* f_file_path);
+		~Shader() {};
         
         void use(); //for using the shader in the program
 
@@ -58,7 +59,8 @@ class Camera{
         glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, 1.0f);
         glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, -1.0f);
 
-        Camera(int width, int height, float fov);
+		Camera(int width, int height, float fov);
+		~Camera() {};
         //void keyboard_movement();
         void scroll_callback_zoom(double xOffset, double yOffset);
         void mouse_callback(double xPos, double yPos, bool &firstMouse);
@@ -110,7 +112,7 @@ private:
 	glm::vec3 dragForce = glm::vec3(0);
 
 	bool bounce = false;
-	unsigned int maxBounce = 3;
+	unsigned int maxBounce = 4;
 	unsigned int currentBounces = 0;
 
 	glm::vec2 acceleration = glm::vec2(0.00076, 0.015);
@@ -119,14 +121,33 @@ private:
 
 	glm::vec4 lastKeyStates = glm::vec4(0);
 
+	float prevFrameTime = 0;
+	float timeScalar = 0;
+
 public:
 	Shader* shader = NULL;
 	GLFWwindow* window = NULL;
 	Model* player = NULL;
 
 	Player(Camera* camera);
+	~Player() {};
 	void playerMovement(glm::vec4 keyStates);
 	void liveUpdate(Shader* shader); //to update in the game loop
+};
+
+class Platforms {
+private:
+	Model* platform = NULL;
+
+	glm::vec3 dimensions = glm::vec3(0);
+	glm::vec3 pos = glm::vec3(0);
+
+	Shader* shader = NULL;
+public:
+	Platforms(Shader* shader);
+	~Platforms() {};
+	void Draw();
+	void liveUpdate();
 };
 
 

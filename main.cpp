@@ -26,6 +26,10 @@ Camera *camera = new Camera(width, height, 45.0f); //the first 2 params are obvi
 
 Player* player = new Player(camera); //the player is initialised
 
+bool Platforms::onPlatform = false;
+std::vector<glm::mat4> Platforms::transformations;
+Model* Platforms::platform = NULL;
+
 int main(){
 	//*************************************//
 	//***********GLFW STUFF****************//
@@ -74,23 +78,18 @@ int main(){
 	//***********OPENGL STUFF**************//
 	//*************************************//
 
-	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-	glm::mat4 trans = glm::mat4(1.0f); //empty transformation matrix
-	
-	vec = trans * vec; //apply the transformation above to this vec
-
-	Shader *progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl"); //constructing the shader object	
+	Shader *progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl"); //constructing the shader object
 
 	progShader->use(); //sets the program object as the current active shader object
-
-	Model* platform1 = new Model("models/platform2/platform2.obj");
 
 	player->shader = progShader;
 	player->window = window;
 
 	player->player = new Model("models/sphere/sphere.obj");
 
-	Platforms* platform2 = new Platforms(progShader);
+	chunksHolder* megaChunk = new chunksHolder(glm::vec3(-30, -30, -30), progShader, player);
+
+	Platforms::platform = new Model("models/platform2/platform2.obj");
 
 	glEnable(GL_DEPTH_TEST); //basically makes sure that you can't see through objects, by rendering them in the correct order
 
@@ -120,19 +119,26 @@ int main(){
 		progShader->set3Float("light.diffuse",  0.7f, 0.7f, 0.7f);
 		progShader->set3Float("light.specular", 2.0f, 2.0f, 2.0f);
 
+		std::cout << Platforms::transformations.size() << std::endl;
+
 		glClearColor(0.0f,0.0f,0.0f,1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer
 
+
 		// render the loaded models
+		Platforms::onPlatform = false;
+
+		megaChunk->liveChunks();
+		megaChunk->updateVirtualChunk();
+
 		player->liveUpdate(progShader);
+		player->onPlatform = Platforms::onPlatform;
 
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f)); // translate it down so it's at the center of the scene
-		model = glm::scale(model, glm::vec3(1.0f, 0.2f, 1.0f));	// it's a bit too big for our scene, so scale it down
-		progShader->setMatrix4("model", model);
+		/**/
 
-		platform2->Draw();
-		platform2->liveUpdate();
+
+		//glm::mat4 model = glm::mat4(1.0f);
+		//progShader->setMatrix4("model", model);
 
 		glfwSwapBuffers(window); //uses the double buffer thing, where the back buffer is drawn to and then swapped with the front one to prevent flickering
 		glfwPollEvents(); //checks for events and allows things such as the framebuffer_size_callback functions to be called once an event has been detected

@@ -57,11 +57,10 @@ class Camera{
         glm::mat4 view = glm::lookAt(cameraPos, glm::vec3(0.0f), cameraUp);
         glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
         glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, 1.0f);
-        glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, -1.0f);
+        glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 		Camera(int width, int height, float fov);
 		~Camera() {};
-        //void keyboard_movement();
         void scroll_callback_zoom(double xOffset, double yOffset);
         void mouse_callback(double xPos, double yPos, bool &firstMouse);
         void liveUpdate();
@@ -106,18 +105,20 @@ public:
 class Player {
 private:
 	Camera* camera = NULL;
-
-	glm::vec3 pos = glm::vec3(0);
-	glm::vec3 velocity = glm::vec3(0);
 	glm::vec3 dragForce = glm::vec3(0);
+
+	glm::mat4 model = glm::mat4(1.0f);
 
 	bool bounce = false;
 	unsigned int maxBounce = 4;
 	unsigned int currentBounces = 0;
 
-	glm::vec2 acceleration = glm::vec2(0.00076, 0.015);
-	glm::vec2 deceleration = glm::vec2(0.000108, 0.0004);
-	float dragCoefficient = 0.16;
+	int firstFrame = 0;
+
+	glm::vec2 acceleration = glm::vec2(0.00076, 0.02);
+	glm::vec2 deceleration = glm::vec2(0.000108, 0.0004); //0.0004
+	float originalDecelerationY = 0.0004; //0.0004
+	float dragCoefficient = 0.28;
 
 	glm::vec4 lastKeyStates = glm::vec4(0);
 
@@ -125,6 +126,10 @@ private:
 	float timeScalar = 0;
 
 public:
+	glm::vec3 pos = glm::vec3(0,0,0);
+	glm::vec3 velocity = glm::vec3(0);
+	bool onPlatform = false;
+
 	Shader* shader = NULL;
 	GLFWwindow* window = NULL;
 	Model* player = NULL;
@@ -137,18 +142,64 @@ public:
 
 class Platforms {
 private:
-	Model* platform = NULL;
 
-	glm::vec3 dimensions = glm::vec3(0);
-	glm::vec3 pos = glm::vec3(0);
+	glm::vec3 pos = glm::vec3(0.0f);
+	glm::mat4 model = glm::mat4(1.0f);
 
+	Player* player = NULL;
 	Shader* shader = NULL;
+	bool destroyed = false;
+	int bounces = 0;
+
+	float scale = 1;
+
 public:
-	Platforms(Shader* shader);
+	static Model* platform;
+	static std::vector<glm::mat4> transformations;
+
+	Platforms(Shader* shader, Player* player, glm::vec3 transform, float scale);
 	~Platforms() {};
 	void Draw();
 	void liveUpdate();
+	void collisionDetection();
+	void transformPlatform(glm::vec3 transform);
+
+	static bool onPlatform;
 };
 
+class chunks { //chunks, which will hold 9 platforms and each will cover the screen
+public:
+	glm::vec3 chunkCoords = glm::vec3(0); //these will be the global coordinates of the chunk
+	glm::vec3 dimensions = glm::vec3(60);
+
+	bool active = false;
+	bool statusChanged = false;
+
+	std::vector<Platforms> platformsInTheChunk; //a vector to hold the platforms
+
+	chunks(int, int, int, Shader* shader, Player* player); //the constructor
+	void chunkUpdate();
+	~chunks(); //the destructor
+};
+
+class chunksHolder { //this will hold 9 chunks
+private:
+	int chunkOverlap(int, int);
+	Player* player = NULL;
+	Shader* shader = NULL;
+
+public:
+	std::vector<chunks> chunksLoaded; //the vector to hold the chunks
+	chunksHolder(glm::vec3 position, Shader* shader, Player* player); //the constructor
+	~chunksHolder(); //the destructor
+
+	glm::vec3 virtualChunk = glm::vec3(0); //this will be a virtual chunk, always relative to the position of the player
+	bool surroundingChunks[3][3][3] = { true }; //this 3x3x3 array will represent all the present chunks, and will be updated according to the virtual chunk above
+
+	void updateVirtualChunk();
+	void virtualChunkHelper(glm::vec3 pos);
+	void liveChunks();
+	//void updateChunks(sf::Sprite, int, int); //function to actually delete/create chunks
+};
 
 #endif

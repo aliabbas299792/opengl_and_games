@@ -10,6 +10,10 @@ struct Light{
   vec3 ambient;
   vec3 diffuse;
   vec3 specular;
+
+  float constant;
+  float linear;
+  float quadratic;
 };
 
 uniform Light light;
@@ -32,14 +36,17 @@ void main()
 	vec3 norm = normalize(normalVec);
 	vec3 lightDir = normalize(light.position - fragPosVec);
 
+	float distance = length(light.position - fragPosVec);
+	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+
 	float diff = max(dot(norm, lightDir), 0.0);
-	vec3 diffuse = diff * light.diffuse;
+	vec3 diffuse = diff * light.diffuse * attenuation;
 
 	vec3 viewDir = normalize(cameraPos - fragPosVec);
 	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 16);
 
-	vec3 result = (light.ambient + (spec * light.specular) + diffuse) * texture(texture_diffuse1, TexCoords).xyz;
+	vec3 result = (light.ambient*attenuation + (spec * light.specular * attenuation) + diffuse) * texture(texture_diffuse1, TexCoords).xyz;
 
 	FragColor.xyz = result;
 }

@@ -117,6 +117,9 @@ int main(){
 		progShader->set3Float("light.ambient",  0.1f, 0.05f, 0.1f);
 		progShader->set3Float("light.diffuse",  0.7f, 0.7f, 0.7f);
 		progShader->set3Float("light.specular", 2.0f, 2.0f, 2.0f);
+		progShader->setFloat("light.constant", 1.0f);
+		progShader->setFloat("light.linear", 0.09f);
+		progShader->setFloat("light.quadratic", 0.032f);
 
 		glClearColor(0.0f,0.0f,0.0f,1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer

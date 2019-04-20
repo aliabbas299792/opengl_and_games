@@ -116,8 +116,8 @@ private:
 	int firstFrame = 0;
 
 	glm::vec2 acceleration = glm::vec2(0.0026, 0.08);
-	glm::vec2 deceleration = glm::vec2(0.000108, 0.0004); //0.0004
-	float originalDecelerationY = 0.0004; //0.0004
+	glm::vec2 deceleration = glm::vec2(0.000108, 0.0004);
+	float originalDecelerationY = 0.0004;
 	float dragCoefficient = 0.16;
 
 	glm::vec4 lastKeyStates = glm::vec4(0);

@@ -111,15 +111,12 @@ int main(){
 		progShader->setMatrix4("view", camera->view); //gives the vertex shader the view matrix to transform the points appropriately
 		progShader->setMatrix4("projection", camera->projection); //obviously the projection matrix is also used, along with the model matrix, all in one
 
-		//for spotlights, it is different, in this case I will demonstrate with a flashlight
-		progShader->setVec3_v2("light.position", glm::vec3(2,2,2));
-
 		progShader->set3Float("light.ambient",  0.1f, 0.05f, 0.1f);
-		progShader->set3Float("light.diffuse",  0.7f, 0.7f, 0.7f);
+		progShader->set3Float("light.diffuse",  1.2f, 1.0f, 1.1f);
 		progShader->set3Float("light.specular", 2.0f, 2.0f, 2.0f);
 		progShader->setFloat("light.constant", 1.0f);
-		progShader->setFloat("light.linear", 0.09f);
-		progShader->setFloat("light.quadratic", 0.032f);
+		progShader->setFloat("light.linear", 0.0025f);
+		progShader->setFloat("light.quadratic", 0.00025f);
 
 		glClearColor(0.0f,0.0f,0.0f,1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer

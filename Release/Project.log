@@ -1,33 +1,13 @@
-﻿  main.cpp
+﻿  playerClass.cpp
 E:\Programming Projects\School\OpenGLProject\header\classDefines.h(45): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
 E:\Programming Projects\School\OpenGLProject\header\classDefines.h(46): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
 E:\Programming Projects\School\OpenGLProject\header\classDefines.h(120): warning C4305: 'initializing': truncation from 'double' to 'float'
 E:\Programming Projects\School\OpenGLProject\header\classDefines.h(121): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\main.cpp(95): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(101): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(159): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\main.cpp(160): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\main.cpp(161): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\main.cpp(162): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
+E:\Programming Projects\School\OpenGLProject\classes\playerClass.cpp(45): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGLProject\classes\playerClass.cpp(46): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Generating code
-  1 of 1080 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  2 of 1081 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    13 functions had inline decision re-evaluated but remain unchanged
+    15 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Project.vcxproj -> E:\Programming Projects\School\OpenGLProject\Release\Project.exe

@@ -55,11 +55,8 @@ void Platforms::collisionDetection() {
 	}
 }
 
-Platforms::Platforms(Shader* shader, Player* player, glm::vec3 transform, float scale) {
-	this->shader = shader;
-	this->player = player;
+Platforms::Platforms(Shader* shader, Player* player, glm::vec3 transform, float scale) : scale(scale), shader(shader), player(player) {
 	this->platform = platform;
-	this->scale = scale;
 
 	this->pos = transform;
 	model = glm::translate(glm::mat4(1.0f), pos);
@@ -68,6 +65,8 @@ Platforms::Platforms(Shader* shader, Player* player, glm::vec3 transform, float 
 
 void Platforms::liveUpdate() {
 	collisionDetection();
+	shader->setVec3_v2("light.position", glm::vec3(pos.x, pos.y + 4, pos.z));
+	shader->setVec3_v2("light.diffuse", glm::vec3(0.5, 0.5, 0.4));
 	this->Draw();
 }
 

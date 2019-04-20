@@ -69,9 +69,9 @@ void chunksHolder::updateVirtualChunk() {
 	//assuming -60k is back, 0k is center, 60k is front (from i,j,k)
 	
 	for (int i = 0; i < chunksLoaded.size(); i++) {
-		if (chunksLoaded[i].chunkCoords.x < virtualChunk.x - 120 || chunksLoaded[i].chunkCoords.x > virtualChunk.x + 120 ||
-			chunksLoaded[i].chunkCoords.y < virtualChunk.y - 120 || chunksLoaded[i].chunkCoords.y > virtualChunk.y + 120 ||
-			chunksLoaded[i].chunkCoords.z < virtualChunk.z - 120 || chunksLoaded[i].chunkCoords.z > virtualChunk.z + 120
+		if (chunksLoaded[i].chunkCoords.x < virtualChunk.x - 60 || chunksLoaded[i].chunkCoords.x > virtualChunk.x + 60 ||
+			chunksLoaded[i].chunkCoords.y < virtualChunk.y - 60 || chunksLoaded[i].chunkCoords.y > virtualChunk.y + 60 ||
+			chunksLoaded[i].chunkCoords.z < virtualChunk.z - 60 || chunksLoaded[i].chunkCoords.z > virtualChunk.z + 60
 			) {
 			chunksLoaded[i].~chunks();
 			chunksLoaded.erase(chunksLoaded.begin() + i);

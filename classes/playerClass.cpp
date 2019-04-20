@@ -19,6 +19,7 @@ void Player::liveUpdate(Shader* shader) {
 	this->playerMovement(lastKeyStates);
 
 	shader->setMatrix4("model", model); //any required transformations are passed to the shader
+	shader->setVec3_v2("light.position", glm::vec3(0, 20, 0));
 
 	player->Draw(shader); //the player ball is drawn
 }
@@ -130,8 +131,8 @@ void Player::playerMovement(glm::vec4 keyStates) {
 		currentBounces = 0; //reset the current bounces
 	}
 
-	if (velocity.b > 2.5) {
-		velocity.b = 2.5;
+	if (velocity.b > 1) {
+		velocity.b = 1;
 	}
 	if (velocity.b < -0.5) {
 		velocity.b = -0.5;

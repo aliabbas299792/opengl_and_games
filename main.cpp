@@ -27,7 +27,6 @@ Camera *camera = new Camera(width, height, 45.0f); //the first 2 params are obvi
 Player* player = new Player(camera); //the player is initialised
 
 bool Platforms::onPlatform = false;
-std::vector<glm::mat4> Platforms::transformations;
 Model* Platforms::platform = NULL;
 
 int main(){
@@ -115,30 +114,19 @@ int main(){
 		//for spotlights, it is different, in this case I will demonstrate with a flashlight
 		progShader->setVec3_v2("light.position", glm::vec3(2,2,2));
 
-		progShader->set3Float("light.ambient",  0.2f, 0.2f, 0.2f);
+		progShader->set3Float("light.ambient",  0.1f, 0.05f, 0.1f);
 		progShader->set3Float("light.diffuse",  0.7f, 0.7f, 0.7f);
 		progShader->set3Float("light.specular", 2.0f, 2.0f, 2.0f);
 
-		std::cout << Platforms::transformations.size() << std::endl;
-
 		glClearColor(0.0f,0.0f,0.0f,1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer
-
-
-		// render the loaded models
+		
 		Platforms::onPlatform = false;
 
 		megaChunk->liveChunks();
-		megaChunk->updateVirtualChunk();
 
 		player->liveUpdate(progShader);
 		player->onPlatform = Platforms::onPlatform;
-
-		/**/
-
-
-		//glm::mat4 model = glm::mat4(1.0f);
-		//progShader->setMatrix4("model", model);
 
 		glfwSwapBuffers(window); //uses the double buffer thing, where the back buffer is drawn to and then swapped with the front one to prevent flickering
 		glfwPollEvents(); //checks for events and allows things such as the framebuffer_size_callback functions to be called once an event has been detected

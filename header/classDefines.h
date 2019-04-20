@@ -115,10 +115,10 @@ private:
 
 	int firstFrame = 0;
 
-	glm::vec2 acceleration = glm::vec2(0.00076, 0.02);
+	glm::vec2 acceleration = glm::vec2(0.0026, 0.08);
 	glm::vec2 deceleration = glm::vec2(0.000108, 0.0004); //0.0004
 	float originalDecelerationY = 0.0004; //0.0004
-	float dragCoefficient = 0.28;
+	float dragCoefficient = 0.16;
 
 	glm::vec4 lastKeyStates = glm::vec4(0);
 
@@ -155,7 +155,6 @@ private:
 
 public:
 	static Model* platform;
-	static std::vector<glm::mat4> transformations;
 
 	Platforms(Shader* shader, Player* player, glm::vec3 transform, float scale);
 	~Platforms() {};
@@ -184,7 +183,6 @@ public:
 
 class chunksHolder { //this will hold 9 chunks
 private:
-	int chunkOverlap(int, int);
 	Player* player = NULL;
 	Shader* shader = NULL;
 
@@ -194,12 +192,10 @@ public:
 	~chunksHolder(); //the destructor
 
 	glm::vec3 virtualChunk = glm::vec3(0); //this will be a virtual chunk, always relative to the position of the player
-	bool surroundingChunks[3][3][3] = { true }; //this 3x3x3 array will represent all the present chunks, and will be updated according to the virtual chunk above
 
 	void updateVirtualChunk();
 	void virtualChunkHelper(glm::vec3 pos);
 	void liveChunks();
-	//void updateChunks(sf::Sprite, int, int); //function to actually delete/create chunks
 };
 
 #endif

@@ -20,14 +20,14 @@ void Platforms::collisionDetection() {
 		glm::vec2 platformCenterXY(pos.x, pos.y);
 		glm::vec2 platformCenterZY(pos.z, pos.y);
 
-		glm::vec2 halfExtent(4*scale, 3.5*scale); //this seems to work best for collision detection, based on trial and error
+		glm::vec2 halfExtent(4*scale, 4*scale); //this seems to work best for collision detection, based on trial and error
 		glm::vec2 difference = playerCenterXZ - platformCenterXZ;
 		glm::vec2 clamped = glm::clamp(difference, -halfExtent, halfExtent);
 		glm::vec2 closest = platformCenterXZ + clamped;
 		difference = closest - playerCenterXZ;
 		float penetrationXZ = 1 - glm::length(difference);
 
-		halfExtent = glm::vec2(4 * scale, 0.5 * scale);
+		halfExtent = glm::vec2(5*scale, 0.5*scale);
 		difference = playerCenterXY - platformCenterXY;
 		clamped = glm::clamp(difference, -halfExtent, halfExtent);
 		closest = platformCenterXY + clamped;
@@ -64,7 +64,6 @@ Platforms::Platforms(Shader* shader, Player* player, glm::vec3 transform, float 
 	this->pos = transform;
 	model = glm::translate(glm::mat4(1.0f), pos);
 	model = glm::scale(model, glm::vec3(scale));
-	transformations.push_back(model);
 }
 
 void Platforms::liveUpdate() {

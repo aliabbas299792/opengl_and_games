@@ -63,18 +63,19 @@ void Player::playerMovement(glm::vec4 keyStates) {
 			Platforms::onPlatform = false;
 			onPlatform = false;
 		}
-		if (keyStates.x) {
-			velocity.r -= velocityIncrease.x;
-		}
-		if (keyStates.y) {
-			velocity.g -= velocityIncrease.x;
-		}
-		if (keyStates.z) {
-			velocity.r += velocityIncrease.x;
-		}
-		if (keyStates.w) {
-			velocity.g += velocityIncrease.x;
-		}
+	}
+
+	if (keyStates.x) {
+		velocity.r -= velocityIncrease.x;
+	}
+	if (keyStates.y) {
+		velocity.g -= velocityIncrease.x;
+	}
+	if (keyStates.z) {
+		velocity.r += velocityIncrease.x;
+	}
+	if (keyStates.w) {
+		velocity.g += velocityIncrease.x;
 	}
 
 	lastKeyStates = keyStates; //this records the last state of the keys and carries this over, to ensure that acceleration works properly
@@ -88,46 +89,32 @@ void Player::playerMovement(glm::vec4 keyStates) {
 	if (!onPlatform && firstFrame > 4) { //y plane deceleration
 		velocity.b -= velocityDecrease.y;
 		bounce = true; //if it's accelerating downwards, it will need to bounce
+	} 
 
-		//much slower acceleration provided while jumping
-		if (keyStates.x) {
-			velocity.r -= velocityIncrease.x/ 5;
+	//x and z plane deceleration
+	if (velocity.r <= -0.005 || velocity.r >= 0.005) {
+		if (velocity.r <= -0.005) {
+			velocity.r += velocityDecrease.x + dragForce.r;
 		}
-		if (keyStates.y) {
-			velocity.g -= velocityIncrease.x / 5;
-		}
-		if (keyStates.z) {
-			velocity.r += velocityIncrease.x / 5;
-		}
-		if (keyStates.w) {
-			velocity.g += velocityIncrease.x / 5;
+		if (velocity.r >= 0.005) {
+			velocity.r -= velocityDecrease.x + dragForce.r;
 		}
 
-	} else { //x and z plane deceleration
-		if (velocity.r <= -0.005 || velocity.r >= 0.005) {
-			if (velocity.r <= -0.005) {
-				velocity.r += velocityDecrease.x + dragForce.r;
-			}
-			if (velocity.r >= 0.005) {
-				velocity.r -= velocityDecrease.x + dragForce.r;
-			}
-
-			if (velocity.r >= -0.005 && velocity.r <= 0.005) {
-				velocity.r = 0;
-			}
+		if (velocity.r >= -0.005 && velocity.r <= 0.005) {
+			velocity.r = 0;
+		}
+	}
+	
+	if (velocity.g <= -0.005 || velocity.g >= 0.005) {
+		if (velocity.g <= -0.005) {
+			velocity.g += velocityDecrease.x + dragForce.g;
+		}
+		if (velocity.g >= 0.005) {
+			velocity.g -= velocityDecrease.x + dragForce.g;
 		}
 
-		if (velocity.g <= -0.005 || velocity.g >= 0.005) {
-			if (velocity.g <= -0.005) {
-				velocity.g += velocityDecrease.x + dragForce.g;
-			}
-			if (velocity.g >= 0.005) {
-				velocity.g -= velocityDecrease.x + dragForce.g;
-			}
-
-			if (velocity.g >= -0.005 && velocity.g <= 0.005) {
-				velocity.g = 0;
-			}
+		if (velocity.g >= -0.005 && velocity.g <= 0.005) {
+			velocity.g = 0;
 		}
 	}
 
@@ -141,6 +128,13 @@ void Player::playerMovement(glm::vec4 keyStates) {
 		bounce = false; //set bounce condition to false
 		velocity.b = 0; //set the vertical velocity back to 0
 		currentBounces = 0; //reset the current bounces
+	}
+
+	if (velocity.b > 2.5) {
+		velocity.b = 2.5;
+	}
+	if (velocity.b < -0.5) {
+		velocity.b = -0.5;
 	}
 
 	//update the position based on the velocity

@@ -33,7 +33,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "E:\Programming Projects\School\OpenGLProject\Release\Ball Game\Ball Game.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\Programming Projects\School\OpenGLProject\Release\Ball Game\msvcp140.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\Programming Projects\School\OpenGLProject\Release\Ball Game\Ball Game.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: "E:\Programming Projects\School\OpenGLProject\Release\Ball Game\assimp-vc140-mt.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "E:\Programming Projects\School\OpenGLProject\Release\Ball Game\glsl\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "E:\Programming Projects\School\OpenGLProject\Release\Ball Game\models\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs

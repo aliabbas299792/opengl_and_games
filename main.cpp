@@ -44,7 +44,7 @@ int main(){
 	//below is a method to enable 8x MSAA in the application
 	glfwWindowHint(GLFW_SAMPLES, 8);
 
-	GLFWwindow* window = glfwCreateWindow(width, height, "Window #1", NULL, NULL); //window creation
+	GLFWwindow* window = glfwCreateWindow(width, height, "Ball Game", NULL, NULL); //window creation
 
 	camera->window = window; //here we give the camera object a pointer to the window object, for it to use internally later
 

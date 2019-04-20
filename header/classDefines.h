@@ -169,7 +169,7 @@ public:
 class chunks { //chunks, which will hold 9 platforms and each will cover the screen
 public:
 	glm::vec3 chunkCoords = glm::vec3(0); //these will be the global coordinates of the chunk
-	glm::vec3 dimensions = glm::vec3(60);
+	glm::vec3 dimensions = glm::vec3(100);
 
 	bool active = false;
 	bool statusChanged = false;

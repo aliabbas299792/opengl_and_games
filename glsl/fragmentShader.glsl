@@ -64,7 +64,7 @@ vec3 calcInfiniteLight(vec3 lightPos){
 
 void main()
 {
-	vec3 infiniteLight = calcInfiniteLight(cameraPos)/2;
+	vec3 infiniteLight = calcInfiniteLight(cameraPos);
 	vec3 pointLight = calcAttenuatedLight(light.position);
 
 	vec3 result =  infiniteLight + pointLight;

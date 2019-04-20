@@ -19,7 +19,7 @@ void Player::liveUpdate(Shader* shader) {
 	this->playerMovement(lastKeyStates);
 
 	shader->setMatrix4("model", model); //any required transformations are passed to the shader
-	shader->setVec3_v2("light.position", glm::vec3(0, 20, 0));
+	shader->setVec3_v2("light.position", camera->cameraPos);
 
 	player->Draw(shader); //the player ball is drawn
 }

@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 #include <vector>
+#include <map>
 
 //assimp headers
 #include <assimp/Importer.hpp>
@@ -39,15 +40,18 @@ class Shader{
 
 class Camera{
     private:
-        int windowWidth = 0;
-        int windowHeight = 0;
-
-        float lastX = windowWidth/2;
-        float lastY = windowHeight/2 + 250;
-		float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
+		float yaw = -90.0f;	
+		// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction 
+		//vector pointing to the right so we initially rotate a bit to the left.
         float pitch = 0;
 
 	public:
+		int windowWidth = 0;
+		int windowHeight = 0;
+
+		float lastX = windowWidth / 2;
+		float lastY = windowHeight / 2 + 250;
+
         GLFWwindow* window = NULL;
 
         float fov = 45.0f;
@@ -116,7 +120,6 @@ private:
 	int firstFrame = 0;
 
 	glm::vec2 acceleration = glm::vec2(0.0026, 0.08);
-	glm::vec2 deceleration = glm::vec2(0.000108, 0.0004);
 	float originalDecelerationY = 0.0004;
 	float dragCoefficient = 0.16;
 
@@ -126,6 +129,22 @@ private:
 	float timeScalar = 0;
 
 public:
+	bool disabled = true;
+	bool gamePlaying = false;
+
+	bool died = false;
+
+	float gravTimer = 0;
+	bool gravEffect = false;
+
+	float timePaused = 0;
+	bool lastPlayCheck = false;
+
+	glm::vec2 deceleration = glm::vec2(0.000108, 0.0004);
+
+	unsigned int highscore = 0;
+	unsigned int points = 0;
+
 	glm::vec3 pos = glm::vec3(0,0,0);
 	glm::vec3 velocity = glm::vec3(0);
 	bool onPlatform = false;
@@ -151,12 +170,16 @@ private:
 	bool destroyed = false;
 	int bounces = 0;
 
+	glm::vec3 lastPlayerPos = glm::vec3(0.0f);
+
 	float scale = 1;
 
 public:
 	static Model* platform;
 
-	Platforms(Shader* shader, Player* player, glm::vec3 transform, float scale);
+	unsigned int type = 0; //0 -> normal (60%), 1 -> instant kill (20%), 2 -> 10pts (10%), 3 -> 30pts (7.5%), 4 -> half gravity (2.5%)
+
+	Platforms(Shader* shader, Player* player, glm::vec3 transform, float scale, int type);
 	~Platforms() {};
 	void Draw();
 	void liveUpdate();
@@ -168,17 +191,20 @@ public:
 
 class chunks { //chunks, which will hold 9 platforms and each will cover the screen
 public:
-	glm::vec3 chunkCoords = glm::vec3(0); //these will be the global coordinates of the chunk
+	glm::vec3 chunkCoords = glm::vec3(0); 
+	//these will be the global coordinates of the chunk
 	glm::vec3 dimensions = glm::vec3(100);
 
-	bool active = false;
-	bool statusChanged = false;
+	std::vector<Platforms> platformsInTheChunk; 
+	//a vector to hold the platforms
 
-	std::vector<Platforms> platformsInTheChunk; //a vector to hold the platforms
+	chunks(int, int, int, Shader* shader, Player* player); 
+	//the constructor
 
-	chunks(int, int, int, Shader* shader, Player* player); //the constructor
 	void chunkUpdate();
-	~chunks(); //the destructor
+
+	~chunks(); 
+	//the destructor
 };
 
 class chunksHolder { //this will hold 9 chunks
@@ -196,6 +222,21 @@ public:
 	void updateVirtualChunk();
 	void virtualChunkHelper(glm::vec3 pos);
 	void liveChunks();
+};
+
+class text {
+public:
+	std::map<GLchar, Character> Characters;
+	GLuint VAO, VBO;
+	
+	float windowWidth = 0;
+	float windowHeight = 0;
+
+	Shader* shader = NULL;
+
+	text(Shader* textShader, float windowWidth, float windowHeight);
+
+	void RenderText(Shader* shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 };
 
 #endif

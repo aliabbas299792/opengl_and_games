@@ -6,6 +6,13 @@
 #include "../header/classDefines.h"
 #include <glm/ext.hpp>
 
+chunksHolder::~chunksHolder() {
+	for (int i = 0; i < chunksLoaded.size(); i++) {
+			chunksLoaded[i].~chunks();
+			chunksLoaded.pop_back();
+	}
+}
+
 chunksHolder::chunksHolder(glm::vec3 pos, Shader* shader, Player* player) {
 	this->player = player;
 	this->shader = shader;
@@ -38,6 +45,7 @@ void chunksHolder::updateVirtualChunk() {
 	virtualChunk.y = floor((player->pos.y) / 100) * 100;
 	virtualChunk.z = floor((player->pos.z) / 100) * 100;
 
+	//I didn't use a loop here, because this makes it easier to visualise
 	virtualChunkHelper(glm::vec3(virtualChunk.x - 100, virtualChunk.y - 100, virtualChunk.z - 100));
 	virtualChunkHelper(glm::vec3(virtualChunk.x, virtualChunk.y - 100, virtualChunk.z - 100));
 	virtualChunkHelper(glm::vec3(virtualChunk.x + 100, virtualChunk.y - 100, virtualChunk.z - 100));
@@ -84,7 +92,6 @@ void chunksHolder::virtualChunkHelper(glm::vec3 pos) {
 	bool found = false;
 	for (int i = 0; i < chunksLoaded.size(); i++) {
 		if (chunksLoaded[i].chunkCoords == pos) {
-			chunksLoaded[i].statusChanged = true;
 			found = true;
 			break;
 		}

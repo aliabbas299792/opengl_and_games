@@ -10,7 +10,7 @@ Camera::Camera(int x, int y, float z){
     windowHeight = y;
 
     fov = z; //sets the internal fov variable
-    projection = glm::perspective(glm::radians(z), (float)windowWidth/windowHeight, 0.1f, 100.0f);
+    projection = glm::perspective(glm::radians(z), (float)(windowWidth/windowHeight), 0.1f, 100.0f);
     //projection matrix, i.e transforms all of the coords to clip space and applies the perspective division
 	//the first param: the FoV, 2nd: aspect ratio, 3rd: distance of near plane, anything closer than this is not drawn, 4th: far plane, anything past it is not drawn
 	bool temp = 0;
@@ -19,7 +19,7 @@ Camera::Camera(int x, int y, float z){
 }
 
 void Camera::mouse_callback(double xpos, double ypos, bool &firstMouse){ //the function we pass on the processing for the callback to
-	ypos += 450; //ensure that the ypos is centered on the player at the beginning
+	ypos -= 100; //ensure that the ypos is centered on the player at the beginning
 
 	if (firstMouse) { //if this is the first mouse movement, do those things (as it prevents a sudden jump in the view)
 		lastX = xpos;
@@ -70,5 +70,5 @@ void Camera::liveUpdate(){
     view = glm::lookAt(cameraPos, cameraFront + cameraPos, cameraUp);
 	//the first param is the position of the camera, and the second is the target, the third is just the up vector
 	//the 2nd param has the cameraPos vector added to it, as we want the target to be constantly in front of the camera, so cameraPos + cameraFront
-    projection = glm::perspective(glm::radians(fov), (float)windowWidth/windowWidth, 0.1f, 100.0f);
+    projection = glm::perspective(glm::radians(fov), (float)windowWidth/windowHeight, 0.1f, 100.0f);
 }

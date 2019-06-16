@@ -37,9 +37,10 @@ chunks::chunks(int posX, int posY, int posZ, Shader* shader, Player* player) { /
 						glm::vec3(
 							chunkCoords.x + sectorWidth*i + (rand() % 25),
 							chunkCoords.y + sectorHeight*j + (rand() % 50),
-							chunkCoords.z + sectorDepth*k + (rand() % 25)
+							chunkCoords.z + sectorDepth*k + (rand() % 5)
 						),
-						((rand() % 600) - 250) / 100
+						1,
+						rand() % 100
 					)
 				);
 			}

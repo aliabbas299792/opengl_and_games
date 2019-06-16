@@ -17,8 +17,7 @@ struct Light{
 };
 
 uniform Light light;
-
-uniform vec3 cameraPos;
+uniform vec3 tint;
 
 in vec3 fragPosVec;
 in vec3 normalVec;
@@ -41,7 +40,7 @@ vec3 calcAttenuatedLight(vec3 lightPos){
 	float diff = max(dot(norm, lightDir), 0.0);
 	vec3 diffuse = diff * light.diffuse * attenuation;
 
-	vec3 viewDir = normalize(cameraPos - fragPosVec);
+	vec3 viewDir = normalize(lightPos - fragPosVec);
 	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 16);
 
@@ -64,10 +63,5 @@ vec3 calcInfiniteLight(vec3 lightPos){
 
 void main()
 {
-	vec3 infiniteLight = calcInfiniteLight(cameraPos)/2;
-	vec3 pointLight = calcAttenuatedLight(light.position);
-
-	vec3 result =  infiniteLight + pointLight;
-
-	FragColor.xyz = result;
+	FragColor.xyz = calcAttenuatedLight(light.position) * tint;
 }

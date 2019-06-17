@@ -76,7 +76,7 @@ void Platforms::collisionDetection() {
 					player->points++;
 				}
 
-				std::cout << player->points << " -- " << type << std::endl;
+				//std::cout << player->points << " -- " << type << std::endl;
 			}
 		}
 	}

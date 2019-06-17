@@ -42,7 +42,10 @@ vec3 calcAttenuatedLight(vec3 lightPos){
 
 	vec3 viewDir = normalize(lightPos - fragPosVec);
 	vec3 reflectDir = reflect(-lightDir, norm);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 16);
+	
+	vec3 halfwayDir = normalize(lightDir + viewDir);
+
+	float spec = pow(max(dot(norm, halfwayDir), 0.0), 16);
 
 	return (light.ambient*attenuation + (spec * light.specular * attenuation) + diffuse) * texture(texture_diffuse1, TexCoords).xyz;
 }

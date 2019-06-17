@@ -98,8 +98,8 @@ int main(){
 	//***********OPENGL STUFF**************//
 	//*************************************//
 
-	Shader* progShader = new Shader("glsl/vertexShader.glsl", "glsl/fragmentShader.glsl"); //constructing the shader object
-	Shader* textShader = new Shader("glsl/vertexShader2.glsl", "glsl/fragmentShader2.glsl"); //constructing the shader object
+	Shader* progShader = new Shader("glsl/normalVertexShader.glsl", "glsl/normalFragmentShader.glsl"); //constructing the shader object
+	Shader* textShader = new Shader("glsl/textVert.glsl", "glsl/textFrag.glsl"); //constructing the shader object
 
 	player->shader = progShader;
 	player->window = window;
@@ -149,8 +149,8 @@ int main(){
 		progShader->set3Float("light.diffuse",  1.6f, 1.5f, 1.5f);
 		progShader->set3Float("light.specular", 2.0f, 2.0f, 2.0f);
 		progShader->setFloat("light.constant", 1.0f);
-		progShader->setFloat("light.linear", 0.022f);
-		progShader->setFloat("light.quadratic", 0.0019f);
+		progShader->setFloat("light.linear", 0.04f);
+		progShader->setFloat("light.quadratic", 0.0025f);
 
 		glClearColor(0.0f,0.0f,0.0f,1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer
@@ -264,7 +264,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			{
 				while (getline(myfile, line))
 				{
-					std::cout << line <<'\n';
+					//std::cout << line <<'\n';
 				}
 				myfile.close();
 			}

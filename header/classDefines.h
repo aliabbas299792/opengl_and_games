@@ -111,8 +111,6 @@ private:
 	Camera* camera = NULL;
 	glm::vec3 dragForce = glm::vec3(0);
 
-	glm::mat4 model = glm::mat4(1.0f);
-
 	bool bounce = false;
 	unsigned int maxBounce = 4;
 	unsigned int currentBounces = 0;
@@ -131,6 +129,8 @@ private:
 public:
 	bool disabled = true;
 	bool gamePlaying = false;
+
+	glm::mat4 model = glm::mat4(1.0f);
 
 	bool died = false;
 

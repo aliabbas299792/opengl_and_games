@@ -102,7 +102,6 @@ int main(){
 	//*************************************//
 
 	Shader* progShader = new Shader("glsl/normalVertexShader.glsl", "glsl/normalFragmentShader.glsl"); //constructing the shader object
-	Shader* shadowShader = new Shader("glsl/shadowVert.glsl", "glsl/shadowFrag.glsl", "glsl/shadowGeom.glsl"); //constructing the shader object
 	Shader* textShader = new Shader("glsl/textVert.glsl", "glsl/textFrag.glsl"); //constructing the shader object
 
 	player->shader = progShader;
@@ -120,7 +119,6 @@ int main(){
 
 	float beginCounter = 0;
 	text* textObj = new text(textShader, width, height);
-	shadows* shadowObj = new shadows(player, shadowShader);
 
 	std::string line;
 	std::fstream myfile("highscore.txt");
@@ -137,34 +135,6 @@ int main(){
 	//the main loop
 	while(!glfwWindowShouldClose(window)){
 		processInput(window); //check if the escape key has been pressed
-
-		if (glfwGetTime() >= timePrev + 0.1) {
-			timePrev = glfwGetTime();
-		}
-		else {
-			continue;
-		}
-
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //makes the entire screen this colour
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer
-
-		if (megaChunk != NULL) {
-			shadowShader->use();
-			shadowObj->shadowLive();
-
-			shadowShader->setMatrix4("model", player->model);
-			player->player->Draw(shadowShader);
-
-			megaChunk->shader = shadowShader;
-			megaChunk->liveChunks();
-
-			glViewport(0, 0, width, height);
-
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-			megaChunk->shader = progShader;
-		}
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //makes the entire screen this colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer
@@ -237,7 +207,7 @@ int main(){
 
 		progShader->use(); //sets the program object as the current active shader object
 
-		progShader->setVec3_v2("light.position", player->pos + glm::vec3(0, 4.0f, 4.0f));
+		progShader->setVec3_v2("light.position", camera->cameraPos);
 
 		glfwSwapBuffers(window); //uses the double buffer thing, where the back buffer is drawn to and then swapped with the front one to prevent flickering
 		glfwPollEvents(); //checks for events and allows things such as the framebuffer_size_callback functions to be called once an event has been detected

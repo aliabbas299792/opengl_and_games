@@ -48,6 +48,8 @@ void Player::playerMovement(glm::vec4 keyStates) {
 	timeScalar = 2500 * (glfwGetTime() - prevFrameTime); //gets delta time difference from last frame
 	prevFrameTime = glfwGetTime(); //sets this as current time, for next loop
 
+	float accelerationScalar = timeScalar / 30;
+
 	if (gamePlaying == false && lastPlayCheck == true) {
 		timePaused = glfwGetTime();
 	}
@@ -65,7 +67,6 @@ void Player::playerMovement(glm::vec4 keyStates) {
 					deceleration.y = originalDecelerationY;
 					dragForce.y = 0;
 			}
-			//std::cout << timePaused << std::endl;
 		}
 
 		if (gravEffect == true) {
@@ -83,23 +84,23 @@ void Player::playerMovement(glm::vec4 keyStates) {
 		}
 
 		if (keyStates.x) {
-			velocity.r -= acceleration.x;
+			velocity.r -= acceleration.x * accelerationScalar;
 		}
 		if (keyStates.y) {
-			velocity.g -= acceleration.x;
+			velocity.g -= acceleration.x * accelerationScalar;
 		}
 		if (keyStates.z) {
-			velocity.r += acceleration.x;
+			velocity.r += acceleration.x * accelerationScalar;
 		}
 		if (keyStates.w) {
-			velocity.g += acceleration.x;
+			velocity.g += acceleration.x * accelerationScalar;
 		}
 
 		lastKeyStates = keyStates; //this records the last state of the keys and carries this over, to ensure that acceleration works properly
 
 		//deceleration
 		if (!onPlatform && firstFrame > 4) { //y plane deceleration
-			velocity.b -= deceleration.y;
+			velocity.b -= deceleration.y * accelerationScalar;
 			bounce = true; //if it's accelerating downwards, it will need to bounce
 		}
 
@@ -107,10 +108,10 @@ void Player::playerMovement(glm::vec4 keyStates) {
 		//x and z plane deceleration
 		if (velocity.r <= -0.001 || velocity.r >= 0.001) {
 			if (velocity.r <= -0.001) {
-				velocity.r += deceleration.x + dragForce.r;
+				velocity.r += deceleration.x * accelerationScalar + dragForce.r;
 			}
 			if (velocity.r >= 0.001) {
-				velocity.r -= deceleration.x + dragForce.r;
+				velocity.r -= deceleration.x * accelerationScalar + dragForce.r;
 			}
 
 			if (velocity.r >= -0.001 && velocity.r <= 0.001) {
@@ -120,10 +121,10 @@ void Player::playerMovement(glm::vec4 keyStates) {
 
 		if (velocity.g <= -0.001 || velocity.g >= 0.001) {
 			if (velocity.g <= -0.001) {
-				velocity.g += deceleration.x + dragForce.g;
+				velocity.g += deceleration.x * accelerationScalar + dragForce.g;
 			}
 			if (velocity.g >= 0.001) {
-				velocity.g -= deceleration.x + dragForce.g;
+				velocity.g -= deceleration.x * accelerationScalar + dragForce.g;
 			}
 
 			if (velocity.g >= -0.001 && velocity.g <= 0.001) {
@@ -140,20 +141,6 @@ void Player::playerMovement(glm::vec4 keyStates) {
 			}
 		}
 
-		/*
-		//the bounce code, the bounds are different to allow for more leeway, because when the bounds are the same, it sometimes randomly did/didn't bounce
-		if (bounce && onPlatform && currentBounces < maxBounce && velocity.b < 0) {
-			velocity.b *= -((1.0f / 40.0f) * pow((currentBounces - 5.0f), 2.0f) + 0.15f); //velocity is reflected to make a bounce
-			//basically it is -f(x) = -(1/40 * (x-5)^2 + 0.15), reflects the bounce but decreases roughly quadratically in intensity
-			currentBounces++; //increment bounces, so that the maximum is reached
-		}
-		if (currentBounces >= maxBounce) { //once max bounces reached...
-			bounce = false; //set bounce condition to false
-			velocity.b = 0; //set the vertical velocity back to 0
-			currentBounces = 0; //reset the current bounces
-		}
-		*/
-
 		if (velocity.b > 1) {
 			velocity.b = 1;
 		}
@@ -161,7 +148,7 @@ void Player::playerMovement(glm::vec4 keyStates) {
 			velocity.b = -1;
 		}
 
-		//update the position based on the velocity ------- ADD DELTA TIME ----------- FIX THE FUCKING GLITCHING YOU BITCH
+		//update the position based on the velocity
 		pos.z += velocity.r * timeScalar;
 		pos.x += velocity.g * timeScalar;
 		pos.y += velocity.b * timeScalar;

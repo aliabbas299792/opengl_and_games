@@ -30,27 +30,6 @@ uniform sampler2D texture_diffuse2;
 uniform sampler2D texture_diffuse3;
 uniform sampler2D texture_specular1;
 uniform sampler2D texture_specular2;
-uniform samplerCube depthMap;
-
-uniform float far_plane;
-
-float ShadowCalculation(vec3 fragPos)
-{
-    vec3 fragToLight = fragPos - light.position;
-    // ise the fragment to light vector to sample from the depth map    
-    float closestDepth = texture(depthMap, fragToLight).r;
-    // it is currently in linear range between [0,1], let's re-transform it back to original depth value
-    closestDepth *= 100;
-    // now get current linear depth as the length between the fragment and light position
-    float currentDepth = length(fragToLight);
-    // test for shadows
-    float bias = 0.05; // we use a much larger bias since depth is now in [near_plane, far_plane] range
-    float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;      
-    // display closestDepth as debug (to visualize depth cubemap)
-    //FragColor = vec4(vec3(closestDepth / far_plane), 1.0);    
-        
-    return shadow;
-}
 
 void main()
 {
@@ -70,18 +49,7 @@ void main()
 
 	float spec = pow(max(dot(norm, halfwayDir), 0.0), 16);
 
-	float shadow = ShadowCalculation(fs_out.fragPosVec);
+	vec3 color = (light.ambient *attenuation + (spec * light.specular * attenuation) + diffuse) * texture(texture_diffuse1, fs_out.TexCoords).xyz;
 
-	vec3 color = (light.ambient + (1.0 - shadow) *attenuation + (spec * light.specular * attenuation) + diffuse) * texture(texture_diffuse1, fs_out.TexCoords).xyz;
-
-	vec3 color2 = diffuse*shadow;
-
-	FragColor.xyz = color;
-
-	
-    vec3 fragToLight = fs_out.fragPosVec - light.position;
-    // ise the fragment to light vector to sample from the depth map    
-    float closestDepth = texture(depthMap, fragToLight).r;
-
-	//FragColor = vec4(vec3(shadow), 1.0);
+	FragColor.xyz = color * tint;
 }

@@ -1,45 +1,15 @@
-﻿  shadowClass.cpp
+﻿  playerClass.cpp
 E:\Programming Projects\School\OpenGLProject\header\classDefines.h(54): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
 E:\Programming Projects\School\OpenGLProject\header\classDefines.h(55): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
 E:\Programming Projects\School\OpenGLProject\header\classDefines.h(123): warning C4305: 'initializing': truncation from 'double' to 'float'
 E:\Programming Projects\School\OpenGLProject\header\classDefines.h(124): warning C4305: 'initializing': truncation from 'double' to 'float'
-  main.cpp
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(54): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(55): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(123): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(124): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\main.cpp(55): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(56): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(119): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(122): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(142): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(189): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(233): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(235): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(269): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\main.cpp(270): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\main.cpp(271): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\main.cpp(272): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\main.cpp(302): warning C4018: '>': signed/unsigned mismatch
+E:\Programming Projects\School\OpenGLProject\classes\playerClass.cpp(48): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGLProject\classes\playerClass.cpp(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGLProject\classes\playerClass.cpp(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGLProject\classes\playerClass.cpp(58): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
   Generating code
-  3 of 1525 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    12 functions had inline decision re-evaluated but remain unchanged
+  1 of 1465 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    11 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Project.vcxproj -> E:\Programming Projects\School\OpenGLProject\Release\Ball Game.exe

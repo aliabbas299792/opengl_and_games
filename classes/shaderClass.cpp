@@ -7,18 +7,132 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "../header/classDefines.h"
 
-Shader::Shader(const char* v_file_path, const char* f_file_path){
+Shader::Shader(const char* v_file_path, const char* f_file_path) {
+	//retrieve code
+	std::stringstream vertexShaderBuffer; //buffer for holding GLSL code which was read from the files, and which will be turned into a string for further processing
+	std::string vertexShaderCode;
+	std::ifstream vertexShaderStream;
+
+	std::stringstream fragmentShaderBuffer; //buffer for holding GLSL code which was read from the files, and which will be turned into a string for further processing
+	std::string fragmentShaderCode;
+	std::ifstream fragmentShaderStream;
+
+	fragmentShaderStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	vertexShaderStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	//it'll throw an exception from either of them if their is a logical error in the reading of the stream (failbit)
+	//or if there is a more severe error (badbit)
+
+	try {
+		vertexShaderStream.open(v_file_path);
+		vertexShaderBuffer << vertexShaderStream.rdbuf();
+		vertexShaderCode = vertexShaderBuffer.str();
+		vertexShaderStream.close();
+
+		fragmentShaderStream.open(f_file_path);
+		fragmentShaderBuffer << fragmentShaderStream.rdbuf();
+		fragmentShaderCode = fragmentShaderBuffer.str();
+		fragmentShaderStream.close();
+	}
+	catch (std::ifstream::failure error) { //catch failures
+		std::cout << "SHADER_NOT_SUCCESFULLY_READ" << std::endl;
+	}
+
+	const char* vertShaderSourcePtr = vertexShaderCode.c_str();
+	const char* fragShaderSourcePtr = fragmentShaderCode.c_str();
+	//the above two store the shader code inside of a const char
+
+	//actual shaders
+	unsigned int vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+	unsigned int fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+	//variables for error correction
+	int result; //success or not
+	int infoLogLength;
+	char infoLog; //the log of any error info
+
+	glShaderSource(vertexShaderID, 1, &vertShaderSourcePtr, NULL);
+	//1st param is the handle of the shader in which to put the source code
+	//2nd param is the number of elements in params 3 and 4, if they are arrays
+	//3rd param is an array of pointers, or a single pointer, to the shader source code
+	//4th param is, when not NULL, a pointer to an array of lengths corresponding to the array of pointers from param 3, so is NULL when just one pointer in param 3
+	glCompileShader(vertexShaderID); //shader is compiled into machine code
+
+	glShaderSource(fragmentShaderID, 1, &fragShaderSourcePtr, NULL);
+	glCompileShader(fragmentShaderID);
+
+	//check vertex shader for errors
+	glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &result);
+	//param 1 -> specifies shader object to be queried
+	//param 2 -> what you are looking for related to it
+	//param 3 -> store it in the location of `result`
+	glGetShaderiv(vertexShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
+	//same thing but for GL_INFO_LOG_LENGTH and in location infoLogLength
+
+	if (infoLogLength > 0) {
+		std::vector<char> VertexShaderErrorMessage(infoLogLength + 1); //makes a vector of that name with a size of 1 greater than infologlength, for the log char array
+		glGetShaderInfoLog(vertexShaderID, infoLogLength, NULL, &VertexShaderErrorMessage[0]);
+		//1st param -> the object to query
+		//2nd param -> the size of the buffer to store returning infromation
+		//3rd param -> the length of the log isn't required beforehand, so you can pass NULL
+		//4th param -> specifies an array of characters that is used to store the returning data
+		printf("%s%s\n\n", &VertexShaderErrorMessage[0], v_file_path); //print the error
+	}
+
+	//check fragment shader for errors
+	glGetShaderiv(fragmentShaderID, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(fragmentShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+	if (infoLogLength > 0) {
+		std::vector<char> FragmentShaderErrorMessage(infoLogLength + 1);
+		glGetShaderInfoLog(fragmentShaderID, infoLogLength, NULL, &FragmentShaderErrorMessage[0]);
+		printf("%s%s\n\n", &FragmentShaderErrorMessage[0], f_file_path);
+	}
+
+	std::cout << "Linking program..." << std::endl;
+
+	ID = glCreateProgram();
+
+	glAttachShader(ID, vertexShaderID);
+	glAttachShader(ID, fragmentShaderID);
+	glLinkProgram(ID);
+
+	//check program for errors
+	glGetProgramiv(ID, GL_LINK_STATUS, &result);
+	glGetProgramiv(ID, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+	if (infoLogLength > 0) {
+		std::vector<char> ProgramErrorMessage(infoLogLength + 1);
+		glGetProgramInfoLog(ID, infoLogLength + 1, NULL, &ProgramErrorMessage[0]);
+		//1st param -> the object to query
+		//2nd param -> the size of the buffer to store returning infromation
+		//3rd param -> the length of the log isn't required beforehand, so you can pass NULL
+		//4th param -> specifies an array of characters that is used to store the returning data
+		printf("%s\n", &ProgramErrorMessage[0]);
+	}
+
+	glDetachShader(ID, vertexShaderID); //detaches vertex shader objectfrom OpenGL program object
+	glDetachShader(ID, fragmentShaderID); //detaches fragment shader object from OpenGL program object
+
+	glDeleteShader(fragmentShaderID); //deletes vertex shader object
+	glDeleteShader(vertexShaderID); //deletes fragment shader object
+}
+
+Shader::Shader(const char* v_file_path, const char* f_file_path, const char* g_file_path){
     //retrieve code
     std::stringstream vertexShaderBuffer; //buffer for holding GLSL code which was read from the files, and which will be turned into a string for further processing
     std::string vertexShaderCode;
     std::ifstream vertexShaderStream;
 
-    std::stringstream fragmentShaderBuffer; //buffer for holding GLSL code which was read from the files, and which will be turned into a string for further processing
-    std::string fragmentShaderCode;
-    std::ifstream fragmentShaderStream;
+	std::stringstream fragmentShaderBuffer; //buffer for holding GLSL code which was read from the files, and which will be turned into a string for further processing
+	std::string fragmentShaderCode;
+	std::ifstream fragmentShaderStream;
+
+	std::stringstream geometryShaderBuffer; //buffer for holding GLSL code which was read from the files, and which will be turned into a string for further processing
+	std::string geometryShaderCode;
+	std::ifstream geometryShaderStream;
 
     fragmentShaderStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    vertexShaderStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	vertexShaderStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	geometryShaderStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     //it'll throw an exception from either of them if their is a logical error in the reading of the stream (failbit)
     //or if there is a more severe error (badbit)
 
@@ -28,22 +142,29 @@ Shader::Shader(const char* v_file_path, const char* f_file_path){
         vertexShaderCode = vertexShaderBuffer.str();
         vertexShaderStream.close();
 
-        fragmentShaderStream.open(f_file_path);
-        fragmentShaderBuffer << fragmentShaderStream.rdbuf();
-        fragmentShaderCode = fragmentShaderBuffer.str();
-        fragmentShaderStream.close();
+		fragmentShaderStream.open(f_file_path);
+		fragmentShaderBuffer << fragmentShaderStream.rdbuf();
+		fragmentShaderCode = fragmentShaderBuffer.str();
+		fragmentShaderStream.close();
+
+		geometryShaderStream.open(g_file_path);
+		geometryShaderBuffer << geometryShaderStream.rdbuf();
+		geometryShaderCode = geometryShaderBuffer.str();
+		geometryShaderStream.close();
     }
     catch(std::ifstream::failure error){ //catch failures
         std::cout << "SHADER_NOT_SUCCESFULLY_READ" << std::endl;
     }
 
     const char* vertShaderSourcePtr = vertexShaderCode.c_str();
-    const char* fragShaderSourcePtr = fragmentShaderCode.c_str();
+	const char* fragShaderSourcePtr = fragmentShaderCode.c_str();
+	const char* geomShaderSourcePtr = geometryShaderCode.c_str();
     //the above two store the shader code inside of a const char
 
     //actual shaders
     unsigned int vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-    unsigned int fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+	unsigned int fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+	unsigned int geometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
     //variables for error correction
     int result; //success or not
     int infoLogLength;
@@ -56,8 +177,11 @@ Shader::Shader(const char* v_file_path, const char* f_file_path){
     //4th param is, when not NULL, a pointer to an array of lengths corresponding to the array of pointers from param 3, so is NULL when just one pointer in param 3
     glCompileShader(vertexShaderID); //shader is compiled into machine code
 
-    glShaderSource(fragmentShaderID, 1, &fragShaderSourcePtr, NULL);
-    glCompileShader(fragmentShaderID);
+	glShaderSource(fragmentShaderID, 1, &fragShaderSourcePtr, NULL);
+	glCompileShader(fragmentShaderID);
+
+	glShaderSource(geometryShaderID, 1, &geomShaderSourcePtr, NULL);
+	glCompileShader(geometryShaderID);
 
     //check vertex shader for errors
     glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &result);
@@ -77,22 +201,33 @@ Shader::Shader(const char* v_file_path, const char* f_file_path){
 		printf("%s%s\n\n", &VertexShaderErrorMessage[0], v_file_path); //print the error
     }
 
-    //check fragment shader for errors
-    glGetShaderiv(fragmentShaderID, GL_COMPILE_STATUS, &result);
-    glGetShaderiv(fragmentShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
+	//check fragment shader for errors
+	glGetShaderiv(fragmentShaderID, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(fragmentShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-    if(infoLogLength > 0){
-        std::vector<char> FragmentShaderErrorMessage(infoLogLength + 1);
+	if (infoLogLength > 0) {
+		std::vector<char> FragmentShaderErrorMessage(infoLogLength + 1);
 		glGetShaderInfoLog(fragmentShaderID, infoLogLength, NULL, &FragmentShaderErrorMessage[0]);
 		printf("%s%s\n\n", &FragmentShaderErrorMessage[0], f_file_path);
-    }
+	}
 
-    printf("Linking program...");
+	//check geometry shader for errors
+	glGetShaderiv(geometryShaderID, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(geometryShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+	if (infoLogLength > 0) {
+		std::vector<char> GeometryShaderErrorMessage(infoLogLength + 1);
+		glGetShaderInfoLog(geometryShaderID, infoLogLength, NULL, &GeometryShaderErrorMessage[0]);
+		printf("%s%s\n\n", &GeometryShaderErrorMessage[0], f_file_path);
+	}
+
+	std::cout << "Linking program..." << std::endl;
 
     ID = glCreateProgram();
 
     glAttachShader(ID, vertexShaderID);
-    glAttachShader(ID, fragmentShaderID);
+	glAttachShader(ID, fragmentShaderID);
+	glAttachShader(ID, geometryShaderID);
     glLinkProgram(ID);
     
     //check program for errors
@@ -110,10 +245,12 @@ Shader::Shader(const char* v_file_path, const char* f_file_path){
     }
 
     glDetachShader(ID, vertexShaderID); //detaches vertex shader objectfrom OpenGL program object
-    glDetachShader(ID, fragmentShaderID); //detaches fragment shader object from OpenGL program object
+	glDetachShader(ID, fragmentShaderID); //detaches fragment shader object from OpenGL program object
+	glDetachShader(ID, geometryShaderID); //detaches geometry shader object from OpenGL program object
 
     glDeleteShader(fragmentShaderID); //deletes vertex shader object
-    glDeleteShader(vertexShaderID); //deletes fragment shader object
+	glDeleteShader(vertexShaderID); //deletes fragment shader object
+	glDeleteShader(geometryShaderID); //deletes geometry shader object
 }
 
 void Shader::use(){

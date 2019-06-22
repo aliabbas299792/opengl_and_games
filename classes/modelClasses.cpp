@@ -60,7 +60,7 @@ void Mesh::Draw(Shader* shader) {
 		else if (name == "texture_specular")
 			number = std::to_string(specularNr++); //store the number as a string  for use in sending the name
 
-		shader->setFloat(("material." + name + number).c_str(), i);
+		shader->setFloat((name + number).c_str(), i);
 
 		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}

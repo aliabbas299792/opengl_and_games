@@ -1,7 +1,10 @@
 #include <glad/glad.c>
 #include <glad/glad.h>
 #include <iostream>
+#include <string.h>
 #include <math.h>
+
+#define GLFW_DLL
 
 #include <fstream>
 
@@ -99,6 +102,7 @@ int main(){
 	//*************************************//
 
 	Shader* progShader = new Shader("glsl/normalVertexShader.glsl", "glsl/normalFragmentShader.glsl"); //constructing the shader object
+	Shader* shadowShader = new Shader("glsl/shadowVert.glsl", "glsl/shadowFrag.glsl", "glsl/shadowGeom.glsl"); //constructing the shader object
 	Shader* textShader = new Shader("glsl/textVert.glsl", "glsl/textFrag.glsl"); //constructing the shader object
 
 	player->shader = progShader;
@@ -115,8 +119,8 @@ int main(){
 	float timePrev = glfwGetTime();
 
 	float beginCounter = 0;
-
 	text* textObj = new text(textShader, width, height);
+	shadows* shadowObj = new shadows(player, shadowShader);
 
 	std::string line;
 	std::fstream myfile("highscore.txt");
@@ -124,7 +128,7 @@ int main(){
 	{
 		while (getline(myfile, line))
 		{
-			std::cout << line << '\n';
+			//std::cout << line << '\n';
 		}
 		myfile.close();
 	}
@@ -132,18 +136,41 @@ int main(){
 
 	//the main loop
 	while(!glfwWindowShouldClose(window)){
-		//(NOT ANYMORE) manually capping the framerate to 100fps, but it's irrespective of time as delta time is implemented
-
 		processInput(window); //check if the escape key has been pressed
 
-		progShader->use(); //sets the program object as the current active shader object
-		camera->liveUpdate(); //does all the stuff that needs to be done regularly in the main loop, in this function
-
-
-		if (beginCounter == 0) {
-			beginCounter++;
-			player->liveUpdate(progShader);
+		if (glfwGetTime() >= timePrev + 0.1) {
+			timePrev = glfwGetTime();
 		}
+		else {
+			continue;
+		}
+
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //makes the entire screen this colour
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer
+
+		if (megaChunk != NULL) {
+			shadowShader->use();
+			shadowObj->shadowLive();
+
+			shadowShader->setMatrix4("model", player->model);
+			player->player->Draw(shadowShader);
+
+			megaChunk->shader = shadowShader;
+			megaChunk->liveChunks();
+
+			glViewport(0, 0, width, height);
+
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+			megaChunk->shader = progShader;
+		}
+
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //makes the entire screen this colour
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer
+
+		if(megaChunk)
+		progShader->use(); //sets the program object as the current active shader object
 
 		progShader->set3Float("light.ambient",  0.1f, 0.05f, 0.1f);
 		progShader->set3Float("light.diffuse",  1.6f, 1.5f, 1.5f);
@@ -151,12 +178,6 @@ int main(){
 		progShader->setFloat("light.constant", 1.0f);
 		progShader->setFloat("light.linear", 0.04f);
 		progShader->setFloat("light.quadratic", 0.0025f);
-
-		glClearColor(0.0f,0.0f,0.0f,1.0f); //makes the entire screen this colour
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears the colour buffer, to allow the colour from the above function to be displayed, and depth buffer
-
-		progShader->setMatrix4("view", camera->view); //gives the vertex shader the view matrix to transform the points appropriately
-		progShader->setMatrix4("projection", camera->projection); //obviously the projection matrix is also used, along with the model matrix, all in one
 
 		Platforms::onPlatform = false;
 
@@ -199,6 +220,15 @@ int main(){
 		player->liveUpdate(progShader);
 		player->onPlatform = Platforms::onPlatform;
 
+		camera->liveUpdate(); //does all the stuff that needs to be done regularly in the main loop, in this function
+
+		progShader->setMatrix4("view", camera->view); //gives the vertex shader the view matrix to transform the points appropriately
+		progShader->setMatrix4("projection", camera->projection); //obviously the projection matrix is also used, along with the model matrix, all in one
+
+		if (player->disabled == false) {
+			player->player->Draw(progShader);
+		}
+
 
 		textObj->RenderText(textShader, "Highscore: " + std::to_string(player->highscore), 15.0f, (mode->height / 100) * 90, 1.0f, glm::vec3(0.541, 0.169, 0.886));
 		if (player->disabled == false) {
@@ -207,7 +237,7 @@ int main(){
 
 		progShader->use(); //sets the program object as the current active shader object
 
-		progShader->setVec3_v2("light.position", camera->cameraPos);
+		progShader->setVec3_v2("light.position", player->pos + glm::vec3(0, 4.0f, 4.0f));
 
 		glfwSwapBuffers(window); //uses the double buffer thing, where the back buffer is drawn to and then swapped with the front one to prevent flickering
 		glfwPollEvents(); //checks for events and allows things such as the framebuffer_size_callback functions to be called once an event has been detected

@@ -1,160 +1,45 @@
-﻿  cameraClass.cpp
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(52): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(53): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(121): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(122): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\classes\cameraClass.cpp(25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\classes\cameraClass.cpp(26): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\classes\cameraClass.cpp(30): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\classes\cameraClass.cpp(31): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\classes\cameraClass.cpp(32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\classes\cameraClass.cpp(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\classes\cameraClass.cpp(62): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-  chunkClass.cpp
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(52): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(53): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(121): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(122): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\classes\chunkClass.cpp(9): warning C4018: '<': signed/unsigned mismatch
-E:\Programming Projects\School\OpenGLProject\classes\chunkClass.cpp(23): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\classes\chunkClass.cpp(24): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\classes\chunkClass.cpp(25): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\classes\chunkClass.cpp(28): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-E:\Programming Projects\School\OpenGLProject\classes\chunkClass.cpp(52): warning C4018: '<': signed/unsigned mismatch
-  chunkHolderClass.cpp
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(52): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(53): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(121): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(122): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\classes\chunkHolderClass.cpp(10): warning C4018: '<': signed/unsigned mismatch
-E:\Programming Projects\School\OpenGLProject\classes\chunkHolderClass.cpp(26): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\classes\chunkHolderClass.cpp(25): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\classes\chunkHolderClass.cpp(24): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\classes\chunkHolderClass.cpp(37): warning C4018: '<': signed/unsigned mismatch
-E:\Programming Projects\School\OpenGLProject\classes\chunkHolderClass.cpp(79): warning C4018: '<': signed/unsigned mismatch
-E:\Programming Projects\School\OpenGLProject\classes\chunkHolderClass.cpp(93): warning C4018: '<': signed/unsigned mismatch
-E:\Programming Projects\School\OpenGLProject\classes\chunkHolderClass.cpp(105): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\classes\chunkHolderClass.cpp(104): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
-E:\Programming Projects\School\OpenGLProject\classes\chunkHolderClass.cpp(103): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
-  modelClasses.cpp
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(52): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(53): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(121): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(122): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\classes\modelClasses.cpp(63): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-  platformClass.cpp
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(52): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(53): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(121): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(122): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\classes\platformClass.cpp(43): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  playerClass.cpp
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(52): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(53): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(121): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(122): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\classes\playerClass.cpp(48): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\classes\playerClass.cpp(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\classes\playerClass.cpp(53): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\classes\playerClass.cpp(57): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-  shaderClass.cpp
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(52): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(53): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(121): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(122): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\classes\shaderClass.cpp(50): warning C4101: 'infoLog': unreferenced local variable
-  textClass.cpp
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(52): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(53): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(121): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(122): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\classes\textClass.cpp(70): warning C4838: conversion from 'FT_Pos' to 'GLuint' requires a narrowing conversion
+﻿  shadowClass.cpp
+E:\Programming Projects\School\OpenGLProject\header\classDefines.h(54): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGLProject\header\classDefines.h(55): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGLProject\header\classDefines.h(123): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\Programming Projects\School\OpenGLProject\header\classDefines.h(124): warning C4305: 'initializing': truncation from 'double' to 'float'
   main.cpp
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(52): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(53): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(121): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\header\classDefines.h(122): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\Programming Projects\School\OpenGLProject\main.cpp(52): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(53): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(115): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(119): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(168): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(203): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(205): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-E:\Programming Projects\School\OpenGLProject\main.cpp(239): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+E:\Programming Projects\School\OpenGLProject\header\classDefines.h(54): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGLProject\header\classDefines.h(55): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGLProject\header\classDefines.h(123): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\Programming Projects\School\OpenGLProject\header\classDefines.h(124): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\Programming Projects\School\OpenGLProject\main.cpp(55): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGLProject\main.cpp(56): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGLProject\main.cpp(119): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGLProject\main.cpp(122): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGLProject\main.cpp(142): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Programming Projects\School\OpenGLProject\main.cpp(189): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+E:\Programming Projects\School\OpenGLProject\main.cpp(233): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+E:\Programming Projects\School\OpenGLProject\main.cpp(235): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+E:\Programming Projects\School\OpenGLProject\main.cpp(269): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-E:\Programming Projects\School\OpenGLProject\main.cpp(240): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+E:\Programming Projects\School\OpenGLProject\main.cpp(270): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-E:\Programming Projects\School\OpenGLProject\main.cpp(241): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+E:\Programming Projects\School\OpenGLProject\main.cpp(271): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-E:\Programming Projects\School\OpenGLProject\main.cpp(242): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+E:\Programming Projects\School\OpenGLProject\main.cpp(272): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-E:\Programming Projects\School\OpenGLProject\main.cpp(272): warning C4018: '>': signed/unsigned mismatch
+E:\Programming Projects\School\OpenGLProject\main.cpp(302): warning C4018: '>': signed/unsigned mismatch
   Generating code
-  0 of 1266 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  3 of 1525 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    12 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-glfw3.lib(context.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(context.obj)' or at 'E:\Programming Projects\School\OpenGLProject\Release\glfw.pdb'; linking object as if no debug info
-glfw3.lib(init.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(init.obj)' or at 'E:\Programming Projects\School\OpenGLProject\Release\glfw.pdb'; linking object as if no debug info
-glfw3.lib(input.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(input.obj)' or at 'E:\Programming Projects\School\OpenGLProject\Release\glfw.pdb'; linking object as if no debug info
-glfw3.lib(monitor.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(monitor.obj)' or at 'E:\Programming Projects\School\OpenGLProject\Release\glfw.pdb'; linking object as if no debug info
-glfw3.lib(vulkan.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(vulkan.obj)' or at 'E:\Programming Projects\School\OpenGLProject\Release\glfw.pdb'; linking object as if no debug info
-glfw3.lib(window.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(window.obj)' or at 'E:\Programming Projects\School\OpenGLProject\Release\glfw.pdb'; linking object as if no debug info
-glfw3.lib(win32_init.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_init.obj)' or at 'E:\Programming Projects\School\OpenGLProject\Release\glfw.pdb'; linking object as if no debug info
-glfw3.lib(win32_joystick.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_joystick.obj)' or at 'E:\Programming Projects\School\OpenGLProject\Release\glfw.pdb'; linking object as if no debug info
-glfw3.lib(win32_monitor.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_monitor.obj)' or at 'E:\Programming Projects\School\OpenGLProject\Release\glfw.pdb'; linking object as if no debug info
-glfw3.lib(win32_time.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_time.obj)' or at 'E:\Programming Projects\School\OpenGLProject\Release\glfw.pdb'; linking object as if no debug info
-glfw3.lib(win32_tls.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_tls.obj)' or at 'E:\Programming Projects\School\OpenGLProject\Release\glfw.pdb'; linking object as if no debug info
-glfw3.lib(win32_window.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_window.obj)' or at 'E:\Programming Projects\School\OpenGLProject\Release\glfw.pdb'; linking object as if no debug info
-glfw3.lib(wgl_context.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(wgl_context.obj)' or at 'E:\Programming Projects\School\OpenGLProject\Release\glfw.pdb'; linking object as if no debug info
-glfw3.lib(egl_context.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(egl_context.obj)' or at 'E:\Programming Projects\School\OpenGLProject\Release\glfw.pdb'; linking object as if no debug info
   Project.vcxproj -> E:\Programming Projects\School\OpenGLProject\Release\Ball Game.exe

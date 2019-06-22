@@ -35,8 +35,11 @@ void Platforms::collisionDetection() {
 		difference = closest - playerCenterXY;
 		float penetrationXY = 1 - glm::length(difference);
 
-		if (penetrationXZ > 0.0f && penetrationXY > -0.1f) { //collision detection bit
+		if (penetrationXZ > 0.0f && penetrationXY > 0.2f) { //collision detection bit
 			onPlatform = true;
+
+			player->velocity.b *= -0.6;
+			bounces++;
 
 			if (type == 4) {
 				player->gravEffect = true;
@@ -53,12 +56,8 @@ void Platforms::collisionDetection() {
 			if (penetrationXZ < 0) {
 				destroyed = true;
 			}
-			else if (penetrationXY > 0.1f) {
+			else if (penetrationXY > 0.3f) {
 				player->pos.y += penetrationXY;
-			}
-			
-			if (penetrationXY > -0.1f) {
-					bounces++;
 			}
 
 			if (bounces >= 2) {

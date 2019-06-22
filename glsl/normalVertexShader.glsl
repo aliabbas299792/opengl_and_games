@@ -8,14 +8,16 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-out vec2 TexCoords;
-out vec3 fragPosVec;
-out vec3 normalVec;
+out FS_OUT {
+	vec2 TexCoords;
+	vec3 fragPosVec;
+	vec3 normalVec;
+} vs_out;
 
 void main(){
     gl_Position = projection * view * model * vec4(pos, 1.0f);
 
-	normalVec = mat3(transpose(inverse(model))) * normalVector;
-	fragPosVec = vec3(model * vec4(pos, 1.0f));
-    TexCoords = texCoords; //output texture coordinates
+	vs_out.normalVec = mat3(transpose(inverse(model))) * normalVector;
+	vs_out.fragPosVec = vec3(model * vec4(pos, 1.0f));
+    vs_out.TexCoords = texCoords; //output texture coordinates
 }

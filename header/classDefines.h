@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <map>
+#include <string.h>
 
 //assimp headers
 #include <assimp/Importer.hpp>
@@ -18,7 +19,8 @@ class Shader{
     public:
         unsigned int ID;
 
-        Shader(const char* v_file_path, const char* f_file_path);
+		Shader(const char* v_file_path, const char* f_file_path, const char* g_file_path);
+		Shader(const char* v_file_path, const char* f_file_path);
 		~Shader() {};
         
         void use(); //for using the shader in the program
@@ -117,9 +119,9 @@ private:
 
 	int firstFrame = 0;
 
-	glm::vec2 acceleration = glm::vec2(0.0026, 0.08);
-	float originalDecelerationY = 0.0004;
-	float dragCoefficient = 0.16;
+	glm::vec2 acceleration = glm::vec2(0.0013, 0.08);
+	float originalDecelerationY = 0.0006;
+	float dragCoefficient = 1.6;
 
 	glm::vec4 lastKeyStates = glm::vec4(0);
 
@@ -140,7 +142,7 @@ public:
 	float timePaused = 0;
 	bool lastPlayCheck = false;
 
-	glm::vec2 deceleration = glm::vec2(0.000108, 0.0004);
+	glm::vec2 deceleration = glm::vec2(0.000108, 0.0006);
 
 	unsigned int highscore = 0;
 	unsigned int points = 0;
@@ -208,11 +210,10 @@ public:
 };
 
 class chunksHolder { //this will hold 9 chunks
-private:
+public:
 	Player* player = NULL;
 	Shader* shader = NULL;
 
-public:
 	std::vector<chunks> chunksLoaded; //the vector to hold the chunks
 	chunksHolder(glm::vec3 position, Shader* shader, Player* player); //the constructor
 	~chunksHolder(); //the destructor
@@ -237,6 +238,25 @@ public:
 	text(Shader* textShader, float windowWidth, float windowHeight);
 
 	void RenderText(Shader* shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+};
+
+class shadows {
+private:
+
+	Player* player = NULL;
+	Shader* shader = NULL;
+public:
+	unsigned int depthMapFBO;
+	unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+	unsigned int depthMap;
+	unsigned int depthCubemap;
+	float near_plane = 0.1f, far_plane = 100.0f;
+	float borderColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+	glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), (float)SHADOW_WIDTH / (float)SHADOW_HEIGHT, near_plane, far_plane);
+	std::vector<glm::mat4> shadowTransforms;
+	shadows(Player* player, Shader* shader);
+	void shadowLive();
 };
 
 #endif

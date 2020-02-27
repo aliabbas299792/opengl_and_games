@@ -7,6 +7,7 @@
     <body>
         <canvas id="canv1"></canvas>
     </body>
+    <script src="js/gl-matrix.js"></script>
     <script src="js/usefulFunctions.js"></script>
     <script src="js/index.js"></script>
 </html>

@@ -31,6 +31,22 @@ function readTextFile(filePath){
         });
 }
 
+function position_buffer(gl, positions){
+    const positionBuffer = gl.createBuffer(); //buffer for shape positions
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer); //buffer operations will be on positionBuffer from here on out
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW); //pass positions to webgl to make shape from js array, into the current buffer from above
+
+    return positionBuffer;
+}
+
+function colour_buffer(gl, colours){ //returns a colour buffer
+    const colourBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, colourBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colours), gl.STATIC_DRAW);
+
+    return colourBuffer;
+}
+
 function initShader(gl, vertex, fragment){
     //load shaders
     const vertShader = loadShader(gl, gl.VERTEX_SHADER, vertex);

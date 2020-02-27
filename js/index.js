@@ -13,9 +13,6 @@ readTextFile("shaders/fragment.glsl").then(function(returnText){
 });
 
 function basic_initBuffers(gl){
-    const positionBuffer = gl.createBuffer(); //buffer for shape positions
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer); //buffer operations will be on positionBuffer from here on out
-
     const positions = [ //square vertices
         -1.0, 1.0,
         1.0, 1.0,
@@ -23,10 +20,16 @@ function basic_initBuffers(gl){
         1.0, -1.0,
     ];
 
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW); //pass positions to webgl to make shape from js array, into the current buffer from above
+    const colours = [ //colours for each of the 4 vertices above
+        1.0,  1.0,  1.0,  1.0, // white
+        1.0,  0.0,  0.0,  1.0, // red
+        0.0,  1.0,  0.0,  1.0, // green
+        0.0,  0.0,  1.0,  1.0, // blue
+    ];
 
-    return {
-        position: positionBuffer,
+    return { //returns appropriate buffers
+        position: position_buffer(gl, positions),
+        colour: colour_buffer(gl, colours),
     };
 }
 
@@ -49,14 +52,27 @@ function drawScene(gl, programInfo, buffers){ //basic function to draw square
     const modelViewMatrix = mat4.create();
     mat4.translate(modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -6.0]); //1st: destination matrix, 2nd: matrix to translate, 3rd: amount to translate
     
-    const numerOfComponents = 2; //number of components per generic vertex attribute
-    const type = gl.FLOAT; //32 bit float data
-    const normalize = false; //no normalisation
-    const stride = 0; //bytes to get from one value to the next, type and num components are used to determine it instead (2*FLOAT_size)
-    const offset = 0; //offset from beginning of buffer
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-    gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, numerOfComponents, type, normalize, stride, offset);
-    gl.enableVertexAttribArray( programInfo.attribLocations.vertexPosition);
+    { //for setting the vertices
+        const numerOfComponents = 2; //number of components per generic vertex attribute (x, y)
+        const type = gl.FLOAT; //32 bit float data
+        const normalize = false; //no normalisation
+        const stride = 0; //bytes to get from one value to the next, type and num components are used to determine it instead (2*FLOAT_size)
+        const offset = 0; //offset from beginning of buffer
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+        gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, numerOfComponents, type, normalize, stride, offset);
+        gl.enableVertexAttribArray( programInfo.attribLocations.vertexPosition); //enabled and will be used for rendering, data passed on
+    }
+
+    { //for setting the colours
+        const numerOfComponents = 4; //number of components for colour (r, g, b, a)
+        const type = gl.FLOAT; //32 bit float data
+        const normalize = false; //no normalisation
+        const stride = 0; //bytes to get from one value to the next, type and num components are used to determine it instead (2*FLOAT_size)
+        const offset = 0; //offset from beginning of buffer
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.colour);
+        gl.vertexAttribPointer(programInfo.attribLocations.vertexColour, numerOfComponents, type, normalize, stride, offset);
+        gl.enableVertexAttribArray( programInfo.attribLocations.vertexColour); //enabled and will be used for rendering, data passed on
+    }
     
     gl.useProgram(programInfo.program); //use the shader program
 
@@ -82,11 +98,12 @@ function main(){
     const programInfo = { //effectively convenient way to store references to where to set uniforms/attribs
         program: shaderProgram,
         attribLocations: {
-            vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'), //index of the vertex attrib to be modified
+            vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertPos'), //index of the vertex attrib to be modified
+            vertexColour: gl.getAttribLocation(shaderProgram, 'aVertColour'), //gets vertex colour attribute location for later
         },
         uniformLocations: {
-            projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'), //used in passing uniforms to these variables in glsl
-            modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'), //used in passing uniforms to these variables in glsl
+            projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjMat'), //used in passing uniforms to these variables in glsl
+            modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uMVM'), //used in passing uniforms to these variables in glsl
         },
     };
 

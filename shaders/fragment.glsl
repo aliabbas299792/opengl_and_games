@@ -1,3 +1,5 @@
+varying lowp vec4 vertColour;
+
 void main() {
-    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    gl_FragColor = vertColour; //simply sets colour for this fragment (it's interpolate automatically between the vertices)
 }

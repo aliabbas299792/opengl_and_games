@@ -1,5 +1,5 @@
 # Test Ball Game
-A small test ball game that I'll be playing around with.
+A small test ball game that I played around with.
 Uses the model branch from the [WASM Template](https://github.com/aliabbas299792/openglWASMTemplate/tree/model) template I made.
 
 To compile it for development, simply run `./compile.sh`, and for release just run `./compile.sh release` in the public directory.
@@ -10,4 +10,4 @@ The blue tiles are made using instancing and the ball is rotated via quaternions
 
 A live example (might take a while to load): [Test](https://erewhon.xyz/3dexperiments/test/)
 
-![alt text](https://github.com/aliabbas299792/wasm-ball-game/blob/master/screenshot.jpg?raw=true)
+![alt text](./screenshot.jpg)

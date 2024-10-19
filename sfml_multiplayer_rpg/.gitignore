@@ -1,0 +1,43 @@
+**/*.tlog
+**/.vscode
+**/.vs
+**/*.iobj
+**/*.ipdb
+**/*.log
+**/*.pdb
+**/*.obj
+**/*.vcxproj
+**/*.vcxproj.filters
+**/*.dll
+**/*.sln
+*/*.vcxproj.user
+*/include
+*/lib
+*/Debug
+*/debug
+*/*/Debug
+*/*/debug
+*/*/include
+*/*/lib
+*/*/x64
+*/*/.vs
+*/*/*.sln
+*/*/*.vcxproj
+*/*/*.vcxproj.filters
+*/*/*.vcxproj.user
+*/*/*/assets
+*/*/assets
+*.vcxproj
+**/xorFunction.h
+**/key.h
+Game/Game Client/Builds
+**/deps/*
+Game/Game Client/cryptic.h
+Game/Game Client/cryptic.cpp
+**/cryptic.h
+Game/Game Client/Game.rc
+Game/Game Client/Game.aps
+Game/Game Client/icon1.ico
+Game/Game Client/icon2.ico
+Game/Launcher/Launcher.aps
+Game/Launcher/Launcher.rc

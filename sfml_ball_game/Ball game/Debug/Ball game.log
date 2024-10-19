@@ -1,0 +1,29 @@
+﻿  main.cpp
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(12): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(13): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(15): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(24): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(55): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(56): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(81): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(94): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(173): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(193): warning C4018: '<': signed/unsigned mismatch
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(194): warning C4018: '<': signed/unsigned mismatch
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(202): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(225): warning C4018: '<': signed/unsigned mismatch
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(226): warning C4018: '<': signed/unsigned mismatch
+c:\users\ali abbas school\desktop\c++\ball game retry\ball game\ball game\main.cpp(235): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Ball game.vcxproj -> C:\Users\Ali Abbas School\Desktop\c++\ball game retry\Ball game\Debug\Ball game.exe
